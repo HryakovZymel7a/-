@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Хрякоград — HD Графика, Лесопилка и Разведение (v15)</title>
+  <title>Хряки Ферма — Brawl Stars UI & Pixel Map (v23)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@600;800;900&family=Sofia+Sans+Condensed:wght@700&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -23,9 +26,14 @@
       height: 100vh;
       height: 100dvh;
       overflow: hidden;
-      background-color: #2b5876;
-      font-family: 'Trebuchet MS', 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(180deg, #0277BD 0%, #01579B 100%);
+      font-family: 'Rubik', system-ui, -apple-system, sans-serif;
+      font-weight: 800;
       touch-action: none;
+    }
+
+    button, input, select {
+      font-family: 'Rubik', system-ui, -apple-system, sans-serif;
     }
 
     #gameCanvas {
@@ -38,53 +46,127 @@
       height: 100vh;
       height: 100dvh;
       touch-action: none;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
     }
 
-    /* Модальное окно лавки */
-    #shopModal {
+    /* Горизонтальная лента быстрого перехода по локациям (Brawl Stars UI) */
+    #locationNavStrip {
+      position: fixed;
+      left: 10px;
+      top: 52px;
+      right: 138px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      white-space: nowrap;
+      padding: 2px 4px 6px 2px;
+      z-index: 60;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x;
+    }
+
+    #locationNavStrip::-webkit-scrollbar {
+      display: none;
+    }
+
+    .loc-nav-btn {
+      flex: 0 0 auto;
+      font-family: 'Sofia Sans Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 14.5px;
+      letter-spacing: 0.3px;
+      color: #ffffff;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.75);
+      background: linear-gradient(180deg, #38b6ff 0%, #1976d2 100%);
+      border: 2px solid #2b1d0e;
+      border-radius: 14px;
+      box-shadow: 0 4px 0 #2b1d0e;
+      padding: 6px 12px;
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.15s ease;
+    }
+
+    .loc-nav-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #2b1d0e;
+    }
+
+    .loc-nav-btn.loc-warm {
+      background: linear-gradient(180deg, #FFC107 0%, #F57C00 100%);
+      color: #ffffff;
+    }
+
+    .loc-nav-btn.loc-green {
+      background: linear-gradient(180deg, #2ECC71 0%, #1E8449 100%);
+      color: #ffffff;
+    }
+
+    .loc-nav-btn.loc-locked {
+      background: linear-gradient(180deg, #607d8b 0%, #455a64 100%);
+      color: #cfd8dc;
+    }
+
+    /* Оверлеи модальных окон в стиле Brawl Stars */
+    #shopModal, .game-modal {
       position: fixed;
       inset: 0;
-      background: rgba(18, 28, 20, 0.74);
+      background: radial-gradient(circle at 50% 35%, rgba(15, 25, 45, 0.68) 0%, rgba(8, 14, 26, 0.88) 100%);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 100;
+      z-index: 105;
       padding: 12px;
       touch-action: auto;
     }
 
-    #shopModal.active {
+    #shopModal.active, .game-modal.active {
       display: flex;
     }
 
     .shop-window {
       width: 100%;
-      max-width: 440px;
+      max-width: 444px;
       max-height: 86vh;
-      background: #f5deb3;
-      border: 4px solid #1a1a1a;
-      border-radius: 24px;
-      box-shadow: 0 10px 0 #1a1a1a, inset 0 4px 0 #fff5dc;
+      background: linear-gradient(180deg, #FFF5DC 0%, #f5dfb0 100%);
+      border: 3px solid #2b1d0e;
+      border-radius: 22px;
+      box-shadow:
+        0 8px 0 #2b1d0e,
+        0 20px 38px rgba(0, 0, 0, 0.65),
+        inset 0 3px 0 rgba(255, 255, 255, 0.9);
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      animation: popIn 0.16s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      animation: brawlPopIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    @keyframes popIn {
-      0% { transform: scale(0.9) translateY(8px); opacity: 0; }
+    @keyframes brawlPopIn {
+      0% { transform: scale(0.84) translateY(18px); opacity: 0; }
+      70% { transform: scale(1.03) translateY(-2px); opacity: 1; }
       100% { transform: scale(1) translateY(0); opacity: 1; }
     }
 
     .shop-header {
-      background: linear-gradient(180deg, #52b788 0%, #2d6a4f 100%);
-      border-bottom: 4px solid #1a1a1a;
-      padding: 11px 14px;
+      position: relative;
+      background: linear-gradient(180deg, #2ECC71 0%, #1E8449 100%);
+      border-bottom: 3px solid #2b1d0e;
+      padding: 12px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 8px;
-      box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.35);
+      box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.45);
     }
 
     .shop-title-wrap {
@@ -95,83 +177,92 @@
     }
 
     .shop-title {
+      font-family: 'Rubik', sans-serif;
       font-size: 17px;
       font-weight: 900;
-      color: #fff;
-      text-shadow: 2px 2px 0 #1a1a1a, -1px -1px 0 #1a1a1a, 1px -1px 0 #1a1a1a, -1px 1px 0 #1a1a1a;
-      letter-spacing: 0.3px;
+      color: #ffffff;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.75);
+      letter-spacing: 0.4px;
       white-space: nowrap;
     }
 
     .shop-balance {
-      background: #ffcf56;
-      border: 3px solid #1a1a1a;
-      border-radius: 999px;
-      padding: 4px 10px 4px 6px;
+      background: rgba(15, 25, 45, 0.85);
+      border: 2px solid #2b1d0e;
+      border-radius: 14px;
+      padding: 4px 12px 4px 7px;
       display: flex;
       align-items: center;
       gap: 5px;
-      box-shadow: 0 2px 0 #1a1a1a, inset 0 2px 0 #fff3b0;
-      font-size: 14px;
+      box-shadow: 0 4px 0 #2b1d0e;
+      font-family: 'Rubik', sans-serif;
+      font-size: 14.5px;
       font-weight: 900;
-      color: #1a1a1a;
+      color: #ffffff;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.75);
       flex-shrink: 0;
     }
 
     .close-btn {
-      width: 38px;
-      height: 38px;
-      background: linear-gradient(180deg, #ff6b6b 0%, #e03131 100%);
-      border: 3px solid #1a1a1a;
-      border-radius: 12px;
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(180deg, #ff5252 0%, #d32f2f 100%);
+      border: 2px solid #2b1d0e;
+      border-radius: 14px;
       color: #fff;
-      font-size: 19px;
+      font-family: 'Rubik', sans-serif;
       font-weight: 900;
+      font-size: 18px;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.75);
       cursor: pointer;
-      box-shadow: 0 3px 0 #1a1a1a, inset 0 2px 0 rgba(255, 255, 255, 0.4);
+      box-shadow: 0 4px 0 #2b1d0e;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
     }
 
     .close-btn:active {
       transform: translateY(3px);
-      box-shadow: 0 0 0 #1a1a1a;
+      box-shadow: 0 1px 0 #2b1d0e;
     }
 
+    /* Панель вкладок в стиле Brawl Stars */
     .shop-tabs {
       display: flex;
-      background: #dfb980;
-      border-bottom: 4px solid #1a1a1a;
-      padding: 6px 6px 0;
-      gap: 4px;
+      background: rgba(15, 25, 45, 0.88);
+      border-bottom: 3px solid #2b1d0e;
+      padding: 8px 8px 6px;
+      gap: 6px;
     }
 
     .tab-btn {
       flex: 1;
-      padding: 8px 3px;
-      font-size: 12px;
-      font-weight: 900;
-      background: #cfa363;
-      border: 3px solid #1a1a1a;
-      border-bottom: none;
-      border-radius: 14px 14px 0 0;
-      color: #4a3219;
+      padding: 7px 6px;
+      font-family: 'Sofia Sans Condensed', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      background: linear-gradient(180deg, #34495e 0%, #2c3e50 100%);
+      border: 2px solid #2b1d0e;
+      border-radius: 14px;
+      box-shadow: 0 4px 0 #2b1d0e;
+      color: #ecf0f1;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.75);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 3px;
-      transition: transform 0.1s, background 0.15s;
+      gap: 4px;
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
       white-space: nowrap;
     }
 
     .tab-btn.active {
-      background: #fff8e7;
-      color: #1a1a1a;
-      transform: translateY(2px);
-      box-shadow: inset 0 3px 0 #ffcf56;
+      background: linear-gradient(180deg, #FFC107 0%, #FFA000 100%);
+      color: #ffffff;
+      transform: translateY(1px);
+      box-shadow: 0 3px 0 #2b1d0e;
     }
 
     .shop-content {
@@ -180,42 +271,42 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      background: #fff8e7;
+      background: #FFF5DC;
       -webkit-overflow-scrolling: touch;
     }
 
     .shop-card {
-      background: #fffdf7;
-      border: 3px solid #1a1a1a;
-      border-radius: 18px;
-      padding: 10px 11px;
+      background: #ffffff;
+      border: 2px solid #2b1d0e;
+      border-radius: 14px;
+      padding: 10px 12px;
       display: flex;
       align-items: center;
       gap: 10px;
-      box-shadow: 0 4px 0 #1a1a1a, inset 0 2px 0 #ffffff;
+      box-shadow: 0 4px 0 #2b1d0e;
     }
 
     .shop-card.unlocked-card {
-      background: #f2fbe9;
+      background: linear-gradient(180deg, #f4fff6 0%, #e3f9e8 100%);
     }
 
     .card-avatar {
-      width: 60px;
-      height: 60px;
-      background: radial-gradient(circle at 35% 30%, #dff9ba 0%, #9be15d 100%);
-      border: 3px solid #1a1a1a;
-      border-radius: 16px;
+      width: 62px;
+      height: 62px;
+      background: radial-gradient(circle at 30% 26%, #4facfe 0%, #00f2fe 100%);
+      border: 2px solid #2b1d0e;
+      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
       overflow: hidden;
-      box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.6);
+      box-shadow: 0 4px 0 #2b1d0e;
     }
 
     .card-avatar canvas {
-      width: 52px;
-      height: 52px;
+      width: 54px;
+      height: 54px;
       object-fit: contain;
     }
 
@@ -225,10 +316,11 @@
     }
 
     .card-name {
+      font-family: 'Rubik', sans-serif;
       font-size: 15px;
-      font-weight: 900;
-      color: #1a1a1a;
-      margin-bottom: 2px;
+      font-weight: 800;
+      color: #2b1d0e;
+      margin-bottom: 3px;
       display: flex;
       align-items: center;
       flex-wrap: wrap;
@@ -236,114 +328,106 @@
     }
 
     .breed-badge {
-      background: #2d6a4f;
-      color: #fff8e7;
-      border: 2px solid #1a1a1a;
-      border-radius: 8px;
-      padding: 1px 6px;
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 0.2px;
+      font-family: 'Sofia Sans Condensed', sans-serif;
+      background: rgba(15, 25, 45, 0.85);
+      color: #ffffff;
+      border: 2px solid #2b1d0e;
+      border-radius: 10px;
+      padding: 2px 7px;
+      font-size: 12px;
+      font-weight: 700;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.75);
     }
 
     .card-desc {
-      font-size: 11.5px;
+      font-family: 'Sofia Sans Condensed', sans-serif;
+      font-size: 13.5px;
       font-weight: 700;
-      color: #6b4c2a;
+      color: #5c4328;
       line-height: 1.25;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
 
     .stat-chips {
       display: flex;
       flex-wrap: wrap;
-      gap: 4px;
+      gap: 5px;
     }
 
     .stat-chip {
-      background: #f5deb3;
-      border: 2px solid #1a1a1a;
-      border-radius: 8px;
-      padding: 2px 6px;
-      font-size: 10.5px;
-      font-weight: 900;
-      color: #1a1a1a;
+      font-family: 'Sofia Sans Condensed', sans-serif;
+      background: #FFF5DC;
+      border: 2px solid #2b1d0e;
+      border-radius: 10px;
+      padding: 2px 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #2b1d0e;
       display: inline-flex;
       align-items: center;
       gap: 3px;
+      box-shadow: 0 2px 0 #2b1d0e;
     }
 
     .stat-chip.highlight {
-      background: #ffcf56;
+      background: #FFC107;
+      color: #2b1d0e;
     }
 
     .upgrade-bar {
       width: 100%;
-      height: 9px;
-      background: #e3c28d;
-      border: 2px solid #1a1a1a;
-      border-radius: 999px;
+      height: 12px;
+      background: rgba(15, 25, 45, 0.8);
+      border: 2px solid #2b1d0e;
+      border-radius: 10px;
       overflow: hidden;
-      margin-top: 4px;
+      margin-top: 6px;
     }
 
     .upgrade-bar-fill {
       height: 100%;
-      background: linear-gradient(90deg, #4cd137 0%, #a3e635 100%);
-      border-right: 2px solid #1a1a1a;
+      background: linear-gradient(90deg, #2ECC71 0%, #a3e635 100%);
+      border-right: 2px solid #2b1d0e;
       transition: width 0.25s ease;
     }
 
+    /* Кнопки Brawl Stars с нижней ступенькой */
     .buy-btn {
-      background: linear-gradient(180deg, #5be346 0%, #3bb528 100%);
-      border: 3px solid #1a1a1a;
+      font-family: 'Rubik', sans-serif;
+      background: linear-gradient(180deg, #2ECC71 0%, #27ae60 100%);
+      border: 2px solid #2b1d0e;
       border-radius: 14px;
-      padding: 8px 10px;
-      font-size: 13px;
-      font-weight: 900;
-      color: #fff;
-      text-shadow: 1.5px 1.5px 0 #1a1a1a;
-      box-shadow: 0 4px 0 #1a1a1a, inset 0 2px 0 rgba(255, 255, 255, 0.45);
+      padding: 9px 12px;
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #ffffff;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.75);
+      box-shadow: 0 4px 0 #2b1d0e;
       cursor: pointer;
       white-space: nowrap;
       flex-shrink: 0;
       display: inline-flex;
       align-items: center;
       gap: 4px;
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
     }
 
     .buy-btn:active:not(:disabled) {
       transform: translateY(3px);
-      box-shadow: 0 1px 0 #1a1a1a;
+      box-shadow: 0 1px 0 #2b1d0e;
     }
 
     .buy-btn:disabled {
-      background: #b2bec3;
-      box-shadow: 0 3px 0 #1a1a1a;
+      background: linear-gradient(180deg, #90a4ae 0%, #607d8b 100%);
+      color: #eceff1;
+      box-shadow: 0 4px 0 #2b1d0e;
       cursor: not-allowed;
     }
 
     .buy-btn.owned {
-      background: #ffcf56;
-      color: #1a1a1a;
-      text-shadow: none;
-    }
-
-    /* Модальные окна Племенного двора и Рынка */
-    .game-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(18, 28, 20, 0.76);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 105;
-      padding: 12px;
-      touch-action: auto;
-    }
-
-    .game-modal.active {
-      display: flex;
+      background: linear-gradient(180deg, #FFC107 0%, #FFA000 100%);
+      color: #ffffff;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.75);
     }
 
     .breed-pair-box {
@@ -351,140 +435,162 @@
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      background: #f5deb3;
-      border: 3px solid #1a1a1a;
-      border-radius: 18px;
+      background: rgba(15, 25, 45, 0.8);
+      border: 2px solid #2b1d0e;
+      border-radius: 14px;
       padding: 10px;
+      box-shadow: 0 4px 0 #2b1d0e;
     }
 
     .parent-slot {
       flex: 1;
-      background: #fffdf7;
-      border: 3px solid #1a1a1a;
+      background: #FFF5DC;
+      border: 2px solid #2b1d0e;
       border-radius: 14px;
       padding: 8px 6px;
       text-align: center;
       cursor: pointer;
-      box-shadow: 0 3px 0 #1a1a1a;
+      box-shadow: 0 4px 0 #2b1d0e;
+      transition: transform 0.08s ease;
     }
 
-    .parent-slot.selected-slot {
-      background: #ffeaa7;
-      border-color: #d35400;
+    .parent-slot:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #2b1d0e;
     }
 
     .parent-slot canvas {
-      width: 48px;
-      height: 48px;
+      width: 50px;
+      height: 50px;
       display: block;
       margin: 0 auto 4px;
     }
 
     .breed-heart-mid {
-      font-size: 22px;
+      font-size: 26px;
       font-weight: 900;
       flex-shrink: 0;
+      filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.75));
     }
 
     .forecast-panel {
-      background: #eef9e6;
-      border: 3px solid #1a1a1a;
-      border-radius: 16px;
-      padding: 10px 12px;
-      font-size: 12px;
-      font-weight: 800;
-      color: #1a1a1a;
-      line-height: 1.4;
+      font-family: 'Sofia Sans Condensed', sans-serif;
+      background: #ffffff;
+      border: 2px solid #2b1d0e;
+      border-radius: 14px;
+      padding: 11px 13px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #2b1d0e;
+      line-height: 1.38;
+      box-shadow: 0 4px 0 #2b1d0e;
     }
 
     .timer-banner {
-      background: #2f3640;
-      color: #ffe047;
-      border: 3px solid #1a1a1a;
+      background: rgba(15, 25, 45, 0.9);
+      color: #FFC107;
+      border: 2px solid #2b1d0e;
       border-radius: 14px;
-      padding: 10px;
+      padding: 11px;
       text-align: center;
-      font-size: 18px;
+      font-family: 'Rubik', sans-serif;
       font-weight: 900;
+      font-size: 17px;
       letter-spacing: 0.5px;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.75);
+      box-shadow: 0 4px 0 #2b1d0e;
     }
 
     .sell-btn {
-      background: linear-gradient(180deg, #ffcf56 0%, #f39c12 100%);
-      border: 3px solid #1a1a1a;
+      font-family: 'Rubik', sans-serif;
+      background: linear-gradient(180deg, #FFC107 0%, #FFA000 100%);
+      border: 2px solid #2b1d0e;
       border-radius: 14px;
-      padding: 8px 10px;
-      font-size: 12.5px;
-      font-weight: 900;
-      color: #1a1a1a;
-      box-shadow: 0 4px 0 #1a1a1a, inset 0 2px 0 rgba(255, 255, 255, 0.55);
+      padding: 9px 12px;
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #ffffff;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.75);
+      box-shadow: 0 4px 0 #2b1d0e;
       cursor: pointer;
       white-space: nowrap;
       flex-shrink: 0;
       display: inline-flex;
       align-items: center;
       gap: 4px;
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
     }
 
     .sell-btn:active:not(:disabled) {
       transform: translateY(3px);
-      box-shadow: 0 1px 0 #1a1a1a;
+      box-shadow: 0 1px 0 #2b1d0e;
     }
 
     .sell-btn:disabled {
-      background: #b2bec3;
+      background: linear-gradient(180deg, #90a4ae 0%, #607d8b 100%);
       color: #fff;
-      box-shadow: 0 3px 0 #1a1a1a;
+      box-shadow: 0 4px 0 #2b1d0e;
       cursor: not-allowed;
     }
 
     .hot-demand-banner {
-      background: linear-gradient(90deg, #ffeaa7 0%, #ffcf56 100%);
-      border: 3px solid #1a1a1a;
+      font-family: 'Sofia Sans Condensed', sans-serif;
+      background: rgba(15, 25, 45, 0.85);
+      border: 2px solid #2b1d0e;
       border-radius: 14px;
-      padding: 8px 11px;
-      font-size: 12px;
-      font-weight: 900;
-      color: #1a1a1a;
+      padding: 9px 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.75);
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 6px;
+      box-shadow: 0 4px 0 #2b1d0e;
     }
-
 
     .gender-switch-bar {
       display: flex;
       gap: 6px;
-      background: #f5deb3;
-      border: 3px solid #1a1a1a;
+      background: rgba(15, 25, 45, 0.8);
+      border: 2px solid #2b1d0e;
       border-radius: 14px;
       padding: 5px;
+      box-shadow: 0 4px 0 #2b1d0e;
     }
 
     .gender-opt-btn {
       flex: 1;
-      padding: 7px 6px;
-      border: 2.5px solid #1a1a1a;
-      border-radius: 10px;
+      padding: 8px 6px;
+      border: 2px solid #2b1d0e;
+      border-radius: 14px;
+      font-family: 'Rubik', sans-serif;
       font-size: 12.5px;
-      font-weight: 900;
+      font-weight: 800;
       cursor: pointer;
-      background: #fffdf7;
-      color: #4a3219;
+      background: #FFF5DC;
+      color: #2b1d0e;
       text-align: center;
+      box-shadow: 0 4px 0 #2b1d0e;
+      transition: transform 0.08s ease;
+    }
+
+    .gender-opt-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #2b1d0e;
     }
 
     .gender-opt-btn.active-male {
-      background: #74b9ff;
-      color: #1a1a1a;
-      box-shadow: inset 0 2px 0 rgba(255,255,255,0.5);
+      background: linear-gradient(180deg, #38b6ff 0%, #1976d2 100%);
+      color: #ffffff;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.75);
     }
 
     .gender-opt-btn.active-female {
-      background: #ff9ff3;
-      color: #1a1a1a;
-      box-shadow: inset 0 2px 0 rgba(255,255,255,0.5);
+      background: linear-gradient(180deg, #ff7eb3 0%, #d81b60 100%);
+      color: #ffffff;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.75);
     }
 
     .gender-tag-male {
@@ -496,12 +602,14 @@
       color: #d63031;
       font-weight: 900;
     }
-
   </style>
 </head>
 <body>
 
 <canvas id="gameCanvas"></canvas>
+
+<!-- Горизонтальная лента быстрого перехода по локациям (со скроллом) -->
+<div id="locationNavStrip"></div>
 
 <!-- Модальное окно лавки -->
 <div id="shopModal">
@@ -509,7 +617,7 @@
     <div class="shop-header">
       <div class="shop-title-wrap">
         <canvas id="shopHeaderIcon" width="32" height="32"></canvas>
-        <div class="shop-title">ЛАВКА «ХРЯКОГРАД»</div>
+        <div class="shop-title">ЛАВКА</div>
       </div>
       <div class="shop-balance">
         <canvas id="shopBalanceCoin" width="22" height="22"></canvas>
@@ -589,6 +697,25 @@
       <button class="close-btn" id="closeSawmillBtn" type="button">✕</button>
     </div>
     <div class="shop-content" id="sawmillBody"></div>
+  </div>
+</div>
+
+
+<!-- Модальное окно Морского Похода («Вы уверены?») -->
+<div id="voyageModal" class="game-modal">
+  <div class="shop-window">
+    <div class="shop-header" style="background: linear-gradient(180deg, #38b6ff 0%, #1976d2 52%, #0d47a1 100%);">
+      <div class="shop-title-wrap">
+        <canvas id="voyageHeaderIcon" width="32" height="32"></canvas>
+        <div class="shop-title" id="voyageModalTitle">ВЫ УВЕРЕНЫ?</div>
+      </div>
+      <div class="shop-balance">
+        <canvas id="voyageBalanceCoin" width="22" height="22"></canvas>
+        <span id="voyageCoinText">40</span>
+      </div>
+      <button class="close-btn" id="closeVoyageBtn" type="button">✕</button>
+    </div>
+    <div class="shop-content" id="voyageBody"></div>
   </div>
 </div>
 
@@ -874,53 +1001,178 @@ function drawCartoonIcon(ctx, key, cx, cy, size) {
   ctx.lineCap = 'round';
   ctx.strokeStyle = '#1a1a1a';
   ctx.lineWidth = 3;
+  if (key === 'heart') {
+    const hg = ctx.createRadialGradient(-4, -5, 2, 0, 0, 16);
+    hg.addColorStop(0, '#ff9eb5');
+    hg.addColorStop(0.45, '#ff385c');
+    hg.addColorStop(1, '#b80d2f');
+    ctx.fillStyle = hg;
+    ctx.beginPath();
+    ctx.moveTo(0, 10);
+    ctx.bezierCurveTo(-18, -2, -10, -16, 0, -6);
+    ctx.bezierCurveTo(10, -16, 18, -2, 0, 10);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.65)';
+    ctx.beginPath();
+    ctx.ellipse(-5, -6, 3, 1.8, -0.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+    return;
+  }
+  if (key === 'sparkle') {
+    const sg = ctx.createRadialGradient(0, 0, 1, 0, 0, 14);
+    sg.addColorStop(0, '#ffffff');
+    sg.addColorStop(0.5, '#ffe047');
+    sg.addColorStop(1, '#f39c12');
+    ctx.fillStyle = sg;
+    ctx.beginPath();
+    for (let i = 0; i < 8; i++) {
+      const r = i % 2 === 0 ? 14 : 5;
+      const a = (i * Math.PI) / 4;
+      if (i === 0) ctx.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+      else ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+    return;
+  }
+  if (key === 'woodchip') {
+    ctx.rotate(0.35);
+    const wg = ctx.createLinearGradient(-10, -6, 10, 6);
+    wg.addColorStop(0, '#ffeaa7');
+    wg.addColorStop(1, '#d38b43');
+    ctx.fillStyle = wg;
+    ctx.beginPath();
+    ctx.moveTo(-10, -4);
+    ctx.lineTo(8, -7);
+    ctx.lineTo(11, 4);
+    ctx.lineTo(-7, 6);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+    return;
+  }
   if (key === 'log') {
-    // Бревно с годовыми кольцами на торце
+    // Объёмное бревно с градиентной корой, бликом и годовыми кольцами
     ctx.save();
     ctx.rotate(-0.22);
-    ctx.fillStyle = '#8c5327';
-    roundRect(ctx, -16, -8, 26, 16, 5);
+    const barkGrad = ctx.createLinearGradient(0, -9, 0, 9);
+    barkGrad.addColorStop(0, '#b56e33');
+    barkGrad.addColorStop(0.55, '#8c4f1e');
+    barkGrad.addColorStop(1, '#59300f');
+    ctx.fillStyle = barkGrad;
+    roundRect(ctx, -16, -9, 26, 18, 5);
     ctx.fill();
     ctx.stroke();
 
-    // Кора (продольные штрихи)
-    ctx.strokeStyle = '#5c3818';
+    // Верхний блик на коре
+    ctx.strokeStyle = 'rgba(255, 225, 175, 0.38)';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(-12, -3);
-    ctx.lineTo(2, -3);
-    ctx.moveTo(-10, 3);
-    ctx.lineTo(3, 3);
+    ctx.moveTo(-12, -5);
+    ctx.lineTo(3, -5);
     ctx.stroke();
 
-    // Светлый спил торца
+    // Тёмная борозда коры
+    ctx.strokeStyle = '#47250a';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(-11, 3);
+    ctx.lineTo(4, 3);
+    ctx.stroke();
+
+    // Светлый спил торца с радиальным градиентом
     ctx.strokeStyle = '#1a1a1a';
     ctx.lineWidth = 2.6;
-    ctx.fillStyle = '#f5deb3';
+    const cutGrad = ctx.createRadialGradient(9, -1, 1, 10, 0, 9);
+    cutGrad.addColorStop(0, '#fff8dc');
+    cutGrad.addColorStop(0.7, '#f0c987');
+    cutGrad.addColorStop(1, '#c99349');
+    ctx.fillStyle = cutGrad;
     ctx.beginPath();
-    ctx.ellipse(10, 0, 6.5, 8, 0, 0, Math.PI * 2);
+    ctx.ellipse(10, 0, 6.8, 8.8, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
 
-    ctx.strokeStyle = '#c97a35';
-    ctx.lineWidth = 1.6;
+    ctx.strokeStyle = '#b8762e';
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.ellipse(10, 0, 3, 4, 0, 0, Math.PI * 2);
+    ctx.ellipse(10, 0, 3.2, 4.5, 0, 0, Math.PI * 2);
     ctx.stroke();
     ctx.restore();
     ctx.restore();
     return;
   }
-  if (key === 'sawmill') {
-    // Диск циркулярной пилы
-    ctx.fillStyle = '#dfe6e9';
+  if (key === 'ship') {
+    // Мультяшный деревянный корабль с парусом
+    ctx.fillStyle = '#8c4f1e';
     ctx.beginPath();
-    ctx.arc(0, 0, 14, 0, Math.PI * 2);
+    ctx.moveTo(-16, 4);
+    ctx.lineTo(16, 4);
+    ctx.lineTo(11, 14);
+    ctx.lineTo(-11, 14);
+    ctx.closePath();
     ctx.fill();
     ctx.stroke();
-    ctx.fillStyle = '#ff6b6b';
+
+    // Мачта
+    ctx.strokeStyle = '#1b1209';
+    ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.arc(0, 0, 5, 0, Math.PI * 2);
+    ctx.moveTo(0, 4);
+    ctx.lineTo(0, -15);
+    ctx.stroke();
+
+    // Парус
+    const sailGrad = ctx.createLinearGradient(-10, -14, 12, 2);
+    sailGrad.addColorStop(0, '#ffffff');
+    sailGrad.addColorStop(1, '#ffe082');
+    ctx.fillStyle = sailGrad;
+    ctx.beginPath();
+    ctx.moveTo(0, -14);
+    ctx.quadraticCurveTo(15, -6, 0, 2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Флажок
+    ctx.fillStyle = '#ff3838';
+    ctx.beginPath();
+    ctx.moveTo(0, -15);
+    ctx.lineTo(-9, -12);
+    ctx.lineTo(0, -9);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+    return;
+  }
+  if (key === 'sawmill') {
+    // Зубчатый стальной диск циркулярной пилы с металлическим блеском
+    const teeth = 12;
+    const metalGrad = ctx.createLinearGradient(-14, -14, 14, 14);
+    metalGrad.addColorStop(0, '#ffffff');
+    metalGrad.addColorStop(0.5, '#cfd8dc');
+    metalGrad.addColorStop(1, '#78909c');
+    ctx.fillStyle = metalGrad;
+    ctx.beginPath();
+    for (let i = 0; i < teeth * 2; i++) {
+      const r = i % 2 === 0 ? 15.5 : 12;
+      const a = (i * Math.PI) / teeth;
+      if (i === 0) ctx.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+      else ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#ff5252';
+    ctx.beginPath();
+    ctx.arc(0, 0, 5.2, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
     ctx.restore();
@@ -1059,8 +1311,8 @@ const MALE_NICKNAMES = [
   'Борька', 'Жора', 'Яшка', 'Петруха', 'Буран', 'Барон',
   'Фунтик', 'Хрюндель', 'Кабаныч', 'Трюфель', 'Степан', 'Кузьма',
   'Прохор', 'Тихон', 'Ерофей', 'Арчи', 'Пухляш', 'Пятачок',
-  'Боцман', 'Граф', 'Алтай', 'Кедр', 'Гром', 'Рыжик',
-  'Черныш', 'Добрыня', 'Богатырь', 'Шустрик', 'Клевер', 'Ветерок'
+  'Боцман', 'Граф', 'Крепыш', 'Кедр', 'Гром', 'Рыжик',
+  'Черныш', 'Добрыня', 'Буян', 'Шустрик', 'Клевер', 'Ветерок'
 ];
 
 const FEMALE_NICKNAMES = [
@@ -1113,21 +1365,32 @@ const SAWMILL_CONFIG = {
   rect: { x: WORLD.penRect.x + 940, y: WORLD.penRect.y - 10, w: 340, h: 380 }
 };
 
+const HARBOR_TILE = { tx: 76, ty: 134 };
+
+const SEA_ISLANDS = [
+  { id: 'island_coconut', name: 'Кокосовый Остров', tx: 16, ty: 20, radius: 9, kind: 'island', isIsland: true, rewardCoins: 850, rewardFood: 24, rewardLogs: 12 },
+  { id: 'island_truffle', name: 'Архипелаг Трюфелей', tx: 144, ty: 20, radius: 9, kind: 'island', isIsland: true, rewardCoins: 1100, rewardFood: 30, rewardLogs: 15 },
+  { id: 'island_coral', name: 'Коралловый Атолл', tx: 16, ty: 140, radius: 9, kind: 'island', isIsland: true, rewardCoins: 1350, rewardFood: 36, rewardLogs: 18 },
+  { id: 'island_golden', name: 'Остров Золотого Хряка', tx: 144, ty: 140, radius: 10, kind: 'island', isIsland: true, rewardCoins: 1800, rewardFood: 45, rewardLogs: 25 }
+];
+
 const LANDMARKS = [
-  { id: 'khryakograd', name: 'Усадьба «Хрякоград»', tx: 80, ty: 82, kind: 'home', rewardCoins: 0, rewardFood: 0 },
-  { id: 'katunka_ford', name: 'Брод на Катуньке', tx: 65, ty: 72, kind: 'mill', rewardCoins: 60, rewardFood: 4 },
+  { id: 'khryakograd', name: 'Усадьба «Хряки Ферма»', tx: 80, ty: 82, kind: 'home', rewardCoins: 0, rewardFood: 0 },
+  { id: 'katunka_ford', name: 'Брод на Хрю-Реке', tx: 65, ty: 72, kind: 'mill', rewardCoins: 60, rewardFood: 4 },
   { id: 'acorn_grove', name: 'Жёлудевая Роща', tx: 96, ty: 70, kind: 'orchard', rewardCoins: 75, rewardFood: 6 },
   { id: 'honey_apiary', name: 'Малиновая Пасека', tx: 58, ty: 94, kind: 'apiary', rewardCoins: 85, rewardFood: 6 },
   { id: 'sunny_meadow', name: 'Солнечный Луг', tx: 98, ty: 96, kind: 'village', rewardCoins: 95, rewardFood: 5 },
-  { id: 'bogatyr_camp', name: 'Стан «Богатырь»', tx: 105, ty: 81, kind: 'tractor', rewardCoins: 110, rewardFood: 7 },
-  { id: 'teletskoe_bay', name: 'Озеро Телецкое', tx: 46, ty: 54, kind: 'village', rewardCoins: 150, rewardFood: 9 },
+  { id: 'bogatyr_camp', name: 'Стан «Кабанчик»', tx: 105, ty: 81, kind: 'tractor', rewardCoins: 110, rewardFood: 7 },
+  { id: 'teletskoe_bay', name: 'Зеркальное Озеро', tx: 46, ty: 54, kind: 'village', rewardCoins: 150, rewardFood: 9 },
   { id: 'cedar_pass', name: 'Кедровый Перевал', tx: 82, ty: 44, kind: 'village', rewardCoins: 170, rewardFood: 10 },
   { id: 'pyatachok_fair', name: 'Ярмарка «Пятачок»', tx: 118, ty: 62, kind: 'orchard', rewardCoins: 210, rewardFood: 12 },
   { id: 'wind_mill', name: 'Мельница «Ветерок»', tx: 42, ty: 110, kind: 'mill', rewardCoins: 185, rewardFood: 11 },
   { id: 'boar_hamlet', name: 'Хутор Кабанчики', tx: 75, ty: 120, kind: 'village', rewardCoins: 205, rewardFood: 13 },
   { id: 'golden_valley', name: 'Золотая Падь', tx: 115, ty: 114, kind: 'village', rewardCoins: 260, rewardFood: 16 },
-  { id: 'altai_peak', name: 'Белуха-Камень', tx: 80, ty: 26, kind: 'mill', rewardCoins: 320, rewardFood: 20 },
-  { id: 'silver_creek', name: 'Серебряный Ключ', tx: 128, ty: 86, kind: 'apiary', rewardCoins: 290, rewardFood: 18 }
+  { id: 'altai_peak', name: 'Хрустальный Пик', tx: 80, ty: 26, kind: 'mill', rewardCoins: 320, rewardFood: 20 },
+  { id: 'silver_creek', name: 'Серебряный Ключ', tx: 128, ty: 86, kind: 'apiary', rewardCoins: 290, rewardFood: 18 },
+  { id: 'sea_harbor', name: 'Порт «Морской Пятачок»', tx: 76, ty: 134, kind: 'harbor', rewardCoins: 240, rewardFood: 14 },
+  ...SEA_ISLANDS
 ];
 
 const FIELD_CONFIGS = [
@@ -1307,6 +1570,58 @@ function buildValleyMap() {
   carveRoad(80, 82, 58, 94);
   carveRoad(58, 94, 42, 110);
   carveRoad(80, 82, 80, 74);
+  carveRoad(80, 82, 75, 120);
+  carveRoad(75, 120, HARBOR_TILE.tx, HARBOR_TILE.ty);
+
+  // Создаём 4 морских острова в океане (на которые можно попасть ТОЛЬКО на корабле!)
+  SEA_ISLANDS.forEach((isl, islIdx) => {
+    const rad = isl.radius || 9;
+    for (let ty = Math.max(2, isl.ty - rad - 3); ty <= Math.min(MAP_ROWS - 3, isl.ty + rad + 3); ty++) {
+      for (let tx = Math.max(2, isl.tx - rad - 3); tx <= Math.min(MAP_COLS - 3, isl.tx + rad + 3); tx++) {
+        const idx = ty * MAP_COLS + tx;
+        const d = Math.hypot(tx - isl.tx, ty - isl.ty) + (fbm(tx * 0.25, ty * 0.25) - 0.5) * 1.6;
+        if (d < rad * 0.58) {
+          TILE_GRID[idx] = (tx + ty) % 2 === 0 ? 3 : 5;
+          TILE_PROPS[idx] = hash2D(tx, ty) > 0.45 ? 1 : (hash2D(ty, tx) > 0.5 ? 5 : 0);
+        } else if (d < rad * 0.82) {
+          TILE_GRID[idx] = 2; // песчаный пляж острова
+          TILE_PROPS[idx] = 0;
+        } else if (d < rad * 1.08) {
+          if (TILE_GRID[idx] === 0) {
+            TILE_GRID[idx] = 1; // лазурная лагуна вокруг острова
+            TILE_PROPS[idx] = 0;
+          }
+        }
+      }
+    }
+    // Очищаем центр острова под пристань/сундуки
+    TILE_PROPS[isl.ty * MAP_COLS + isl.tx] = 0;
+
+    // Добавляем богатые сокровища и брёвна на каждый морской остров
+    TREASURE_SPOTS.push({
+      id: `tr_isl_${islIdx}_a`,
+      tx: isl.tx - 2,
+      ty: isl.ty + 1,
+      kind: 'chest',
+      coins: 140 + islIdx * 45,
+      food: 6 + islIdx * 2
+    });
+    TREASURE_SPOTS.push({
+      id: `tr_isl_${islIdx}_b`,
+      tx: isl.tx + 2,
+      ty: isl.ty - 1,
+      kind: 'truffle',
+      coins: 120 + islIdx * 35,
+      food: 5 + islIdx * 2
+    });
+    LOG_SPOTS.push({
+      id: `log_isl_${islIdx}`,
+      tx: isl.tx + 1,
+      ty: isl.ty + 2,
+      amount: 4 + islIdx,
+      respawnAt: 0
+    });
+  });
 
   for (let i = 0; i < 46; i++) {
     const tx = 20 + Math.floor(hash2D(i, 3.7) * (MAP_COLS - 40));
@@ -1379,6 +1694,9 @@ let state = {
   boars: [],
   unlockedBoars: ['boar_classic'],
   breeding: null,
+  shipBuilt: false,
+  shipBuild: null,
+  voyage: null,
   marketDayIndex: 0,
   marketDayTimer: 0,
   unlockedFields: [0],
@@ -1687,6 +2005,29 @@ function loadGame() {
   if (!hadFog) {
     revealFogAroundWorld(WORLD.homeTile.tx * TILE_SIZE, WORLD.homeTile.ty * TILE_SIZE, 15);
   }
+  // Слегка приоткрываем облака над 4 морскими островами, чтобы игрок видел их в море
+  SEA_ISLANDS.forEach((isl) => {
+    revealFogAroundWorld(isl.tx * TILE_SIZE + TILE_SIZE / 2, isl.ty * TILE_SIZE + TILE_SIZE / 2, 5.5);
+  });
+
+  if (typeof state.shipBuilt !== 'boolean') state.shipBuilt = false;
+  if (state.shipBuild && (!state.shipBuild.active || typeof state.shipBuild.startTimeMs !== 'number')) {
+    state.shipBuild = null;
+  }
+
+  // Восстанавливаем состояние морского похода при перезаходе
+  if (state.voyage && state.voyage.active) {
+    caravan.targetX = state.voyage.targetX;
+    caravan.targetY = state.voyage.targetY;
+    if (state.voyage.phase === 'prep') {
+      caravan.status = 'voyage_prep';
+      caravan.x = HARBOR_TILE.tx * TILE_SIZE + TILE_SIZE / 2;
+      caravan.y = HARBOR_TILE.ty * TILE_SIZE + TILE_SIZE / 2;
+    } else if (state.voyage.phase === 'sailing') {
+      caravan.status = 'voyage_sailing';
+    }
+  }
+
   initPlots();
   displayedCoins = state.coins;
 }
@@ -1739,10 +2080,93 @@ function getScoutVisionRadius() {
   return (5.2 + (state.scoutVisionLevel - 1) * 1.2) * nightPenalty;
 }
 
-function sendCaravanTo(wx, wy) {
-  const clampedX = Math.max(120, Math.min(WORLD.w - 120, wx));
-  const clampedY = Math.max(120, Math.min(WORLD.h - 120, wy));
+const SHIP_BUILD_LOGS = 250;
+const SHIP_BUILD_COINS = 350;
+const SHIP_BUILD_DURATION_MS = 2 * 60 * 60 * 1000; // 2 часа реального времени на постройку корабля
+const VOYAGE_PREP_DURATION_MS = 15 * 60 * 1000; // 15 минут реального времени до отплытия
+const VOYAGE_SAIL_DURATION_MS = 30 * 60 * 1000; // 30 минут реального времени в пути по морю
+const SEA_VOYAGE_COST = 35;
 
+const BIOME_NAMES = {
+  0: 'Открытое море 🌊',
+  1: 'Лазурная отмель 🏝️',
+  2: 'Золотой пляж 🏖️',
+  3: 'Сочный луг 🌿',
+  4: 'Изумрудная поляна 🌱',
+  5: 'Солнечный луг 🌼',
+  6: 'Кедровый бор 🌲',
+  7: 'Берёзовая роща 🌳',
+  8: 'Каменистые холмы ⛰️',
+  9: 'Скалистый перевал 🏔️',
+  10: 'Речной берег 💧',
+  11: 'Просёлочная тропа 🛤️'
+};
+
+function classifyDestination(wx, wy) {
+  const clampedX = Math.max(96, Math.min(WORLD.w - 96, wx));
+  const clampedY = Math.max(96, Math.min(WORLD.h - 96, wy));
+  const tx = Math.max(0, Math.min(MAP_COLS - 1, Math.floor(clampedX / TILE_SIZE)));
+  const ty = Math.max(0, Math.min(MAP_ROWS - 1, Math.floor(clampedY / TILE_SIZE)));
+  const tileType = TILE_GRID[ty * MAP_COLS + tx];
+
+  // Проверяем, нажал ли игрок на один из 4 морских островов
+  for (const isl of SEA_ISLANDS) {
+    if (Math.hypot(tx - isl.tx, ty - isl.ty) <= (isl.radius + 3)) {
+      return {
+        isDistantSea: true,
+        isIsland: true,
+        island: isl,
+        destName: `${isl.name} (Только на корабле ⛵)`,
+        targetX: isl.tx * TILE_SIZE + TILE_SIZE / 2,
+        targetY: isl.ty * TILE_SIZE + TILE_SIZE / 2,
+        cost: SEA_VOYAGE_COST
+      };
+    }
+  }
+
+  // Только открытое море (глубокая вода 0 и отмель 1) требует корабль! Весь материк (лес, луга, горы, берег) доступен обозу пешком
+  if (tileType === 0 || tileType === 1) {
+    return {
+      isDistantSea: true,
+      isIsland: false,
+      island: null,
+      destName: 'Открытое море (Только на корабле ⛵)',
+      targetX: clampedX,
+      targetY: clampedY,
+      cost: SEA_VOYAGE_COST
+    };
+  }
+
+  // Проверяем, не нажал ли игрок рядом с известным ориентиром долины
+  let nearLandmarkName = null;
+  for (const lm of LANDMARKS) {
+    if (lm.id !== 'khryakograd' && !lm.isIsland && Math.hypot(tx - lm.tx, ty - lm.ty) <= 4.5) {
+      nearLandmarkName = `📍 ${lm.name}`;
+      break;
+    }
+  }
+
+  const distMeters = Math.max(10, Math.round(Math.hypot(clampedX - caravan.x, clampedY - caravan.y) / 8));
+  const estSeconds = Math.max(2, Math.round(Math.hypot(clampedX - caravan.x, clampedY - caravan.y) / getScoutSpeed()));
+
+  return {
+    isDistantSea: false,
+    isIsland: false,
+    island: null,
+    destName: nearLandmarkName || (BIOME_NAMES[tileType] || 'Лесная поляна 🌲'),
+    distMeters,
+    estSeconds,
+    targetX: clampedX,
+    targetY: clampedY,
+    cost: EXPEDITION_COST
+  };
+}
+
+let pendingVoyageTarget = null;
+
+function executeLandExpedition(dest) {
+  const clampedX = dest.targetX;
+  const clampedY = dest.targetY;
   const sx = caravan.x;
   const sy = caravan.y;
   const dx = clampedX - sx;
@@ -1775,6 +2199,43 @@ function sendCaravanTo(wx, wy) {
   triggerHaptic('medium');
   spawnFloatingText(clampedX, clampedY - 26, `ОБОЗ ВЫЕХАЛ! (-${EXPEDITION_COST}💰)`, '#ffcf56');
   saveGame();
+}
+
+function sendCaravanTo(wx, wy) {
+  // 1. Если хряки уже плывут по морю (30 мин) или идут в походе — в другой поход отправить НЕЛЬЗЯ!
+  if (caravan.status === 'voyage_sailing') {
+    SoundManager.uiClick();
+    triggerHaptic('medium');
+    spawnFloatingText(wx, wy - 24, '⛵ Хряки в плавании! В другой поход нельзя!', '#ff6b6b');
+    openVoyageModal();
+    return;
+  }
+  if (caravan.status === 'moving') {
+    SoundManager.uiClick();
+    triggerHaptic('light');
+    spawnFloatingText(wx, wy - 24, 'Обоз уже в пути! В другой поход пока нельзя!', '#ff6b6b');
+    return;
+  }
+
+  // 2. Если хряки сейчас на 15-минутных сборах перед отплытием — открываем окно «Вы уверены?», где можно передумать и отменить!
+  if (caravan.status === 'voyage_prep') {
+    SoundManager.uiClick();
+    triggerHaptic('medium');
+    openVoyageModal();
+    return;
+  }
+
+  const dest = classifyDestination(wx, wy);
+  if (!dest.isDistantSea && Math.hypot(dest.targetX - caravan.x, dest.targetY - caravan.y) < 28) {
+    return;
+  }
+
+  // 3. ПРЕДОТВРАЩЕНИЕ СЛУЧАЙНЫХ КАСАНИЙ:
+  //    Куда бы ни нажал игрок (в лес, на поляну, к реке или в море) — хряки НЕ отправляются, пока игрок не подтвердит отправку!
+  pendingVoyageTarget = dest;
+  SoundManager.uiClick();
+  triggerHaptic('light');
+  openVoyageModal();
 }
 
 /**
@@ -1823,7 +2284,11 @@ function syncActiveBoars() {
         fullnessTimer: 0,
         labelTimer: 3.0,
         waitTimer: Math.random() * 2,
-        walkPhase: Math.random() * Math.PI * 2
+        walkPhase: Math.random() * Math.PI * 2,
+        breathPhase: Math.random() * Math.PI * 2,
+        blinkCooldown: 1.5 + Math.random() * 3.0,
+        blinkTimer: 0,
+        dustCooldown: 0
       });
     } else {
       const existing = activeBoars.find((ab) => ab.uid === inst.uid);
@@ -1959,10 +2424,71 @@ function resize() {
   canvas.width = Math.round(W * dpr);
   canvas.height = Math.round(H * dpr);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.imageSmoothingEnabled = false;
   computeHudLayout();
   const c = clampCamera(camera.x, camera.y);
   camera.x = c.x;
   camera.y = c.y;
+}
+
+
+const locationNavStrip = document.getElementById('locationNavStrip');
+let locationNavBuilt = false;
+
+function buildLocationNavStrip() {
+  if (!locationNavStrip) return;
+  locationNavStrip.innerHTML = '';
+  const items = [
+    { id: 'pen', icon: '🐷', label: 'Загон', getTarget: () => ({ wx: WORLD.penRect.x + WORLD.penRect.w / 2, wy: WORLD.penRect.y + WORLD.penRect.h / 2, zoom: 0.85 }) },
+    { id: 'breed', icon: '❤️', label: 'Случка', getTarget: () => ({ wx: BREEDING_CONFIG.rect.x + BREEDING_CONFIG.rect.w / 2, wy: BREEDING_CONFIG.rect.y + BREEDING_CONFIG.rect.h / 2, zoom: 0.85 }) },
+    { id: 'market', icon: '⚖️', label: 'Рынок', getTarget: () => ({ wx: MARKET_CONFIG.rect.x + MARKET_CONFIG.rect.w / 2, wy: MARKET_CONFIG.rect.y + MARKET_CONFIG.rect.h / 2, zoom: 0.85 }) },
+    { id: 'barn', icon: '🏠', label: 'Амбар', getTarget: () => ({ wx: BARN_CONFIG.rect.x + BARN_CONFIG.rect.w / 2, wy: BARN_CONFIG.rect.y + BARN_CONFIG.rect.h / 2, zoom: 0.85 }) },
+    { id: 'sawmill', icon: '🪵', label: 'Лесопилка', getTarget: () => ({ wx: SAWMILL_CONFIG.rect.x + SAWMILL_CONFIG.rect.w / 2, wy: SAWMILL_CONFIG.rect.y + SAWMILL_CONFIG.rect.h / 2, zoom: 0.85 }) },
+    { id: 'f0', icon: '🥕', label: 'Огород', getTarget: () => ({ wx: FIELD_CONFIGS[0].rect.x + FIELD_CONFIGS[0].rect.w / 2, wy: FIELD_CONFIGS[0].rect.y + FIELD_CONFIGS[0].rect.h / 2, zoom: 0.82 }) },
+    { id: 'harbor', icon: '⛵', label: 'Верфь', getTarget: () => ({ wx: HARBOR_TILE.tx * TILE_SIZE + TILE_SIZE / 2, wy: HARBOR_TILE.ty * TILE_SIZE + TILE_SIZE / 2, zoom: 0.65 }) },
+    { id: 'squad', icon: '🧭', label: 'Обоз', getTarget: () => ({ wx: caravan.x, wy: caravan.y, zoom: Math.max(camera.targetZoom, 0.6) }) },
+    { id: 'world', icon: '🗺️', label: 'Долина', getTarget: () => ({ wx: WORLD.w / 2, wy: WORLD.h / 2, zoom: 0.095 }) }
+  ];
+
+  items.forEach((item) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'loc-nav-btn';
+    btn.dataset.locId = item.id;
+    btn.textContent = `${item.icon} ${item.label}`;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      SoundManager.uiClick();
+      triggerHaptic('light');
+      const t = item.getTarget();
+      if (t.zoom) {
+        setZoomAroundScreenPoint(t.zoom, W / 2, H / 2, true);
+      }
+      focusCameraOn(t.wx, t.wy, t.zoom || camera.targetZoom);
+    });
+    locationNavStrip.appendChild(btn);
+  });
+  locationNavBuilt = true;
+}
+
+function syncLocationNavStripState() {
+  if (!locationNavBuilt) buildLocationNavStrip();
+  if (!locationNavStrip) return;
+  const targetTop = `${hudLayout.safeTop + 42}px`;
+  const targetRight = `${W - hudLayout.minimap.x + 8}px`;
+  if (locationNavStrip.style.top !== targetTop) locationNavStrip.style.top = targetTop;
+  if (locationNavStrip.style.right !== targetRight) locationNavStrip.style.right = targetRight;
+
+  const btns = locationNavStrip.querySelectorAll('.loc-nav-btn');
+  btns.forEach((btn) => {
+    const id = btn.dataset.locId;
+    const isLocked = (id === 'barn' && state.barnLevel === 0) || (id === 'sawmill' && state.sawmillLevel === 0) || (id === 'harbor' && !state.shipBuilt);
+    const isReady = (id === 'harbor' && state.shipBuild && state.shipBuild.active && Date.now() >= state.shipBuild.startTimeMs + state.shipBuild.durationMs) ||
+                    (id === 'breed' && state.breeding && state.breeding.active && Date.now() >= state.breeding.startTimeMs + state.breeding.durationMs);
+    btn.classList.toggle('loc-locked', isLocked && !isReady);
+    btn.classList.toggle('loc-green', Boolean(isReady));
+    btn.classList.toggle('loc-warm', id === 'market' || id === 'squad');
+  });
 }
 
 function computeHudLayout() {
@@ -2007,6 +2533,7 @@ function computeHudLayout() {
     { id: 'barn', label: 'Амбар', wx: BARN_CONFIG.rect.x + BARN_CONFIG.rect.w / 2, wy: BARN_CONFIG.rect.y + BARN_CONFIG.rect.h / 2 },
     { id: 'sawmill', label: 'Пилка', wx: SAWMILL_CONFIG.rect.x + SAWMILL_CONFIG.rect.w / 2, wy: SAWMILL_CONFIG.rect.y + SAWMILL_CONFIG.rect.h / 2 },
     { id: 'f0', label: 'Огород', wx: FIELD_CONFIGS[0].rect.x + FIELD_CONFIGS[0].rect.w / 2, wy: FIELD_CONFIGS[0].rect.y + FIELD_CONFIGS[0].rect.h / 2 },
+    { id: 'harbor', label: 'Верфь', wx: HARBOR_TILE.tx * TILE_SIZE + TILE_SIZE / 2, wy: HARBOR_TILE.ty * TILE_SIZE + TILE_SIZE / 2, zoom: 0.65 },
     { id: 'squad', label: 'Обоз', wx: caravan.x, wy: caravan.y },
     { id: 'world', label: 'Долина', wx: WORLD.w / 2, wy: WORLD.h / 2, zoom: 0.092 }
   ];
@@ -2024,7 +2551,7 @@ function computeHudLayout() {
 
   hudLayout.sunDialCard = {
     x: 10,
-    y: navY + 34,
+    y: navY + 40,
     w: Math.min(205, navAvailW),
     h: 34
   };
@@ -2054,34 +2581,36 @@ function computeHudLayout() {
 /**
  * БЫСТРЫЙ ОФФСКРИН-КЭШ КАРТЫ И ОБЛАЧНОГО ПОКРОВА (768x768)
  */
-const OVERVIEW_SCALE = 2; // 160 * 2 = 320x320 (в 9 раз меньше видеопамяти и мгновенная отрисовка)
+const OVERVIEW_SCALE = 4; // 160 * 4 = 640x640 HD-кэш для чёткости при отдалении
 const overviewCanvas = document.createElement('canvas');
 overviewCanvas.width = MAP_COLS * OVERVIEW_SCALE;
 overviewCanvas.height = MAP_ROWS * OVERVIEW_SCALE;
 const octx = overviewCanvas.getContext('2d');
+octx.imageSmoothingEnabled = false;
 
 const fogCanvas = document.createElement('canvas');
 fogCanvas.width = MAP_COLS * OVERVIEW_SCALE;
 fogCanvas.height = MAP_ROWS * OVERVIEW_SCALE;
 const fctx = fogCanvas.getContext('2d');
+fctx.imageSmoothingEnabled = false;
 const fogImageData = fctx.createImageData(fogCanvas.width, fogCanvas.height);
 const fogPixels32 = new Uint32Array(fogImageData.data.buffer);
 const cloudBasePixels32 = new Uint32Array(fogCanvas.width * fogCanvas.height);
 let fogLayerDirty = true;
 
 const TILE_PALETTE = [
-  '#235375', // 0: глубокая бирюзовая вода
-  '#45a5de', // 1: лазурная отмель
-  '#f3d486', // 2: песчаная коса
-  '#82c925', // 3: сочный луг
-  '#6eb527', // 4: изумрудная трава
-  '#b8d858', // 5: солнечная поляна
-  '#49752b', // 6: кедровый бор
-  '#629647', // 7: берёзовая роща
-  '#9c8867', // 8: каменистые холмы
-  '#7d7063', // 9: скалы Алтая
-  '#2fb0fa', // 10: река Катунька и озёра
-  '#d99f62'  // 11: просёлочная тропа
+  '#0277BD', // 0: насыщенный морской океан
+  '#039BE5', // 1: лазурная береговая отмель
+  '#ffe07d', // 2: тёплый золотой песок
+  '#7ee024', // 3: сочный мультяшный луг
+  '#64c91c', // 4: насыщенная изумрудная трава
+  '#b8f035', // 5: солнечная поляна
+  '#459624', // 6: густой кедровый бор
+  '#66bf32', // 7: весенняя берёзовая роща
+  '#b8925c', // 8: тёплые терракотовые холмы
+  '#7a728a', // 9: скалистые вершины
+  '#1ec8ff', // 10: хрустальная река и озёра
+  '#eba452'  // 11: золотистая просёлочная тропа
 ];
 
 function drawTileDecoration(c, tx, ty, ts, now = 0) {
@@ -2315,27 +2844,42 @@ function hexToAbgr32(hex) {
 function bakeOverviewTerrain() {
   const w = overviewCanvas.width;
   const h = overviewCanvas.height;
-  const imgData = octx.createImageData(w, h);
-  const buf32 = new Uint32Array(imgData.data.buffer);
-  const palette32 = TILE_PALETTE.map(hexToAbgr32);
+  octx.imageSmoothingEnabled = false;
 
+  // 1. Насыщенный морской градиент (#0277BD — #01579B) на весь океан
+  const seaGrad = octx.createLinearGradient(0, 0, w, h);
+  seaGrad.addColorStop(0, '#0277BD');
+  seaGrad.addColorStop(0.55, '#0268A6');
+  seaGrad.addColorStop(1, '#01579B');
+  octx.fillStyle = seaGrad;
+  octx.fillRect(0, 0, w, h);
+
+  // Лёгкая текстура морских волн на фоне океана
+  octx.strokeStyle = 'rgba(129, 212, 250, 0.22)';
+  octx.lineWidth = 1.6;
+  for (let wy = 10; wy < h; wy += 18) {
+    for (let wx = (wy % 36 === 0 ? 8 : 22); wx < w - 16; wx += 38) {
+      octx.beginPath();
+      octx.moveTo(wx, wy);
+      octx.quadraticCurveTo(wx + 7, wy - 2.5, wx + 14, wy);
+      octx.stroke();
+    }
+  }
+
+  // 2. Рисуем тайлы суши, отмелей, пляжей и рек со сглаженными берегами
   for (let ty = 0; ty < MAP_ROWS; ty++) {
     const rowOff = ty * MAP_COLS;
     const pyBase = ty * OVERVIEW_SCALE;
     for (let tx = 0; tx < MAP_COLS; tx++) {
-      const col32 = palette32[TILE_GRID[rowOff + tx]];
+      const tType = TILE_GRID[rowOff + tx];
+      if (tType === 0) continue; // океан уже отрисован морским градиентом с волнами
       const pxBase = tx * OVERVIEW_SCALE;
-      for (let oy = 0; oy < OVERVIEW_SCALE; oy++) {
-        const dstRow = (pyBase + oy) * w + pxBase;
-        for (let ox = 0; ox < OVERVIEW_SCALE; ox++) {
-          buf32[dstRow + ox] = col32;
-        }
-      }
+      octx.fillStyle = TILE_PALETTE[tType];
+      octx.fillRect(pxBase, pyBase, OVERVIEW_SCALE, OVERVIEW_SCALE);
     }
   }
-  octx.putImageData(imgData, 0, 0);
 
-  // Декорации для крупных объектов (горы, деревья, мосты)
+  // 3. Декорации для крупных объектов (горы, деревья, мосты)
   for (let ty = 0; ty < MAP_ROWS; ty++) {
     for (let tx = 0; tx < MAP_COLS; tx++) {
       const p = TILE_PROPS[ty * MAP_COLS + tx];
@@ -2345,28 +2889,44 @@ function bakeOverviewTerrain() {
     }
   }
 
-  // Однократно запекаем облачный покров в Uint32Array
+  // 4. Вместо белого фона с облаками вокруг острова — морская дымка (#0277BD — #01579B) только над неоткрытой сушей, а вокруг острова — чистое море с волнами!
   const tempCloud = document.createElement('canvas');
   tempCloud.width = w;
   tempCloud.height = h;
   const tctx = tempCloud.getContext('2d');
-  const grad = tctx.createLinearGradient(0, 0, w, h);
-  grad.addColorStop(0, '#eef2f5');
-  grad.addColorStop(0.5, '#e2e8ec');
-  grad.addColorStop(1, '#d8e0e6');
-  tctx.fillStyle = grad;
-  tctx.fillRect(0, 0, w, h);
+  tctx.clearRect(0, 0, w, h);
 
-  for (let i = 0; i < 180; i++) {
+  const fogGrad = tctx.createLinearGradient(0, 0, w, h);
+  fogGrad.addColorStop(0, 'rgba(2, 119, 189, 0.78)');
+  fogGrad.addColorStop(1, 'rgba(1, 87, 155, 0.84)');
+
+  for (let ty = 0; ty < MAP_ROWS; ty++) {
+    const rowOff = ty * MAP_COLS;
+    const pyBase = ty * OVERVIEW_SCALE;
+    for (let tx = 0; tx < MAP_COLS; tx++) {
+      const tType = TILE_GRID[rowOff + tx];
+      if (tType <= 1) continue; // Вокруг острова и в море нет белых облаков — виден морской градиент с волнами!
+      tctx.fillStyle = fogGrad;
+      tctx.fillRect(tx * OVERVIEW_SCALE, pyBase, OVERVIEW_SCALE, OVERVIEW_SCALE);
+    }
+  }
+
+  // Лёгкие волнистые линии на морской дымке
+  tctx.strokeStyle = 'rgba(179, 229, 252, 0.25)';
+  tctx.lineWidth = 1.5;
+  for (let i = 0; i < 140; i++) {
     const cx = hash2D(i, 41) * w;
     const cy = hash2D(73, i) * h;
-    const rx = 8 + hash2D(i, 19) * 12;
-    const ry = rx * 0.62;
-    tctx.fillStyle = i % 2 === 0 ? 'rgba(255, 255, 255, 0.72)' : 'rgba(206, 218, 228, 0.55)';
-    tctx.beginPath();
-    tctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
-    tctx.fill();
+    const tx = Math.floor(cx / OVERVIEW_SCALE);
+    const ty = Math.floor(cy / OVERVIEW_SCALE);
+    if (tx >= 0 && tx < MAP_COLS && ty >= 0 && ty < MAP_ROWS && TILE_GRID[ty * MAP_COLS + tx] > 1) {
+      tctx.beginPath();
+      tctx.moveTo(cx - 8, cy);
+      tctx.quadraticCurveTo(cx, cy - 3, cx + 8, cy);
+      tctx.stroke();
+    }
   }
+
   const cData = tctx.getImageData(0, 0, w, h);
   cloudBasePixels32.set(new Uint32Array(cData.data.buffer));
 }
@@ -2399,33 +2959,77 @@ function rebuildFogCanvas() {
  */
 let floatingTexts = [];
 let particles = [];
+let dustPuffs = [];
 let barnBounce = 0;
+let sawmillBounce = 0;
+let marketBounce = 0;
+let breedBounce = 0;
 let shopBtnBounce = 0;
+let pillBounce = { coin: 0, food: 0, log: 0 };
+let plotBounces = {};
+let cameraShakeTime = 0;
+let cameraShakeMag = 0;
+let pressedHudKey = null;
 let seedBounce = { carrot: 0, pumpkin: 0, acorn: 0 };
+
+// Плывущие полупрозрачные облака над усадьбой
+const driftingClouds = Array.from({ length: 10 }, (_, idx) => ({
+  x: WORLD.penRect.x - 900 + idx * 320,
+  y: WORLD.penRect.y - 600 + (idx % 4) * 440,
+  rx: 95 + (idx % 3) * 35,
+  ry: 48 + (idx % 2) * 18,
+  speed: 14 + (idx % 4) * 5
+}));
+
+function triggerCameraShake(mag = 4, dur = 0.16) {
+  cameraShakeMag = Math.max(cameraShakeMag, mag);
+  cameraShakeTime = Math.max(cameraShakeTime, dur);
+}
+
+function spawnDustPuff(wx, wy, count = 2, color = 'rgba(235, 215, 175, 0.55)') {
+  if (dustPuffs.length > 36) dustPuffs.splice(0, count);
+  for (let i = 0; i < count; i++) {
+    dustPuffs.push({
+      x: wx + (Math.random() - 0.5) * 18,
+      y: wy + (Math.random() - 0.5) * 8,
+      vx: (Math.random() - 0.5) * 26,
+      vy: -10 - Math.random() * 18,
+      r: 6 + Math.random() * 6,
+      life: 1.0,
+      color
+    });
+  }
+}
 
 function spawnFloatingText(wx, wy, text, color = '#ffdd59') {
   if (floatingTexts.length > 24) floatingTexts.shift();
-  floatingTexts.push({ x: wx, y: wy, text, color, life: 1.0, vy: -60 });
+  floatingTexts.push({ x: wx, y: wy, text, color, life: 1.0, maxLife: 1.0, vy: -68 });
+  if (text.includes('💰') || text.includes('+')) pillBounce.coin = 1.0;
+  if (text.includes('корма') || text.includes('🥕')) pillBounce.food = 1.0;
+  if (text.includes('🪵') || text.includes('брев')) pillBounce.log = 1.0;
 }
 
 function spawnParticles(wx, wy, iconKey, count = 5) {
-  if (particles.length > 48) particles.splice(0, count);
+  if (particles.length > 56) particles.splice(0, count);
   for (let i = 0; i < count; i++) {
-    const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
-    const speed = 60 + Math.random() * 80;
+    const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.55;
+    const speed = 68 + Math.random() * 92;
     particles.push({
       x: wx,
       y: wy,
       vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed - 44,
+      vy: Math.sin(angle) * speed - 56,
+      rot: (Math.random() - 0.5) * 1.2,
+      vRot: (Math.random() - 0.5) * 6,
       iconKey,
       life: 1.0,
-      scale: 0.78 + Math.random() * 0.45
+      scale: 0.8 + Math.random() * 0.48
     });
   }
 }
 
 function canAffordAnything() {
+  if (!state.shipBuilt && !state.shipBuild && state.logs >= SHIP_BUILD_LOGS && state.coins >= SHIP_BUILD_COINS) return true;
   if (state.boars.length < getMaxHerdCapacity()) {
     const cheapestBoar = BOAR_CATALOG.find((b) => state.coins >= b.price);
     if (cheapestBoar) return true;
@@ -2475,43 +3079,75 @@ function roundRect(ctx, x, y, w, h, r) {
 }
 
 function drawGroundShadow(ctx, x, y, rx, ry) {
-  ctx.fillStyle = 'rgba(18, 35, 12, 0.24)';
+  const sg = ctx.createRadialGradient(x, y, rx * 0.1, x, y, rx);
+  sg.addColorStop(0, 'rgba(15, 32, 10, 0.36)');
+  sg.addColorStop(0.65, 'rgba(15, 32, 10, 0.18)');
+  sg.addColorStop(1, 'rgba(15, 32, 10, 0)');
+  ctx.fillStyle = sg;
   ctx.beginPath();
-  ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2);
+  ctx.ellipse(x, y, rx * 1.12, ry * 1.12, 0, 0, Math.PI * 2);
   ctx.fill();
 }
 
-function drawCartoonButton(ctx, x, y, w, h, r, topColor, bottomColor, pressed = false) {
+function drawCartoonButton(ctx, x, y, w, h, r = 14, topColor = '#FFC107', bottomColor = '#FFA000', pressed = false) {
+  const radius = 14;
+  const depth = 4; // Нижняя ступенька 4px (box-shadow: 0 4px 0 #2b1d0e)
   const offset = pressed ? 3 : 0;
-  ctx.fillStyle = '#1a1a1a';
-  roundRect(ctx, x, y + 4, w, h, r);
+
+  ctx.save();
+  // Нижняя ступенька Brawl Stars (#2b1d0e)
+  ctx.fillStyle = '#2b1d0e';
+  roundRect(ctx, x, y + depth, w, h, radius);
   ctx.fill();
 
+  // Основной корпус кнопки
   const grad = ctx.createLinearGradient(0, y + offset, 0, y + offset + h);
   grad.addColorStop(0, topColor);
   grad.addColorStop(1, bottomColor);
   ctx.fillStyle = grad;
-  ctx.strokeStyle = '#1a1a1a';
-  ctx.lineWidth = 3.2;
-  roundRect(ctx, x, y + offset, w, h, r);
+  ctx.strokeStyle = '#2b1d0e';
+  ctx.lineWidth = 2;
+  roundRect(ctx, x, y + offset, w, h, radius);
   ctx.fill();
   ctx.stroke();
 
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.34)';
-  roundRect(ctx, x + 5, y + offset + 3, w - 10, h * 0.34, r * 0.6);
+  // Верхний глянцевый блик
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.32)';
+  roundRect(ctx, x + 3, y + offset + 2, Math.max(4, w - 6), h * 0.36, Math.max(6, radius - 3));
   ctx.fill();
+  ctx.restore();
 }
 
-function drawOutlinedText(text, x, y, fontSize, fill = '#ffffff', align = 'center', strokeW = 4) {
-  ctx.font = `900 ${fontSize}px 'Trebuchet MS', sans-serif`;
+function drawOutlinedText(text, x, y, fontSize, fill = '#ffffff', align = 'center', strokeW = 3.0) {
+  ctx.save();
   ctx.textAlign = align;
   ctx.textBaseline = 'middle';
   ctx.lineJoin = 'round';
-  ctx.lineWidth = strokeW;
-  ctx.strokeStyle = '#1a1a1a';
-  ctx.strokeText(text, x, y);
-  ctx.fillStyle = fill;
-  ctx.fillText(text, x, y);
+
+  const isSmallText = fontSize <= 12.6;
+  if (isSmallText) {
+    // Мелкие подписи: узкий Sofia Sans Condensed (700) БЕЗ толстой чёрной обводки, с объёмной тенью 0 2px 0 rgba(0,0,0,0.75)
+    ctx.font = `700 ${Math.round(fontSize * 1.08)}px 'Sofia Sans Condensed', 'Rubik', sans-serif`;
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.75)';
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 2;
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = fill;
+    ctx.fillText(text, x, y);
+  } else {
+    // Крупный текст, цифры ресурсов и заголовки кнопок: Rubik (800/900)
+    ctx.font = `900 ${fontSize}px 'Rubik', sans-serif`;
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+    ctx.fillText(text, x, y + 2);
+    if (strokeW > 0) {
+      ctx.strokeStyle = '#2b1d0e';
+      ctx.lineWidth = Math.min(2.6, strokeW * 0.65);
+      ctx.strokeText(text, x, y);
+    }
+    ctx.fillStyle = fill;
+    ctx.fillText(text, x, y);
+  }
+  ctx.restore();
 }
 
 function isRectVisible(rx, ry, rw, rh, margin = 150) {
@@ -2540,7 +3176,7 @@ function drawVisibleLayerCropped(sourceCanvas) {
   if (visW <= 0 || visH <= 0) return;
 
   const ratio = sourceCanvas.width / WORLD.w;
-  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingEnabled = false;
   ctx.drawImage(
     sourceCanvas,
     visX * ratio,
@@ -2674,8 +3310,16 @@ function drawAmbientLife(now) {
 }
 
 function drawTerrainAndTiles(now = 0) {
-  ctx.fillStyle = '#235375';
-  ctx.fillRect(camera.x - 10, camera.y - 10, W / camera.zoom + 20, H / camera.zoom + 20);
+  ctx.imageSmoothingEnabled = false;
+
+  const viewW = W / camera.zoom;
+  const viewH = H / camera.zoom;
+  const seaBgGrad = ctx.createLinearGradient(camera.x, camera.y, camera.x + viewW, camera.y + viewH);
+  seaBgGrad.addColorStop(0, '#0277BD');
+  seaBgGrad.addColorStop(1, '#01579B');
+  ctx.fillStyle = seaBgGrad;
+  ctx.fillRect(camera.x - 10, camera.y - 10, viewW + 20, viewH + 20);
+
   drawVisibleLayerCropped(overviewCanvas);
 
   if (camera.zoom >= 0.36) {
@@ -2699,24 +3343,38 @@ function drawTerrainAndTiles(now = 0) {
         ctx.fillRect(x, y, TILE_SIZE + 0.6, TILE_SIZE + 0.6);
 
         if (tType === 0 || tType === 1 || tType === 10) {
-          // Живая рябь и солнечные блики на воде
-          const wave = Math.sin(now / 480 + tx * 0.9 + ty * 0.6) * 5;
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.32)';
-          ctx.lineWidth = 2.2;
+          // Мультяшная живая рябь и солнечные блики на воде
+          const wave = Math.sin(now / 460 + tx * 0.9 + ty * 0.6) * 5.5;
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.44)';
+          ctx.lineWidth = 2.5;
           ctx.beginPath();
-          ctx.moveTo(x + 14 + wave, y + 22);
-          ctx.lineTo(x + 34 + wave, y + 22);
-          ctx.moveTo(x + 26 - wave, y + 44);
-          ctx.lineTo(x + 48 - wave, y + 44);
+          ctx.moveTo(x + 12 + wave, y + 20);
+          ctx.quadraticCurveTo(x + 24 + wave, y + 17, x + 36 + wave, y + 20);
+          ctx.moveTo(x + 24 - wave, y + 44);
+          ctx.quadraticCurveTo(x + 37 - wave, y + 41, x + 50 - wave, y + 44);
           ctx.stroke();
         } else if (tType === 11) {
-          // Брусчатка и колея на дорогах
-          ctx.fillStyle = '#c4884d';
+          // Объёмные камешки и золотистые блики на тропе
+          ctx.fillStyle = '#ffd08a';
           ctx.beginPath();
-          ctx.arc(x + 18, y + 20, 4.5, 0, Math.PI * 2);
-          ctx.arc(x + 44, y + 42, 5.5, 0, Math.PI * 2);
-          ctx.arc(x + 24, y + 48, 3.5, 0, Math.PI * 2);
+          ctx.ellipse(x + 20, y + 19, 6, 4, 0.2, 0, Math.PI * 2);
+          ctx.ellipse(x + 44, y + 43, 7, 4.5, -0.2, 0, Math.PI * 2);
           ctx.fill();
+          ctx.fillStyle = '#b87432';
+          ctx.beginPath();
+          ctx.arc(x + 22, y + 21, 3.5, 0, Math.PI * 2);
+          ctx.arc(x + 46, y + 45, 4, 0, Math.PI * 2);
+          ctx.fill();
+        } else if ((tType === 3 || tType === 4) && (tx + ty) % 3 === 0) {
+          // Сочные мультяшные травинки-галочки на лугах
+          ctx.strokeStyle = '#4aa812';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(x + 24, y + 34);
+          ctx.lineTo(x + 20, y + 27);
+          ctx.moveTo(x + 24, y + 34);
+          ctx.lineTo(x + 29, y + 28);
+          ctx.stroke();
         }
       }
     }
@@ -2901,21 +3559,24 @@ function drawLandmarks(now) {
     const lm = LANDMARKS[i];
     const wx = lm.tx * TILE_SIZE + TILE_SIZE / 2;
     const wy = lm.ty * TILE_SIZE + TILE_SIZE / 2;
-    if (!isRectVisible(wx - 220, wy - 220, 440, 440, 200)) continue;
+    if (!isRectVisible(wx - 240, wy - 240, 480, 480, 220)) continue;
 
     const tileIdx = lm.ty * MAP_COLS + lm.tx;
-    const isDiscovered = state.discoveredLandmarks.includes(lm.id) || FOG_GRID[tileIdx] === 1;
+    const nearCaravan = Math.hypot(caravan.x - wx, caravan.y - wy) < 220 && caravan.status !== 'voyage_prep';
+    const isDiscovered = state.discoveredLandmarks.includes(lm.id) || ( lm.isIsland ? nearCaravan : FOG_GRID[tileIdx] === 1 );
 
     if (isDiscovered && !state.discoveredLandmarks.includes(lm.id)) {
       state.discoveredLandmarks.push(lm.id);
       state.coins += lm.rewardCoins;
       state.food += lm.rewardFood;
+      if (lm.rewardLogs) state.logs += lm.rewardLogs;
       SoundManager.discover();
-      spawnFloatingText(wx, wy - 55, `ОТКРЫТО: ${lm.name}! +${lm.rewardCoins}`, '#ffe047');
+      spawnFloatingText(wx, wy - 55, `ОТКРЫТО: ${lm.name}! +${lm.rewardCoins}💰`, '#ffe047');
       saveGame();
     }
 
-    if (!isDiscovered) continue;
+    // Морские острова видны всегда как маяки в море, чтобы по ним можно было нажать
+    if (!isDiscovered && !lm.isIsland) continue;
 
     ctx.save();
     ctx.translate(wx, wy);
@@ -2980,6 +3641,58 @@ function drawLandmarks(now) {
       ctx.lineTo(0, 24);
       ctx.stroke();
       ctx.restore();
+    } else if (lm.kind === 'harbor') {
+      // Верфь и Порт «Морской Пятачок»
+      drawGroundShadow(ctx, 0, 26, 48, 14);
+      ctx.fillStyle = '#9c5923';
+      ctx.strokeStyle = '#1b1209';
+      ctx.lineWidth = 3.2;
+      roundRect(ctx, -34, 4, 68, 20, 6);
+      ctx.fill();
+      ctx.stroke();
+
+      if (state.shipBuilt) {
+        const bob = Math.sin(now / 260) * 3;
+        drawCartoonIcon(ctx, 'ship', 0, -14 + bob, 46);
+      } else if (state.shipBuild && state.shipBuild.active) {
+        // Строящийся остов корабля на деревянных лесах
+        ctx.fillStyle = '#c97a35';
+        roundRect(ctx, -22, -10, 44, 14, 5);
+        ctx.fill();
+        ctx.stroke();
+        // Леса верфи
+        ctx.strokeStyle = '#5c310e';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(-24, 4);
+        ctx.lineTo(-24, -22);
+        ctx.moveTo(24, 4);
+        ctx.lineTo(24, -22);
+        ctx.moveTo(-28, -16);
+        ctx.lineTo(28, -16);
+        ctx.stroke();
+        drawCartoonIcon(ctx, 'log', 0, -14, 26);
+      } else {
+        // Пустой стапель верфи
+        ctx.setLineDash([6, 5]);
+        ctx.strokeStyle = '#ffe047';
+        ctx.lineWidth = 2.8;
+        roundRect(ctx, -24, -20, 48, 22, 7);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        drawCartoonIcon(ctx, 'log', -10, -9, 22);
+        drawCartoonIcon(ctx, 'ship', 12, -11, 24);
+      }
+    } else if (lm.kind === 'island') {
+      // Маяк и золотой сундук морского острова
+      const bob = Math.sin(now / 280 + lm.tx) * 3.5;
+      drawGroundShadow(ctx, 0, 22, 38, 12);
+      ctx.fillStyle = 'rgba(255, 224, 71, 0.28)';
+      ctx.beginPath();
+      ctx.arc(0, -4 + bob, 28, 0, Math.PI * 2);
+      ctx.fill();
+      drawCartoonIcon(ctx, 'ship', -12, -4 + bob, 32);
+      drawCartoonIcon(ctx, 'coin', 14, 2 + bob, 26);
     } else {
       drawGroundShadow(ctx, 0, 18, 30, 9);
       ctx.fillStyle = '#fff5dc';
@@ -3002,7 +3715,21 @@ function drawLandmarks(now) {
     ctx.save();
     ctx.translate(0, 38 * Math.min(1.8, invScale * 0.65));
     ctx.scale(invScale, invScale);
-    drawOutlinedText(lm.name, 0, 0, 13.5, lm.kind === 'home' ? '#ffe047' : '#ffffff', 'center', 3.4);
+    const titleCol = lm.isIsland ? '#74ff52' : (lm.kind === 'home' || lm.kind === 'harbor') ? '#ffe047' : '#ffffff';
+    drawOutlinedText(lm.isIsland ? `⛵ ${lm.name}` : lm.name, 0, 0, 13.5, titleCol, 'center', 3.6);
+    if (lm.isIsland) {
+      drawOutlinedText(`Только на корабле • +${lm.rewardCoins}💰`, 0, 16, 11, '#ffe047', 'center', 3.0);
+    } else if (lm.kind === 'harbor') {
+      if (state.shipBuilt) {
+        drawOutlinedText(`⛵ Корабль готов к плаванию!`, 0, 16, 11, '#74ff52', 'center', 3.0);
+      } else if (state.shipBuild && state.shipBuild.active) {
+        const remBuild = Math.max(0, state.shipBuild.startTimeMs + state.shipBuild.durationMs - Date.now());
+        const bTxt = remBuild > 0 ? `🔨 Стройка: ${formatRealDuration(remBuild)}` : `🎉 КОРАБЛЬ ГОТОВ! ЖМИ`;
+        drawOutlinedText(bTxt, 0, 16, 11, remBuild > 0 ? '#48dbfb' : '#74ff52', 'center', 3.0);
+      } else {
+        drawOutlinedText(`🔨 Построить корабль (250🪵 + 350💰)`, 0, 16, 11, '#ffcf56', 'center', 3.0);
+      }
+    }
     ctx.restore();
 
     ctx.restore();
@@ -3013,11 +3740,14 @@ function drawBreedingHouse(now) {
   const { x, y, w, h } = BREEDING_CONFIG.rect;
   if (!isRectVisible(x, y, w, h, 140)) return;
 
-  drawGroundShadow(ctx, x + w / 2, y + h - 4, w * 0.48, 20);
-  ctx.fillStyle = '#e6c280';
-  ctx.strokeStyle = '#1a1a1a';
-  ctx.lineWidth = 3.5;
-  roundRect(ctx, x, y + 60, w, h - 60, 20);
+  drawGroundShadow(ctx, x + w / 2, y + h - 2, w * 0.5, 22);
+  const brPadGrad = ctx.createLinearGradient(x, y + 60, x, y + h);
+  brPadGrad.addColorStop(0, '#ffe299');
+  brPadGrad.addColorStop(1, '#d99e4c');
+  ctx.fillStyle = brPadGrad;
+  ctx.strokeStyle = '#1b1209';
+  ctx.lineWidth = 4;
+  roundRect(ctx, x, y + 60, w, h - 60, 24);
   ctx.fill();
   ctx.stroke();
 
@@ -3129,11 +3859,14 @@ function drawMarketZone(now) {
   const { x, y, w, h } = MARKET_CONFIG.rect;
   if (!isRectVisible(x, y, w, h, 140)) return;
 
-  drawGroundShadow(ctx, x + w / 2, y + h - 4, w * 0.48, 18);
-  ctx.fillStyle = '#e8c382';
-  ctx.strokeStyle = '#1a1a1a';
-  ctx.lineWidth = 3.5;
-  roundRect(ctx, x, y + 40, w, h - 40, 20);
+  drawGroundShadow(ctx, x + w / 2, y + h - 2, w * 0.5, 20);
+  const mkPadGrad = ctx.createLinearGradient(x, y + 40, x, y + h);
+  mkPadGrad.addColorStop(0, '#ffe5a3');
+  mkPadGrad.addColorStop(1, '#d99b45');
+  ctx.fillStyle = mkPadGrad;
+  ctx.strokeStyle = '#1b1209';
+  ctx.lineWidth = 4;
+  roundRect(ctx, x, y + 40, w, h - 40, 24);
   ctx.fill();
   ctx.stroke();
 
@@ -3176,11 +3909,14 @@ function drawBarnZone(now) {
   const { x, y, w, h } = BARN_CONFIG.rect;
   if (!isRectVisible(x, y, w, h, 140)) return;
 
-  drawGroundShadow(ctx, x + w / 2, y + h - 4, w * 0.48, 20);
-  ctx.fillStyle = '#d9b372';
-  ctx.strokeStyle = '#1a1a1a';
-  ctx.lineWidth = 3.5;
-  roundRect(ctx, x, y + 60, w, h - 60, 20);
+  drawGroundShadow(ctx, x + w / 2, y + h - 2, w * 0.5, 22);
+  const bnPadGrad = ctx.createLinearGradient(x, y + 60, x, y + h);
+  bnPadGrad.addColorStop(0, '#ffdf94');
+  bnPadGrad.addColorStop(1, '#cf9240');
+  ctx.fillStyle = bnPadGrad;
+  ctx.strokeStyle = '#1b1209';
+  ctx.lineWidth = 4;
+  roundRect(ctx, x, y + 60, w, h - 60, 24);
   ctx.fill();
   ctx.stroke();
 
@@ -3294,39 +4030,66 @@ function drawGirlBow(ctx, cx, cy, scale = 1.0) {
   ctx.scale(scale, scale);
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
-  ctx.strokeStyle = '#1a1a1a';
+  ctx.strokeStyle = '#1b1209';
   ctx.lineWidth = 2.6;
 
-  // Левое крыло бантика
-  ctx.fillStyle = '#ff4d8d';
+  // Нижние ленточки бантика
+  ctx.fillStyle = '#d81b60';
+  ctx.beginPath();
+  ctx.moveTo(-2, 2);
+  ctx.lineTo(-8, 12);
+  ctx.lineTo(-3, 10);
+  ctx.lineTo(0, 4);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(2, 2);
+  ctx.lineTo(8, 12);
+  ctx.lineTo(3, 10);
+  ctx.lineTo(0, 4);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Градиент атласных крыльев бантика
+  const bowGrad = ctx.createLinearGradient(0, -10, 0, 10);
+  bowGrad.addColorStop(0, '#ff85b3');
+  bowGrad.addColorStop(0.5, '#ff3377');
+  bowGrad.addColorStop(1, '#c2185b');
+  ctx.fillStyle = bowGrad;
+
+  // Левое крыло
   ctx.beginPath();
   ctx.moveTo(-2, 0);
-  ctx.quadraticCurveTo(-15, -10, -14, 0);
-  ctx.quadraticCurveTo(-15, 10, -2, 0);
+  ctx.bezierCurveTo(-17, -12, -17, 12, -2, 0);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
 
-  // Правое крыло бантика
+  // Правое крыло
   ctx.beginPath();
   ctx.moveTo(2, 0);
-  ctx.quadraticCurveTo(15, -10, 14, 0);
-  ctx.quadraticCurveTo(15, 10, 2, 0);
+  ctx.bezierCurveTo(17, -12, 17, 12, 2, 0);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
 
-  // Светлые блики на крыльях
-  ctx.fillStyle = '#ff9ff3';
+  // Глянцевые блики
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.72)';
   ctx.beginPath();
-  ctx.arc(-8, -2, 2.3, 0, Math.PI * 2);
-  ctx.arc(8, -2, 2.3, 0, Math.PI * 2);
+  ctx.ellipse(-8.5, -3.2, 3.2, 1.6, -0.3, 0, Math.PI * 2);
+  ctx.ellipse(8.5, -3.2, 3.2, 1.6, 0.3, 0, Math.PI * 2);
   ctx.fill();
 
-  // Центральный узелок
-  ctx.fillStyle = '#ff2a6d';
+  // Центральный объёмный узелок
+  const knotGrad = ctx.createRadialGradient(-1, -1.5, 1, 0, 0, 5);
+  knotGrad.addColorStop(0, '#ff9ec4');
+  knotGrad.addColorStop(1, '#ad1457');
+  ctx.fillStyle = knotGrad;
   ctx.beginPath();
-  ctx.arc(0, 0, 4.4, 0, Math.PI * 2);
+  ctx.arc(0, 0, 4.6, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
 
@@ -3337,9 +4100,13 @@ function drawPenAndBoars() {
   const { x, y, w, h } = WORLD.penRect;
   if (!isRectVisible(x, y, w, h, 140)) return;
 
-  drawGroundShadow(ctx, x + w / 2, y + h + 4, w * 0.49, 18);
-  ctx.fillStyle = '#84e058';
-  roundRect(ctx, x, y, w, h, 22);
+  drawGroundShadow(ctx, x + w / 2, y + h + 6, w * 0.5, 20);
+  const penTurfGrad = ctx.createRadialGradient(x + w * 0.48, y + h * 0.45, 30, x + w / 2, y + h / 2, w * 0.62);
+  penTurfGrad.addColorStop(0, '#a8ff5e');
+  penTurfGrad.addColorStop(0.65, '#7de03b');
+  penTurfGrad.addColorStop(1, '#58b81d');
+  ctx.fillStyle = penTurfGrad;
+  roundRect(ctx, x, y, w, h, 26);
   ctx.fill();
 
   // Декоративные пучки клевера и ромашек в загоне
@@ -3414,27 +4181,34 @@ function drawPenAndBoars() {
     let jumpOffset = 0;
     let scaleX = 1;
     let scaleY = 1;
+    let tilt = 0;
 
+    // Живое дыхание + пружинящее покачивание при ходьбе и прыжке
+    const breath = Math.sin(boar.breathPhase || 0) * 0.028;
     if (boar.bounceTime > 0) {
       const t = 1 - boar.bounceTime;
-      jumpOffset = Math.sin(t * Math.PI) * 34;
-      const squash = Math.sin(t * Math.PI * 2) * 0.22;
+      jumpOffset = Math.sin(t * Math.PI) * 38;
+      const squash = Math.sin(t * Math.PI * 2) * 0.24;
       scaleX = 1 + squash;
       scaleY = 1 - squash;
+      tilt = Math.sin(t * Math.PI * 2) * 0.08;
+    } else if (boar.waitTimer <= 0) {
+      const wobble = Math.sin(boar.walkPhase) * 0.055;
+      scaleX = 1 + wobble + breath;
+      scaleY = 1 - wobble - breath;
+      jumpOffset = Math.abs(Math.sin(boar.walkPhase)) * 5.5;
+      tilt = Math.sin(boar.walkPhase) * 0.045;
     } else {
-      const wobble = Math.sin(boar.walkPhase) * 0.04;
-      scaleX = 1 + wobble;
-      scaleY = 1 - wobble;
+      scaleX = 1 + breath;
+      scaleY = 1 - breath * 1.15;
     }
 
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.24)';
-    ctx.beginPath();
-    const shadowScale = 1 - jumpOffset / 120;
-    ctx.ellipse(bx, by + baseSize * 0.38, baseSize * 0.36 * shadowScale, baseSize * 0.12 * shadowScale, 0, 0, Math.PI * 2);
-    ctx.fill();
+    const shadowScale = Math.max(0.5, 1 - jumpOffset / 115);
+    drawGroundShadow(ctx, bx, by + baseSize * 0.39, baseSize * 0.38 * shadowScale, baseSize * 0.13 * shadowScale);
 
     ctx.save();
     ctx.translate(bx, by - jumpOffset);
+    ctx.rotate(tilt * boar.facing);
     ctx.scale(boar.facing * scaleX, scaleY);
 
     if (sprite && sprite.complete && sprite.naturalWidth > 0) {
@@ -3442,16 +4216,24 @@ function drawPenAndBoars() {
       const drawW = baseSize * aspect;
       const drawH = baseSize;
       ctx.drawImage(sprite, -drawW / 2, -drawH / 2, drawW, drawH);
+
+
+
       if (boar.gender === 'female') {
         // Бантик высоко на макушке/ушке (не закрывает глаз!)
-        drawGirlBow(ctx, drawW * 0.04, -drawH * 0.45, 0.92 * boar.scale);
+        drawGirlBow(ctx, drawW * 0.04, -drawH * 0.45, 0.96 * boar.scale);
       }
     } else {
-      ctx.fillStyle = '#ffb8c6';
-      ctx.strokeStyle = '#1a1a1a';
+      // Многослойная векторная иллюстрация хряка с градиентами и бликами
+      const bodyGrad = ctx.createRadialGradient(-8, -10, 4, 0, 4, 38);
+      bodyGrad.addColorStop(0, '#ffdde6');
+      bodyGrad.addColorStop(0.6, '#ff9ebb');
+      bodyGrad.addColorStop(1, '#d96b8c');
+      ctx.fillStyle = bodyGrad;
+      ctx.strokeStyle = '#1b1209';
       ctx.lineWidth = 3.5;
       ctx.beginPath();
-      ctx.ellipse(0, 4, 34, 26, 0, 0, Math.PI * 2);
+      ctx.ellipse(0, 4, 35, 27, 0, 0, Math.PI * 2);
       ctx.fill();
       ctx.stroke();
     }
@@ -3516,35 +4298,76 @@ function drawHeart(ctx, x, y, r) {
 }
 
 function drawFenceHorizontal(x, y, w) {
-  ctx.fillStyle = '#c97a35';
-  ctx.strokeStyle = '#1a1a1a';
+  ctx.save();
+  ctx.strokeStyle = '#1b1209';
   ctx.lineWidth = 3;
 
-  roundRect(ctx, x, y - 14, w, 8, 3);
+  // Мягкая тень от забора на траву
+  ctx.fillStyle = 'rgba(18, 36, 10, 0.22)';
+  roundRect(ctx, x + 2, y + 3, w, 8, 4);
+  ctx.fill();
+
+  const railGrad = ctx.createLinearGradient(0, y - 16, 0, y + 6);
+  railGrad.addColorStop(0, '#e59949');
+  railGrad.addColorStop(0.5, '#c2742c');
+  railGrad.addColorStop(1, '#8c4c16');
+  ctx.fillStyle = railGrad;
+
+  roundRect(ctx, x, y - 15, w, 8.5, 3.5);
   ctx.fill();
   ctx.stroke();
 
-  roundRect(ctx, x, y - 4, w, 8, 3);
+  roundRect(ctx, x, y - 4.5, w, 8.5, 3.5);
   ctx.fill();
   ctx.stroke();
 
+  // Верхний солнечный блик на перекладинах
+  ctx.strokeStyle = 'rgba(255, 232, 185, 0.45)';
+  ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  ctx.moveTo(x + 6, y - 13);
+  ctx.lineTo(x + w - 6, y - 13);
+  ctx.moveTo(x + 6, y - 2.5);
+  ctx.lineTo(x + w - 6, y - 2.5);
+  ctx.stroke();
+
+  ctx.strokeStyle = '#1b1209';
+  ctx.lineWidth = 3;
   const posts = Math.max(4, Math.floor(w / 62));
   for (let i = 0; i <= posts; i++) {
-    const px = x + (w / posts) * i - 6;
-    ctx.fillStyle = '#e09145';
-    roundRect(ctx, px, y - 22, 12, 28, 4);
+    const px = x + (w / posts) * i - 6.5;
+    const postGrad = ctx.createLinearGradient(px, y - 24, px + 13, y + 6);
+    postGrad.addColorStop(0, '#f3aa5b');
+    postGrad.addColorStop(0.6, '#cf7e32');
+    postGrad.addColorStop(1, '#945218');
+    ctx.fillStyle = postGrad;
+    roundRect(ctx, px, y - 23, 13, 29, 4.5);
     ctx.fill();
     ctx.stroke();
+
+    // Гвоздики на столбиках
+    ctx.fillStyle = '#3d2510';
+    ctx.beginPath();
+    ctx.arc(px + 6.5, y - 11, 1.6, 0, Math.PI * 2);
+    ctx.arc(px + 6.5, y, 1.6, 0, Math.PI * 2);
+    ctx.fill();
   }
+  ctx.restore();
 }
 
 function drawFenceVertical(x, y, h) {
-  ctx.fillStyle = '#c97a35';
-  ctx.strokeStyle = '#1a1a1a';
+  ctx.save();
+  const vGrad = ctx.createLinearGradient(x - 6, 0, x + 6, 0);
+  vGrad.addColorStop(0, '#eca050');
+  vGrad.addColorStop(0.6, '#c2742c');
+  vGrad.addColorStop(1, '#874814');
+  ctx.fillStyle = vGrad;
+  ctx.strokeStyle = '#1b1209';
   ctx.lineWidth = 3;
-  roundRect(ctx, x - 5, y - 16, 10, h + 18, 4);
+  roundRect(ctx, x - 5.5, y - 16, 11, h + 18, 4.5);
   ctx.fill();
   ctx.stroke();
+  ctx.restore();
 }
 
 function getFieldPlotRects(fieldCfg) {
@@ -3609,15 +4432,25 @@ function drawAllFields(now) {
       continue;
     }
 
-    ctx.fillStyle = '#1a1a1a';
-    roundRect(ctx, x, y + 4, w, h, 20);
+    ctx.fillStyle = '#1b1209';
+    roundRect(ctx, x, y + 6, w, h, 24);
     ctx.fill();
 
-    ctx.fillStyle = '#9c6631';
-    ctx.strokeStyle = '#1a1a1a';
+    const fldGrad = ctx.createLinearGradient(x, y, x, y + h);
+    fldGrad.addColorStop(0, '#c78342');
+    fldGrad.addColorStop(0.5, '#a16228');
+    fldGrad.addColorStop(1, '#754114');
+    ctx.fillStyle = fldGrad;
+    ctx.strokeStyle = '#1b1209';
     ctx.lineWidth = 4;
-    roundRect(ctx, x, y, w, h, 20);
+    roundRect(ctx, x, y, w, h, 24);
     ctx.fill();
+    ctx.stroke();
+
+    // Внутренний золотистый кант поля
+    ctx.strokeStyle = 'rgba(255, 224, 150, 0.35)';
+    ctx.lineWidth = 2.2;
+    roundRect(ctx, x + 5, y + 5, w - 10, h - 10, 20);
     ctx.stroke();
 
     const unlockPos = state.unlockedFields.indexOf(fieldCfg.id);
@@ -3757,7 +4590,7 @@ function drawCaravan(now) {
 
   if (caravan.trailHistory.length > 1) {
     ctx.save();
-    ctx.strokeStyle = 'rgba(92, 56, 24, 0.35)';
+    ctx.strokeStyle = caravan.status === 'voyage_sailing' ? 'rgba(255, 255, 255, 0.45)' : 'rgba(92, 56, 24, 0.35)';
     ctx.lineWidth = 5;
     ctx.lineCap = 'round';
     ctx.beginPath();
@@ -3769,21 +4602,62 @@ function drawCaravan(now) {
     ctx.restore();
   }
 
-  if (caravan.status === 'moving' && caravan.waypoints.length > 0) {
+  // Предпросмотр точки назначения при нажатии на карту (пока игрок не подтвердил отправку)
+  if (pendingVoyageTarget && voyageModal.classList.contains('active') && caravan.status === 'idle') {
+    const px = pendingVoyageTarget.targetX;
+    const py = pendingVoyageTarget.targetY;
+    const pulse = 1 + Math.sin(now / 150) * 0.16;
+
+    ctx.save();
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(caravan.x, caravan.y);
+    ctx.lineTo(px, py);
+    ctx.strokeStyle = 'rgba(27, 18, 9, 0.55)';
+    ctx.lineWidth = Math.max(6, 5 * invScale);
+    ctx.setLineDash([12, 10]);
+    ctx.lineDashOffset = -(now / 26) % 22;
+    ctx.stroke();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = Math.max(3, 2.5 * invScale);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.translate(px, py);
+    ctx.scale(invScale, invScale);
+    ctx.fillStyle = 'rgba(255, 224, 71, 0.36)';
+    ctx.beginPath();
+    ctx.arc(0, 0, 28 * pulse, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#ffe047';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+    drawCartoonIcon(ctx, pendingVoyageTarget.isDistantSea ? 'ship' : 'flag', 0, -8, 32);
+    drawOutlinedText('❓ Подтвердить?', 0, 24, 11.5, '#ffe047', 'center', 3);
+    ctx.restore();
+  }
+
+  // Линия маршрута для сухопутного похода или морского плавания
+  if ((caravan.status === 'moving' && caravan.waypoints.length > 0) ||
+      ((caravan.status === 'voyage_prep' || caravan.status === 'voyage_sailing') && caravan.targetX !== null)) {
     ctx.save();
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.beginPath();
     ctx.moveTo(caravan.x, caravan.y);
-    caravan.waypoints.forEach((wp) => ctx.lineTo(wp.x, wp.y));
+    if (caravan.status === 'moving') {
+      caravan.waypoints.forEach((wp) => ctx.lineTo(wp.x, wp.y));
+    } else {
+      ctx.lineTo(caravan.targetX, caravan.targetY);
+    }
 
-    ctx.strokeStyle = '#1a1a1a';
+    ctx.strokeStyle = '#1b1209';
     ctx.lineWidth = Math.max(8, 6 * invScale);
     ctx.setLineDash([14, 12]);
     ctx.lineDashOffset = -(now / 22) % 26;
     ctx.stroke();
 
-    ctx.strokeStyle = '#ffe047';
+    ctx.strokeStyle = (caravan.status === 'voyage_prep' || caravan.status === 'voyage_sailing') ? '#48dbfb' : '#ffe047';
     ctx.lineWidth = Math.max(4.5, 3.5 * invScale);
     ctx.stroke();
     ctx.setLineDash([]);
@@ -3794,11 +4668,11 @@ function drawCaravan(now) {
     ctx.save();
     ctx.translate(tx, ty);
     ctx.scale(invScale, invScale);
-    ctx.fillStyle = 'rgba(255, 224, 71, 0.28)';
+    ctx.fillStyle = 'rgba(72, 219, 251, 0.32)';
     ctx.beginPath();
-    ctx.arc(0, 0, 24 * pulse, 0, Math.PI * 2);
+    ctx.arc(0, 0, 26 * pulse, 0, Math.PI * 2);
     ctx.fill();
-    drawCartoonIcon(ctx, 'flag', 0, -6, 30);
+    drawCartoonIcon(ctx, (caravan.status === 'voyage_prep' || caravan.status === 'voyage_sailing') ? 'ship' : 'flag', 0, -6, 32);
     ctx.restore();
     ctx.restore();
   }
@@ -3807,33 +4681,103 @@ function drawCaravan(now) {
   ctx.translate(caravan.x, caravan.y);
   ctx.scale(invScale, invScale);
 
-  const bob = caravan.status === 'moving' ? Math.abs(Math.sin(caravan.stepPhase)) * 4 : 0;
+  const cTx = Math.max(0, Math.min(MAP_COLS - 1, Math.floor(caravan.x / TILE_SIZE)));
+  const cTy = Math.max(0, Math.min(MAP_ROWS - 1, Math.floor(caravan.y / TILE_SIZE)));
+  const onWater = TILE_GRID[cTy * MAP_COLS + cTx] <= 1 || caravan.status === 'voyage_sailing' || caravan.status === 'voyage_prep';
 
-  drawGroundShadow(ctx, 0, 18, 28, 9);
-
-  ctx.fillStyle = '#c97a35';
-  ctx.strokeStyle = '#1a1a1a';
-  ctx.lineWidth = 2.8;
-  roundRect(ctx, -22, -6 - bob, 44, 18, 5);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = '#5c3818';
-  ctx.beginPath();
-  ctx.arc(-13, 13, 6.5, 0, Math.PI * 2);
-  ctx.arc(13, 13, 6.5, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  const leadSprite = boarSprites['boar_classic'];
-  if (leadSprite && leadSprite.complete && leadSprite.naturalWidth > 0) {
+  if (onWater) {
+    // Рисуем корабль хряков с парусом и волнами!
+    const waveBob = Math.sin(now / 240) * 3.5;
+    const tilt = Math.sin(now / 380) * 0.06;
     ctx.save();
-    ctx.scale(caravan.facing, 1);
-    ctx.drawImage(leadSprite, -16, -28 - bob, 32, 32);
+    ctx.rotate(tilt);
+
+    // Пенистые волны под кораблём
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+    ctx.beginPath();
+    ctx.ellipse(0, 16, 32, 9, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Мачта и полосатый парус
+    ctx.strokeStyle = '#1b1209';
+    ctx.lineWidth = 3.5;
+    ctx.beginPath();
+    ctx.moveTo(0, 4 - waveBob);
+    ctx.lineTo(0, -38 - waveBob);
+    ctx.stroke();
+
+    const sailGrad = ctx.createLinearGradient(-18, -36, 20, -4);
+    sailGrad.addColorStop(0, '#ffffff');
+    sailGrad.addColorStop(0.6, '#fff3d1');
+    sailGrad.addColorStop(1, '#ffd166');
+    ctx.fillStyle = sailGrad;
+    ctx.beginPath();
+    ctx.moveTo(0, -36 - waveBob);
+    ctx.quadraticCurveTo(26 * caravan.facing, -20 - waveBob, 0, -4 - waveBob);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Хряк-капитан на палубе
+    const leadSprite = boarSprites['boar_classic'];
+    if (leadSprite && leadSprite.complete && leadSprite.naturalWidth > 0) {
+      ctx.save();
+      ctx.scale(caravan.facing, 1);
+      ctx.drawImage(leadSprite, -15, -24 - waveBob, 30, 30);
+      ctx.restore();
+    }
+
+    // Деревянный борт корабля
+    const hullGrad = ctx.createLinearGradient(0, -2 - waveBob, 0, 15 - waveBob);
+    hullGrad.addColorStop(0, '#d38b43');
+    hullGrad.addColorStop(0.5, '#9c5923');
+    hullGrad.addColorStop(1, '#5c310e');
+    ctx.fillStyle = hullGrad;
+    ctx.beginPath();
+    ctx.moveTo(-28, -1 - waveBob);
+    ctx.lineTo(28, -1 - waveBob);
+    ctx.lineTo(20, 14 - waveBob);
+    ctx.lineTo(-20, 14 - waveBob);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
     ctx.restore();
+  } else {
+    const bob = caravan.status === 'moving' ? Math.abs(Math.sin(caravan.stepPhase)) * 4 : 0;
+    drawGroundShadow(ctx, 0, 18, 28, 9);
+
+    ctx.fillStyle = '#c97a35';
+    ctx.strokeStyle = '#1a1a1a';
+    ctx.lineWidth = 2.8;
+    roundRect(ctx, -22, -6 - bob, 44, 18, 5);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#5c3818';
+    ctx.beginPath();
+    ctx.arc(-13, 13, 6.5, 0, Math.PI * 2);
+    ctx.arc(13, 13, 6.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    const leadSprite = boarSprites['boar_classic'];
+    if (leadSprite && leadSprite.complete && leadSprite.naturalWidth > 0) {
+      ctx.save();
+      ctx.scale(caravan.facing, 1);
+      ctx.drawImage(leadSprite, -16, -28 - bob, 32, 32);
+      ctx.restore();
+    }
   }
 
-  if (caravan.status === 'moving' && caravan.targetX !== null) {
+  if (caravan.status === 'voyage_prep' && state.voyage) {
+    const remMs = Math.max(0, state.voyage.prepStartTimeMs + state.voyage.prepDurationMs - Date.now());
+    drawOutlinedText(`⏳ Отплытие через ${formatRealDuration(remMs)}`, 0, 32, 12.5, '#ffe047', 'center', 3.4);
+    drawOutlinedText(`(Нажми, если передумал)`, 0, 47, 10.5, '#74ff52', 'center', 2.8);
+  } else if (caravan.status === 'voyage_sailing' && state.voyage) {
+    const remMs = Math.max(0, state.voyage.sailStartTimeMs + state.voyage.sailDurationMs - Date.now());
+    drawOutlinedText(`⛵ В плавании: ${formatRealDuration(remMs)}`, 0, 32, 12.5, '#48dbfb', 'center', 3.4);
+    drawOutlinedText(`В другой поход нельзя`, 0, 47, 10.2, '#ff9ff3', 'center', 2.8);
+  } else if (caravan.status === 'moving' && caravan.targetX !== null) {
     const remMeters = Math.max(5, Math.round(Math.hypot(caravan.targetX - caravan.x, caravan.targetY - caravan.y) / 8));
     drawOutlinedText(`В пути • ${remMeters} м`, 0, 30, 13, '#ffe047', 'center', 3.2);
   } else if (caravan.status === 'camp' && caravan.campTimer > 0) {
@@ -3863,7 +4807,65 @@ function getDayPhaseInfo(minutes) {
   return { timeStr, label: 'ночь', tint: 'rgba(20, 32, 62, 0.48)', glowAlpha: 0.9 };
 }
 
+function drawSunbeamsAndDriftingClouds(now) {
+  if (camera.zoom < 0.25) return;
+  const phase = getDayPhaseInfo(state.gameMinutes);
+
+  // 1. Мягкие плывущие облака и их тени на траве
+  ctx.save();
+  for (let i = 0; i < driftingClouds.length; i++) {
+    const cl = driftingClouds[i];
+    if (!isRectVisible(cl.x - cl.rx * 2, cl.y - cl.ry * 2, cl.rx * 4, cl.ry * 4, 180)) continue;
+
+    // Тень от облака на земле
+    ctx.fillStyle = 'rgba(15, 35, 20, 0.08)';
+    ctx.beginPath();
+    ctx.ellipse(cl.x + 45, cl.y + 85, cl.rx * 0.95, cl.ry * 0.7, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Воздушное полупрозрачное облако
+    const cg = ctx.createRadialGradient(cl.x - cl.rx * 0.2, cl.y - cl.ry * 0.25, 8, cl.x, cl.y, cl.rx);
+    cg.addColorStop(0, 'rgba(255, 255, 255, 0.24)');
+    cg.addColorStop(0.6, 'rgba(255, 255, 255, 0.11)');
+    cg.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    ctx.fillStyle = cg;
+    ctx.beginPath();
+    ctx.ellipse(cl.x, cl.y, cl.rx, cl.ry, 0, 0, Math.PI * 2);
+    ctx.ellipse(cl.x + cl.rx * 0.45, cl.y + 8, cl.rx * 0.72, cl.ry * 0.75, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+
+  // 2. Тёплые солнечные лучи (God Rays) над усадьбой утром и днём
+  if (phase.label === 'день' || phase.label === 'утро') {
+    const cx = WORLD.penRect.x - 240;
+    const cy = WORLD.penRect.y - 360;
+    if (isRectVisible(cx - 200, cy - 200, 1800, 1600, 300)) {
+      ctx.save();
+      ctx.globalCompositeOperation = 'screen';
+      for (let r = 0; r < 4; r++) {
+        const sway = Math.sin(now / 1900 + r * 1.4) * 35;
+        const rayX = cx + r * 340 + sway;
+        const rayGrad = ctx.createLinearGradient(rayX, cy, rayX + 420, cy + 1150);
+        rayGrad.addColorStop(0, 'rgba(255, 244, 185, 0.14)');
+        rayGrad.addColorStop(0.55, 'rgba(255, 236, 150, 0.06)');
+        rayGrad.addColorStop(1, 'rgba(255, 236, 150, 0)');
+        ctx.fillStyle = rayGrad;
+        ctx.beginPath();
+        ctx.moveTo(rayX, cy);
+        ctx.lineTo(rayX + 170, cy);
+        ctx.lineTo(rayX + 640, cy + 1150);
+        ctx.lineTo(rayX + 360, cy + 1150);
+        ctx.closePath();
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+  }
+}
+
 function drawCloudsAndDayNight(now) {
+  drawSunbeamsAndDriftingClouds(now);
   if (fogLayerDirty) rebuildFogCanvas();
 
   const phase = getDayPhaseInfo(state.gameMinutes);
@@ -3915,13 +4917,13 @@ function drawCloudsAndDayNight(now) {
  */
 function drawHUD(now) {
   const cp = hudLayout.coinPill;
-  drawStatPill(cp.x, cp.y, cp.w, cp.h, 'coin', Math.round(displayedCoins).toString(), '#ffcf56');
+  drawStatPill(cp.x, cp.y, cp.w, cp.h, 'coin', Math.round(displayedCoins).toString(), '#ffcf56', pillBounce.coin);
 
   const fp = hudLayout.foodPill;
-  drawStatPill(fp.x, fp.y, fp.w, fp.h, 'basket', `${state.food}`, '#a3e635');
+  drawStatPill(fp.x, fp.y, fp.w, fp.h, 'basket', `${state.food}`, '#a3e635', pillBounce.food);
 
   const lp = hudLayout.logPill;
-  drawStatPill(lp.x, lp.y, lp.w, lp.h, 'log', `${state.logs}`, '#deb887');
+  drawStatPill(lp.x, lp.y, lp.w, lp.h, 'log', `${state.logs}`, '#deb887', pillBounce.log);
 
   const snd = hudLayout.soundBtn;
   const muted = SoundManager.isMuted();
@@ -3948,40 +4950,42 @@ function drawHUD(now) {
   drawOutlinedText('−', zOut.x + zOut.w / 2, zOut.y + zOut.h / 2 + 1, 16, canZoomOut ? '#ffffff' : '#b2bec3', 'center', 3);
 
   const zoomPct = `${Math.round(camera.zoom * 100)}%`;
-  drawCartoonButton(ctx, zRes.x, zRes.y, zRes.h, zRes.h, 9, '#fff5dc', '#e3c28d', false);
-  drawOutlinedText(zoomPct, zRes.x + zRes.w / 2, zRes.y + zRes.h / 2 + 1, 10.5, '#ffffff', 'center', 2.6);
+  ctx.save();
+  ctx.fillStyle = '#2b1d0e';
+  roundRect(ctx, zRes.x, zRes.y + 4, zRes.w, zRes.h, 12);
+  ctx.fill();
+  ctx.fillStyle = 'rgba(15, 25, 45, 0.8)';
+  ctx.strokeStyle = '#2b1d0e';
+  ctx.lineWidth = 2;
+  roundRect(ctx, zRes.x, zRes.y, zRes.w, zRes.h, 12);
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+  roundRect(ctx, zRes.x + 3, zRes.y + 2, Math.max(4, zRes.w - 6), zRes.h * 0.35, 8);
+  ctx.fill();
+  ctx.restore();
+  drawOutlinedText(zoomPct, zRes.x + zRes.w / 2, zRes.y + zRes.h / 2 + 1, 11.5, '#ffffff', 'center', 0);
 
   drawCartoonButton(ctx, zIn.x, zIn.y, zIn.w, zIn.h, 9, canZoomIn ? '#ffffff' : '#dfe6e9', canZoomIn ? '#dfe6e9' : '#b2bec3', false);
   drawOutlinedText('+', zIn.x + zIn.w / 2, zIn.y + zIn.h / 2 + 1, 16, canZoomIn ? '#ffffff' : '#b2bec3', 'center', 3);
 
-  hudLayout.navBtns.forEach((btn) => {
-    const isLocked = (btn.id === 'barn' && state.barnLevel === 0) || (btn.id === 'sawmill' && state.sawmillLevel === 0);
-    drawCartoonButton(
-      ctx,
-      btn.x,
-      btn.y,
-      btn.w,
-      btn.h,
-      8,
-      isLocked ? '#dfe6e9' : '#fff5dc',
-      isLocked ? '#b2bec3' : '#e3c28d',
-      false
-    );
-    drawOutlinedText(btn.label, btn.x + btn.w / 2, btn.y + btn.h / 2 + 1, 9.5, isLocked ? '#dfe6e9' : '#ffffff', 'center', 2.4);
-  });
+  syncLocationNavStripState();
 
   drawMinimap();
   drawSunDialBadge();
 
   const dockTop = H - 76;
-  ctx.fillStyle = '#6f3e18';
-  ctx.strokeStyle = '#1a1a1a';
-  ctx.lineWidth = 4;
+  const dockGrad = ctx.createLinearGradient(0, dockTop, 0, H);
+  dockGrad.addColorStop(0, 'rgba(15, 25, 45, 0.92)');
+  dockGrad.addColorStop(1, 'rgba(10, 18, 34, 0.96)');
+  ctx.fillStyle = dockGrad;
+  ctx.strokeStyle = '#2b1d0e';
+  ctx.lineWidth = 3;
   ctx.beginPath();
   ctx.moveTo(-4, H + 4);
   ctx.lineTo(-4, dockTop + 14);
-  ctx.quadraticCurveTo(-4, dockTop, 12, dockTop);
-  ctx.lineTo(W - 12, dockTop);
+  ctx.quadraticCurveTo(-4, dockTop, 14, dockTop);
+  ctx.lineTo(W - 14, dockTop);
   ctx.quadraticCurveTo(W + 4, dockTop, W + 4, dockTop + 14);
   ctx.lineTo(W + 4, H + 4);
   ctx.closePath();
@@ -3990,6 +4994,7 @@ function drawHUD(now) {
 
   const speedMult = 1 + (state.growthSpeedLevel - 1) * 0.2;
 
+  // Карточки огорода/корма внизу — тёплого кремового цвета (#FFF5DC) в стиле Brawl Stars
   hudLayout.seedBtns.forEach((btn) => {
     const crop = CROPS[btn.cropId];
     const selected = state.selectedSeed === btn.cropId;
@@ -4003,25 +5008,40 @@ function drawHUD(now) {
       btn.w,
       btn.h,
       14,
-      selected ? '#ffe047' : '#fff5dc',
-      selected ? '#f39c12' : '#e3c28d',
+      selected ? '#FFF5DC' : '#FFF5DC',
+      selected ? '#FFE082' : '#F3E2B8',
       false
     );
 
-    drawCartoonIcon(ctx, crop.iconKey, btn.x + btn.w / 2, btn.y + 21 + yOff, 27);
+    if (selected) {
+      ctx.save();
+      ctx.strokeStyle = '#FFC107';
+      ctx.lineWidth = 2.5;
+      roundRect(ctx, btn.x + 2, btn.y + yOff + 2, btn.w - 4, btn.h - 4, 12);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // Нижняя контрастная плашка под "+X корма" внутри кремовой карточки
+    ctx.fillStyle = selected ? '#2ECC71' : 'rgba(15, 25, 45, 0.82)';
+    roundRect(ctx, btn.x + 5, btn.y + 35 + yOff, btn.w - 10, 17, 8);
+    ctx.fill();
+
+    drawCartoonIcon(ctx, crop.iconKey, btn.x + btn.w / 2, btn.y + 19 + yOff, 25);
 
     const sec = (crop.growTime / speedMult).toFixed(0);
-    drawOutlinedText(`${sec}с`, btn.x + 15, btn.y + 12 + yOff, 9.2, '#d8f3dc', 'center', 2.4);
-    drawOutlinedText(`${crop.seedCost}💰`, btn.x + btn.w - 17, btn.y + 12 + yOff, 9.2, '#ffe047', 'center', 2.4);
-    drawOutlinedText(`+${crop.feedValue} корма`, btn.x + btn.w / 2, btn.y + 44 + yOff, 10.5, '#ffffff', 'center', 2.8);
+    drawOutlinedText(`${sec}с`, btn.x + 15, btn.y + 12 + yOff, 10.5, '#ffffff', 'center', 0);
+    drawOutlinedText(`${crop.seedCost}💰`, btn.x + btn.w - 17, btn.y + 12 + yOff, 10.5, '#FFE047', 'center', 0);
+    drawOutlinedText(`+${crop.feedValue} корма`, btn.x + btn.w / 2, btn.y + 43.5 + yOff, 11, '#ffffff', 'center', 0);
   });
 
+  // Кнопка «ЛАВКА» — ярко-жёлтая (#FFC107) с нижней ступенькой
   const sb = hudLayout.shopBtn;
   const shopYOff = shopBtnBounce > 0 ? Math.sin((1 - shopBtnBounce) * Math.PI) * 4 : 0;
-  drawCartoonButton(ctx, sb.x, sb.y + shopYOff, sb.w, sb.h, 15, '#52b788', '#2d6a4f', false);
+  drawCartoonButton(ctx, sb.x, sb.y + shopYOff, sb.w, sb.h, 14, '#FFC107', '#FFA000', false);
 
-  drawCartoonIcon(ctx, 'shop', sb.x + 24, sb.y + sb.h / 2 + shopYOff, 30);
-  drawOutlinedText('ЛАВКА', sb.x + sb.w * 0.64, sb.y + sb.h / 2 + 1 + shopYOff, 14, '#ffffff', 'center', 3.5);
+  drawCartoonIcon(ctx, 'shop', sb.x + 24, sb.y + sb.h / 2 + shopYOff, 29);
+  drawOutlinedText('ЛАВКА', sb.x + sb.w * 0.64, sb.y + sb.h / 2 + 1 + shopYOff, 14.5, '#ffffff', 'center', 2.8);
 
   if (canAffordAnything()) {
     const pulse = 1 + Math.sin(now / 180) * 0.14;
@@ -4045,30 +5065,29 @@ function drawSunDialBadge() {
   const phase = getDayPhaseInfo(state.gameMinutes);
   const isNight = phase.label === 'ночь';
 
-  drawCartoonButton(
-    ctx,
-    sd.x,
-    sd.y,
-    sd.w,
-    sd.h,
-    17,
-    isNight ? '#3c5a99' : '#74c69d',
-    isNight ? '#1e2f56' : '#40916c',
-    false
-  );
-
   ctx.save();
+  ctx.fillStyle = '#2b1d0e';
+  roundRect(ctx, sd.x, sd.y + 4, sd.w, sd.h, 14);
+  ctx.fill();
+
+  ctx.fillStyle = 'rgba(15, 25, 45, 0.8)';
+  ctx.strokeStyle = '#2b1d0e';
+  ctx.lineWidth = 2;
+  roundRect(ctx, sd.x, sd.y, sd.w, sd.h, 14);
+  ctx.fill();
+  ctx.stroke();
+
   ctx.translate(sd.x + 18, sd.y + sd.h / 2);
-  ctx.fillStyle = isNight ? '#ffe047' : '#ffcf56';
-  ctx.strokeStyle = '#1a1a1a';
-  ctx.lineWidth = 2.2;
+  ctx.fillStyle = isNight ? '#ffe047' : '#FFC107';
+  ctx.strokeStyle = '#2b1d0e';
+  ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.arc(0, 0, 8, 0, Math.PI * 2);
+  ctx.arc(0, 0, 7.5, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
   ctx.restore();
 
-  drawOutlinedText(`Хрякоград ×3 • ${phase.timeStr}`, sd.x + 33, sd.y + sd.h / 2 + 1, 10.8, '#ffffff', 'left', 2.8);
+  drawOutlinedText(`Хряки Ферма • ${phase.timeStr}`, sd.x + 32, sd.y + sd.h / 2 + 1, 11.8, '#ffffff', 'left', 0);
 }
 
 function drawMinimap() {
@@ -4083,6 +5102,7 @@ function drawMinimap() {
   roundRect(ctx, mm.x, mm.y, mm.w, mm.h, 12);
   ctx.clip();
 
+  ctx.imageSmoothingEnabled = false;
   ctx.drawImage(overviewCanvas, mm.x, mm.y, mm.w, mm.h);
   ctx.drawImage(fogCanvas, mm.x, mm.y, mm.w, mm.h);
 
@@ -4121,24 +5141,49 @@ function drawMinimap() {
   ctx.stroke();
 }
 
-function drawStatPill(x, y, w, h, iconKey, text, bg) {
-  ctx.fillStyle = '#1a1a1a';
-  roundRect(ctx, x, y + 3, w, h, h / 2);
+function drawStatPill(x, y, w, h, iconKey, text, bg, bounceVal = 0) {
+  const bScale = bounceVal > 0 ? 1 + Math.sin((1 - bounceVal) * Math.PI) * 0.14 : 1;
+  ctx.save();
+  if (bScale !== 1) {
+    const cx = x + w / 2;
+    const cy = y + h / 2;
+    ctx.translate(cx, cy);
+    ctx.scale(bScale, bScale);
+    ctx.translate(-cx, -cy);
+  }
+
+  // Нижняя ступенька Brawl Stars (0 4px 0 #2b1d0e)
+  ctx.fillStyle = '#2b1d0e';
+  roundRect(ctx, x, y + 4, w, h, 14);
   ctx.fill();
 
-  ctx.fillStyle = bg;
-  ctx.strokeStyle = '#1a1a1a';
-  ctx.lineWidth = 3.2;
-  roundRect(ctx, x, y, w, h, h / 2);
+  // Полупрозрачный тёмно-синий корпус плашки ресурса (rgba(15, 25, 45, 0.8))
+  ctx.fillStyle = 'rgba(15, 25, 45, 0.8)';
+  ctx.strokeStyle = '#2b1d0e';
+  ctx.lineWidth = 2;
+  roundRect(ctx, x, y, w, h, 14);
   ctx.fill();
   ctx.stroke();
 
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
-  roundRect(ctx, x + 8, y + 3, w - 16, h * 0.32, h / 4);
+  // Тонкий верхний блик
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+  roundRect(ctx, x + 4, y + 2, Math.max(8, w - 8), h * 0.35, 10);
   ctx.fill();
 
-  drawCartoonIcon(ctx, iconKey, x + 19, y + h / 2, 24);
-  drawOutlinedText(text, x + 36, y + h / 2 + 1, 13.5, '#ffffff', 'left', 3.4);
+  // Контрастный медальон под золотую/зелёную/древесную иконку
+  const medalCol = iconKey === 'coin'
+    ? 'rgba(255, 193, 7, 0.25)'
+    : iconKey === 'basket'
+    ? 'rgba(46, 204, 113, 0.28)'
+    : 'rgba(222, 184, 135, 0.25)';
+  ctx.fillStyle = medalCol;
+  ctx.beginPath();
+  ctx.arc(x + 18, y + h / 2, 12.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  drawCartoonIcon(ctx, iconKey, x + 18, y + h / 2, 23);
+  drawOutlinedText(text, x + 35, y + h / 2 + 1, 14.5, '#ffffff', 'left', 2.4);
+  ctx.restore();
 }
 
 function drawSoundSpeakerIcon(ctx, cx, cy, muted) {
@@ -4305,6 +5350,81 @@ function update(dt) {
       caravan.trailHistory.push({ x: caravan.x, y: caravan.y });
       if (caravan.trailHistory.length > 45) caravan.trailHistory.shift();
     }
+  } else if (caravan.status === 'voyage_prep' && state.voyage && state.voyage.active) {
+    const nowMs = Date.now();
+    const prepEnd = state.voyage.prepStartTimeMs + state.voyage.prepDurationMs;
+    const sqBtn = hudLayout.navBtns.find((b) => b.id === 'squad');
+    if (sqBtn) {
+      sqBtn.wx = caravan.x;
+      sqBtn.wy = caravan.y;
+    }
+    if (nowMs >= prepEnd) {
+      // 15 минут сборов истекли — корабль отплывает в 30-минутное морское плавание!
+      state.voyage.phase = 'sailing';
+      state.voyage.sailStartTimeMs = nowMs;
+      caravan.status = 'voyage_sailing';
+      caravan.startX = HARBOR_TILE.tx * TILE_SIZE + TILE_SIZE / 2;
+      caravan.startY = HARBOR_TILE.ty * TILE_SIZE + TILE_SIZE / 2;
+      caravan.x = caravan.startX;
+      caravan.y = caravan.startY;
+      caravan.trailHistory = [{ x: caravan.x, y: caravan.y }];
+      SoundManager.marchStart();
+      triggerHaptic('success');
+      spawnFloatingText(caravan.x, caravan.y - 36, '⛵ КОРАБЛЬ ОТПЛЫЛ НА 30 МИН!', '#48dbfb');
+      saveGame(true);
+    }
+  } else if (caravan.status === 'voyage_sailing' && state.voyage && state.voyage.active) {
+    const nowMs = Date.now();
+    const elapsed = Math.max(0, nowMs - state.voyage.sailStartTimeMs);
+    const total = Math.max(1000, state.voyage.sailDurationMs);
+    const prog = Math.min(1, elapsed / total);
+
+    const startX = state.voyage.startX || (HARBOR_TILE.tx * TILE_SIZE + TILE_SIZE / 2);
+    const startY = state.voyage.startY || (HARBOR_TILE.ty * TILE_SIZE + TILE_SIZE / 2);
+    const prevX = caravan.x;
+    caravan.x = startX + (state.voyage.targetX - startX) * prog;
+    caravan.y = startY + (state.voyage.targetY - startY) * prog;
+    if (Math.abs(caravan.x - prevX) > 0.05) {
+      caravan.facing = caravan.x >= prevX ? 1 : -1;
+    }
+
+    revealFogAroundWorld(caravan.x, caravan.y, getScoutVisionRadius() + 1.5);
+
+    const lastTr = caravan.trailHistory[caravan.trailHistory.length - 1];
+    if (!lastTr || Math.hypot(caravan.x - lastTr.x, caravan.y - lastTr.y) > 32) {
+      caravan.trailHistory.push({ x: caravan.x, y: caravan.y });
+      if (caravan.trailHistory.length > 55) caravan.trailHistory.shift();
+    }
+
+    const sqBtn = hudLayout.navBtns.find((b) => b.id === 'squad');
+    if (sqBtn) {
+      sqBtn.wx = caravan.x;
+      sqBtn.wy = caravan.y;
+    }
+
+    if (prog >= 1) {
+      // Корабль прибыл на остров / в дальнее море спустя 30 минут!
+      caravan.x = state.voyage.targetX;
+      caravan.y = state.voyage.targetY;
+      caravan.status = 'camp';
+      caravan.campTimer = 8.0;
+      revealFogAroundWorld(caravan.x, caravan.y, getScoutVisionRadius() + 6.5);
+
+      const bonusCoins = state.voyage.isIsland ? 340 : 160;
+      const bonusFood = state.voyage.isIsland ? 14 : 7;
+      const bonusLogs = state.voyage.isIsland ? 8 : 4;
+      state.coins += bonusCoins;
+      state.food += bonusFood;
+      state.logs += bonusLogs;
+      state.voyage = null;
+
+      SoundManager.discover();
+      triggerHaptic('success');
+      spawnParticles(caravan.x, caravan.y - 20, 'coin', 10);
+      spawnParticles(caravan.x, caravan.y - 28, 'sparkle', 6);
+      spawnFloatingText(caravan.x, caravan.y - 48, `⛵ ПРИБЫЛИ! +${bonusCoins}💰 +${bonusFood}🥕 +${bonusLogs}🪵`, '#ffe047');
+      saveGame(true);
+    }
   } else if (caravan.status === 'camp') {
     caravan.campTimer -= dt;
     if (caravan.campTimer <= 0) {
@@ -4374,12 +5494,41 @@ function update(dt) {
     }
   }
 
+  if (cameraShakeTime > 0) {
+    cameraShakeTime = Math.max(0, cameraShakeTime - dt);
+    if (cameraShakeTime <= 0) cameraShakeMag = 0;
+  }
+  if (pillBounce.coin > 0) pillBounce.coin = Math.max(0, pillBounce.coin - dt * 4);
+  if (pillBounce.food > 0) pillBounce.food = Math.max(0, pillBounce.food - dt * 4);
+  if (pillBounce.log > 0) pillBounce.log = Math.max(0, pillBounce.log - dt * 4);
+
+  // Дрейф воздушных облаков над долиной
+  for (let i = 0; i < driftingClouds.length; i++) {
+    const cl = driftingClouds[i];
+    cl.x += cl.speed * dt;
+    if (cl.x > WORLD.penRect.x + 2200) {
+      cl.x = WORLD.penRect.x - 1100;
+    }
+  }
+
   for (let i = 0; i < activeBoars.length; i++) {
     const boar = activeBoars[i];
+    boar.breathPhase = (boar.breathPhase || 0) + dt * 3.6;
     if (boar.bounceTime > 0) boar.bounceTime = Math.max(0, boar.bounceTime - dt * 2.4);
     if (boar.heartsTime > 0) boar.heartsTime = Math.max(0, boar.heartsTime - dt * 1.4);
     if (boar.fullnessTimer > 0) boar.fullnessTimer = Math.max(0, boar.fullnessTimer - dt);
     if (boar.labelTimer > 0) boar.labelTimer = Math.max(0, boar.labelTimer - dt);
+
+    // Периодическое живое моргание глазок
+    if (boar.blinkTimer > 0) {
+      boar.blinkTimer = Math.max(0, boar.blinkTimer - dt);
+    } else {
+      boar.blinkCooldown = (boar.blinkCooldown || 2.5) - dt;
+      if (boar.blinkCooldown <= 0) {
+        boar.blinkTimer = 0.14;
+        boar.blinkCooldown = 2.4 + Math.random() * 3.2;
+      }
+    }
 
     if (boar.waitTimer > 0) {
       boar.waitTimer -= dt;
@@ -4400,22 +5549,42 @@ function update(dt) {
       boar.y += (dy / dist) * speed * dt;
       boar.facing = dx > 0 ? 1 : -1;
       boar.walkPhase += dt * 10;
+
+      // Пыль из-под копыт при беге
+      boar.dustCooldown = (boar.dustCooldown || 0) - dt;
+      if (boar.dustCooldown <= 0 && camera.zoom >= 0.45) {
+        boar.dustCooldown = 0.28 + Math.random() * 0.15;
+        const wx = WORLD.penRect.x + 56 + boar.x * (WORLD.penRect.w - 112);
+        const wy = WORLD.penRect.y + 56 + boar.y * (WORLD.penRect.h - 94) + 34;
+        spawnDustPuff(wx - boar.facing * 12, wy, 1, 'rgba(218, 240, 175, 0.55)');
+      }
     }
+  }
+
+  for (let i = dustPuffs.length - 1; i >= 0; i--) {
+    const dp = dustPuffs[i];
+    dp.x += dp.vx * dt;
+    dp.y += dp.vy * dt;
+    dp.r += 12 * dt;
+    dp.life -= dt * 1.65;
+    if (dp.life <= 0) dustPuffs.splice(i, 1);
   }
 
   for (let i = particles.length - 1; i >= 0; i--) {
     const p = particles[i];
     p.x += p.vx * dt;
     p.y += p.vy * dt;
-    p.vy += 190 * dt;
-    p.life -= dt * 1.3;
+    p.vy += 205 * dt;
+    if (p.vRot) p.rot = (p.rot || 0) + p.vRot * dt;
+    p.life -= dt * 1.28;
     if (p.life <= 0) particles.splice(i, 1);
   }
 
   for (let i = floatingTexts.length - 1; i >= 0; i--) {
     const ft = floatingTexts[i];
     ft.y += ft.vy * dt;
-    ft.life -= dt * 1.15;
+    ft.vy *= Math.pow(0.25, dt);
+    ft.life -= dt * 1.08;
     if (ft.life <= 0) floatingTexts.splice(i, 1);
   }
 
@@ -4426,21 +5595,42 @@ function update(dt) {
 
 function drawWorldEffects() {
   const invScale = Math.min(2.6, Math.max(1.0, 0.75 / camera.zoom));
-  for (let i = 0; i < particles.length; i++) {
-    const p = particles[i];
+
+  // Облачка пыли из-под копыт и колёс
+  for (let i = 0; i < dustPuffs.length; i++) {
+    const dp = dustPuffs[i];
     ctx.save();
-    ctx.globalAlpha = Math.max(0, p.life);
-    drawCartoonIcon(ctx, p.iconKey, p.x, p.y, 24 * p.scale * invScale);
+    ctx.globalAlpha = Math.max(0, dp.life * 0.75);
+    ctx.fillStyle = dp.color;
+    ctx.beginPath();
+    ctx.arc(dp.x, dp.y, dp.r, 0, Math.PI * 2);
+    ctx.fill();
     ctx.restore();
   }
 
+  // Разлетающиеся частицы (монетки, сердечки, щепки, искорки)
+  for (let i = 0; i < particles.length; i++) {
+    const p = particles[i];
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    if (p.rot) ctx.rotate(p.rot);
+    ctx.globalAlpha = Math.max(0, p.life);
+    drawCartoonIcon(ctx, p.iconKey, 0, 0, 25 * p.scale * invScale);
+    ctx.restore();
+  }
+
+  // Всплывающие цифры дохода с пружинящим увеличением (Pop-in)
   for (let i = 0; i < floatingTexts.length; i++) {
     const ft = floatingTexts[i];
+    const progress = 1 - ft.life;
+    const popScale = progress < 0.18
+      ? 0.5 + (progress / 0.18) * 0.78
+      : Math.max(0.95, 1.28 - (progress - 0.18) * 0.4);
     ctx.save();
     ctx.translate(ft.x, ft.y);
-    ctx.scale(invScale, invScale);
-    ctx.globalAlpha = Math.max(0, ft.life);
-    drawOutlinedText(ft.text, 0, 0, 17, ft.color, 'center', 4);
+    ctx.scale(invScale * popScale, invScale * popScale);
+    ctx.globalAlpha = Math.max(0, Math.min(1, ft.life * 1.25));
+    drawOutlinedText(ft.text, 0, 0, 17.5, ft.color, 'center', 4.5);
     ctx.restore();
   }
 }
@@ -4457,7 +5647,7 @@ function gameLoop(now) {
   if (!worldInitialized) {
     ctx.fillStyle = '#2b5876';
     ctx.fillRect(0, 0, W, H);
-    drawOutlinedText('ЗАГРУЗКА ХРЯКОГРАДА...', W / 2, H / 2, 18, '#ffe047', 'center', 4);
+    drawOutlinedText('ЗАГРУЗКА «ХРЯКИ ФЕРМА»...', W / 2, H / 2, 19, '#ffe047', 'center', 4.5);
     return;
   }
 
@@ -4473,6 +5663,9 @@ function gameLoop(now) {
   try {
     update(dt);
     ctx.save();
+    const shakeX = cameraShakeTime > 0 ? (Math.random() - 0.5) * cameraShakeMag * 2 : 0;
+    const shakeY = cameraShakeTime > 0 ? (Math.random() - 0.5) * cameraShakeMag * 2 : 0;
+    ctx.translate(shakeX, shakeY);
     ctx.scale(camera.zoom, camera.zoom);
     ctx.translate(-camera.x, -camera.y);
     drawTerrainAndTiles(now);
@@ -4586,7 +5779,7 @@ function getTwoPointers() {
 }
 
 canvas.addEventListener('pointerdown', (e) => {
-  if (!worldInitialized || shopModal.classList.contains('active') || breedModal.classList.contains('active') || marketModal.classList.contains('active') || sawmillModal.classList.contains('active')) return;
+  if (!worldInitialized || shopModal.classList.contains('active') || breedModal.classList.contains('active') || marketModal.classList.contains('active') || sawmillModal.classList.contains('active') || voyageModal.classList.contains('active')) return;
   const rect = canvas.getBoundingClientRect();
   const sx = e.clientX - rect.left;
   const sy = e.clientY - rect.top;
@@ -4681,7 +5874,7 @@ canvas.addEventListener('pointermove', (e) => {
   if (!camera.isDragging) return;
 
   const totalDist = Math.hypot(sx - camera.downX, sy - camera.downY);
-  if (totalDist > 8) {
+  if (totalDist > 11) {
     camera.dragMoved = true;
   }
 
@@ -4727,7 +5920,7 @@ function handlePointerFinish(e) {
   camera.isMinimapDragging = false;
   camera.activePointerId = null;
 
-  if (!wasDrag && !wasMinimap && worldInitialized && !shopModal.classList.contains('active') && !breedModal.classList.contains('active') && !marketModal.classList.contains('active') && !sawmillModal.classList.contains('active')) {
+  if (!wasDrag && !wasMinimap && worldInitialized && !shopModal.classList.contains('active') && !breedModal.classList.contains('active') && !marketModal.classList.contains('active') && !sawmillModal.classList.contains('active') && !voyageModal.classList.contains('active')) {
     const rect = canvas.getBoundingClientRect();
     const sx = e.clientX - rect.left;
     const sy = e.clientY - rect.top;
@@ -4747,7 +5940,7 @@ canvas.addEventListener('pointercancel', (e) => {
 });
 
 canvas.addEventListener('wheel', (e) => {
-  if (!worldInitialized || shopModal.classList.contains('active') || breedModal.classList.contains('active') || marketModal.classList.contains('active') || sawmillModal.classList.contains('active')) return;
+  if (!worldInitialized || shopModal.classList.contains('active') || breedModal.classList.contains('active') || marketModal.classList.contains('active') || sawmillModal.classList.contains('active') || voyageModal.classList.contains('active')) return;
   e.preventDefault();
   const rect = canvas.getBoundingClientRect();
   const sx = e.clientX - rect.left;
@@ -4810,17 +6003,7 @@ function handleSingleTap(sx, sy) {
     }
   }
 
-  for (const btn of hudLayout.navBtns) {
-    if (pointInRect(sx, sy, btn)) {
-      SoundManager.uiClick();
-      triggerHaptic('light');
-      if (btn.zoom) {
-        setZoomAroundScreenPoint(btn.zoom, W / 2, H / 2, true);
-      }
-      focusCameraOn(btn.wx, btn.wy, btn.zoom || camera.targetZoom);
-      return;
-    }
-  }
+
 
   if (pointInRect(sx, sy, hudLayout.minimap)) {
     SoundManager.uiClick();
@@ -4888,7 +6071,10 @@ function handleSingleTap(sx, sy) {
         SoundManager.crunch();
         SoundManager.coin();
         triggerHaptic('success');
-        spawnParticles(bx, by - 20, 'coin', 7);
+        spawnParticles(bx, by - 20, 'coin', 6);
+        spawnParticles(bx, by - 32, 'heart', 4);
+        spawnDustPuff(bx, by + 26, 4);
+        triggerCameraShake(3.2, 0.12);
         spawnFloatingText(bx, by - 48, `${boar.nickname} (${boar.breed}) +${reward}!`, '#ffdd59');
       } else {
         const reward = Math.round(boar.income * barnMult);
@@ -4898,6 +6084,8 @@ function handleSingleTap(sx, sy) {
         SoundManager.coin();
         triggerHaptic('medium');
         spawnParticles(bx, by - 20, 'coin', 4);
+        spawnParticles(bx, by - 28, 'sparkle', 2);
+        spawnDustPuff(bx, by + 26, 3);
         const statusHint = boar.fullnessTimer > 0 ? ` • сыт ${Math.ceil(boar.fullnessTimer)}с` : '';
         spawnFloatingText(bx, by - 42, `${boar.nickname}: +${reward}${statusHint}`, '#ffffff');
       }
@@ -4922,7 +6110,9 @@ function handleSingleTap(sx, sy) {
       lg.respawnAt = performance.now() + 45000;
       SoundManager.chop();
       triggerHaptic('medium');
-      spawnParticles(lx, ly - 10, 'log', 5);
+      spawnParticles(lx, ly - 10, 'log', 4);
+      spawnParticles(lx, ly - 14, 'woodchip', 6);
+      triggerCameraShake(4.0, 0.15);
       spawnFloatingText(lx, ly - 24, `+${gained} 🪵 бревна!`, '#deb887');
       saveGame();
       return;
@@ -5085,7 +6275,9 @@ function handleSingleTap(sx, sy) {
         plot.weedChecked = false;
         SoundManager.harvest();
         triggerHaptic('success');
-        spawnParticles(cx, cy, cropCfg.iconKey, 6);
+        spawnParticles(cx, cy, cropCfg.iconKey, 5);
+        spawnParticles(cx, cy - 8, 'sparkle', 4);
+        triggerCameraShake(2.8, 0.11);
         spawnFloatingText(cx, cy - 10, `+${cropCfg.feedValue} корма`, '#a3e635');
         saveGame();
       } else if (plot.hasWeed) {
@@ -5108,7 +6300,26 @@ function handleSingleTap(sx, sy) {
     }
   }
 
-  if (wx >= 100 && wx <= WORLD.w - 100 && wy >= 100 && wy <= WORLD.h - 100) {
+  // Если нажали на Верфь / Порт «Морской Пятачок» — открываем окно постройки корабля или морского похода
+  const harborWx = HARBOR_TILE.tx * TILE_SIZE + TILE_SIZE / 2;
+  const harborWy = HARBOR_TILE.ty * TILE_SIZE + TILE_SIZE / 2;
+  if (Math.hypot(wx - harborWx, wy - harborWy) <= Math.max(78, 56 / camera.zoom)) {
+    SoundManager.uiClick();
+    triggerHaptic('medium');
+    openVoyageModal();
+    return;
+  }
+
+  // Если нажали прямо на корабль/обоз во время сборов или плавания — открываем окно похода
+  if ((caravan.status === 'voyage_prep' || caravan.status === 'voyage_sailing') &&
+      Math.hypot(wx - caravan.x, wy - caravan.y) <= Math.max(65, 48 / camera.zoom)) {
+    SoundManager.uiClick();
+    triggerHaptic('medium');
+    openVoyageModal();
+    return;
+  }
+
+  if (wx >= 60 && wx <= WORLD.w - 60 && wy >= 60 && wy <= WORLD.h - 60) {
     sendCaravanTo(wx, wy);
   }
 }
@@ -5291,6 +6502,84 @@ function renderShop() {
       shopList.appendChild(card);
     });
   } else if (currentTab === 'expedition') {
+    // Карточка постройки Корабля для морских островов (250 брёвен + 350 монет, 2 часа)
+    const shipCard = document.createElement('div');
+    shipCard.className = 'shop-card' + (state.shipBuilt ? ' unlocked-card' : '');
+    const shipAv = document.createElement('div');
+    shipAv.className = 'card-avatar';
+    const shipC = document.createElement('canvas');
+    shipC.width = 56;
+    shipC.height = 56;
+    renderIconToCanvas(shipC, 'ship');
+    shipAv.appendChild(shipC);
+
+    const shipInfo = document.createElement('div');
+    shipInfo.className = 'card-info';
+    const shipBtn = document.createElement('button');
+    shipBtn.type = 'button';
+
+    if (state.shipBuilt) {
+      shipInfo.innerHTML = `
+        <div class="card-name"><span>⛵ Парусный Корабль</span><span class="breed-badge">Построен</span></div>
+        <div class="card-desc">Готов к плаванию на морские острова и в дальнее море!</div>
+      `;
+      shipBtn.className = 'buy-btn owned';
+      shipBtn.textContent = 'На верфь';
+      shipBtn.onclick = () => {
+        closeShop();
+        focusCameraOn(HARBOR_TILE.tx * TILE_SIZE + TILE_SIZE / 2, HARBOR_TILE.ty * TILE_SIZE + TILE_SIZE / 2, 0.65);
+        openVoyageModal();
+      };
+    } else if (state.shipBuild && state.shipBuild.active) {
+      const remMs = Math.max(0, state.shipBuild.startTimeMs + state.shipBuild.durationMs - Date.now());
+      const pct = Math.min(100, Math.round((1 - remMs / state.shipBuild.durationMs) * 100));
+      shipInfo.innerHTML = `
+        <div class="card-name"><span>🔨 Верфь: Стройка корабля</span></div>
+        <div class="card-desc">${remMs > 0 ? `Осталось: <b>${formatRealDuration(remMs)}</b> (${pct}%)` : '🎉 <b>Корабль готов! Заберите на верфи!</b>'}</div>
+        <div class="upgrade-bar"><div class="upgrade-bar-fill" style="width:${pct}%"></div></div>
+      `;
+      shipBtn.className = 'buy-btn';
+      shipBtn.textContent = remMs > 0 ? 'Строится...' : 'Забрать!';
+      shipBtn.onclick = () => {
+        closeShop();
+        openVoyageModal();
+      };
+    } else {
+      const hasEnough = state.logs >= SHIP_BUILD_LOGS && state.coins >= SHIP_BUILD_COINS;
+      shipInfo.innerHTML = `
+        <div class="card-name"><span>⛵ Построить Корабль</span></div>
+        <div class="card-desc">Нужен для плавания на острова! Время: <b>2 часа</b> реального времени.</div>
+        <div class="stat-chips">
+          <span class="stat-chip">🪵 ${state.logs}/${SHIP_BUILD_LOGS}</span>
+          <span class="stat-chip highlight">💰 ${state.coins}/${SHIP_BUILD_COINS}</span>
+        </div>
+      `;
+      shipBtn.className = 'buy-btn';
+      shipBtn.textContent = `${SHIP_BUILD_LOGS}🪵 + ${SHIP_BUILD_COINS}💰`;
+      shipBtn.disabled = !hasEnough;
+      shipBtn.onclick = () => {
+        if (state.logs >= SHIP_BUILD_LOGS && state.coins >= SHIP_BUILD_COINS && !state.shipBuilt && !state.shipBuild) {
+          state.logs -= SHIP_BUILD_LOGS;
+          state.coins -= SHIP_BUILD_COINS;
+          state.shipBuild = {
+            active: true,
+            startTimeMs: Date.now(),
+            durationMs: SHIP_BUILD_DURATION_MS
+          };
+          saveGame(true);
+          SoundManager.purchase();
+          triggerHaptic('success');
+          closeShop();
+          focusCameraOn(HARBOR_TILE.tx * TILE_SIZE + TILE_SIZE / 2, HARBOR_TILE.ty * TILE_SIZE + TILE_SIZE / 2, 0.65);
+          openVoyageModal();
+        }
+      };
+    }
+    shipCard.appendChild(shipAv);
+    shipCard.appendChild(shipInfo);
+    shipCard.appendChild(shipBtn);
+    shopList.appendChild(shipCard);
+
     const maxLvl = 8;
     const spdPrice = getScoutSpeedPrice();
     const spdPct = Math.round((state.scoutSpeedLevel / maxLvl) * 100);
@@ -5384,24 +6673,44 @@ function renderShop() {
 
     LANDMARKS.forEach((lm) => {
       const opened = state.discoveredLandmarks.includes(lm.id);
+      const isIsl = Boolean(lm.isIsland);
       const lCard = document.createElement('div');
       lCard.className = 'shop-card' + (opened ? ' unlocked-card' : '');
       const lInfo = document.createElement('div');
       lInfo.className = 'card-info';
-      lInfo.innerHTML = `
-        <div class="card-name">${opened ? '📍 ' + lm.name : '☁️ Место под облаками'}</div>
-        <div class="card-desc">${opened ? 'Участок долины открыт.' : 'Нажмите на карту долины, чтобы отправить туда обоз!'}</div>
-      `;
+      if (isIsl) {
+        lInfo.innerHTML = `
+          <div class="card-name"><span>⛵ ${lm.name}</span><span class="breed-badge">Только корабль</span></div>
+          <div class="card-desc">Сборы: 15 мин • Плыть: 30 мин. Награда: +${lm.rewardCoins}💰 +${lm.rewardFood}🥕 +${lm.rewardLogs}🪵</div>
+        `;
+      } else {
+        lInfo.innerHTML = `
+          <div class="card-name">${opened ? '📍 ' + lm.name : '☁️ Место под облаками'}</div>
+          <div class="card-desc">${opened ? 'Участок долины открыт.' : 'Нажмите на карту долины, чтобы отправить туда обоз!'}</div>
+        `;
+      }
       const lBtn = document.createElement('button');
       lBtn.type = 'button';
-      lBtn.className = 'buy-btn' + (opened ? ' owned' : '');
-      lBtn.textContent = opened ? 'Показать' : 'Закрыто';
-      lBtn.disabled = !opened;
-      if (opened) {
+      if (isIsl) {
+        lBtn.className = 'buy-btn';
+        lBtn.textContent = '⛵ Плыть';
         lBtn.onclick = () => {
           closeShop();
-          focusCameraOn(lm.tx * TILE_SIZE + TILE_SIZE / 2, lm.ty * TILE_SIZE + TILE_SIZE / 2, 0.55);
+          const wx = lm.tx * TILE_SIZE + TILE_SIZE / 2;
+          const wy = lm.ty * TILE_SIZE + TILE_SIZE / 2;
+          focusCameraOn(wx, wy, 0.35);
+          sendCaravanTo(wx, wy);
         };
+      } else {
+        lBtn.className = 'buy-btn' + (opened ? ' owned' : '');
+        lBtn.textContent = opened ? 'Показать' : 'Закрыто';
+        lBtn.disabled = !opened;
+        if (opened) {
+          lBtn.onclick = () => {
+            closeShop();
+            focusCameraOn(lm.tx * TILE_SIZE + TILE_SIZE / 2, lm.ty * TILE_SIZE + TILE_SIZE / 2, 0.55);
+          };
+        }
       }
       lCard.appendChild(lInfo);
       lCard.appendChild(lBtn);
@@ -6061,7 +7370,7 @@ function openSawmillModal() {
   sawmillModal.classList.add('active');
   if (sawmillTimerInterval) clearInterval(sawmillTimerInterval);
   sawmillTimerInterval = setInterval(() => {
-    if (sawmillModal.classList.contains('active')) {
+    if (sawmillModal.classList.contains('active') || voyageModal.classList.contains('active')) {
       renderSawmillModal();
     }
   }, 600);
@@ -6326,6 +7635,436 @@ function renderSawmillModal() {
   fCard.appendChild(fInfo);
   fCard.appendChild(fBtn);
   sawmillBody.appendChild(fCard);
+}
+
+
+/**
+ * МОРСКОЙ ПОХОД НА ОСТРОВА И В ДАЛЬНЕЕ МОРЕ («ВЫ УВЕРЕНЫ?», 15 МИН СБОРЫ, 30 МИН ПЛАВАНИЕ)
+ */
+const voyageModal = document.getElementById('voyageModal');
+const voyageBody = document.getElementById('voyageBody');
+const voyageModalTitle = document.getElementById('voyageModalTitle');
+let voyageOpenedAt = 0;
+let voyageTimerInterval = null;
+
+function openVoyageModal() {
+  voyageOpenedAt = performance.now();
+  renderIconToCanvas(document.getElementById('voyageHeaderIcon'), 'ship');
+  renderIconToCanvas(document.getElementById('voyageBalanceCoin'), 'coin');
+  renderVoyageModal();
+  voyageModal.classList.add('active');
+  if (voyageTimerInterval) clearInterval(voyageTimerInterval);
+  voyageTimerInterval = setInterval(() => {
+    if (voyageModal.classList.contains('active')) {
+      renderVoyageModal();
+    }
+  }, 1000);
+}
+
+function closeVoyageModal() {
+  voyageModal.classList.remove('active');
+  pendingVoyageTarget = null;
+  if (voyageTimerInterval) {
+    clearInterval(voyageTimerInterval);
+    voyageTimerInterval = null;
+  }
+}
+
+document.getElementById('closeVoyageBtn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  SoundManager.uiClick();
+  closeVoyageModal();
+});
+
+voyageModal.addEventListener('pointerdown', (e) => {
+  if (e.target === voyageModal && performance.now() - voyageOpenedAt > 200) {
+    closeVoyageModal();
+  }
+});
+
+function renderVoyageModal() {
+  document.getElementById('voyageCoinText').textContent = Math.floor(state.coins).toString();
+  voyageBody.innerHTML = '';
+
+  // Сценарий 1: Идут 15-минутные сборы перед отплытием (игрок ЕЩЁ МОЖЕТ ПЕРЕДУМАТЬ!)
+  if (caravan.status === 'voyage_prep' && state.voyage && state.voyage.active) {
+    voyageModalTitle.textContent = 'ВЫ УВЕРЕНЫ? (СБОРЫ)';
+    const remMs = Math.max(0, state.voyage.prepStartTimeMs + state.voyage.prepDurationMs - Date.now());
+    const pct = Math.min(100, Math.round((1 - remMs / state.voyage.prepDurationMs) * 100));
+
+    const infoCard = document.createElement('div');
+    infoCard.className = 'forecast-panel';
+    infoCard.innerHTML = `
+      <div style="font-size:14.5px;margin-bottom:6px">⛵ <b>Пункт назначения: ${state.voyage.destName}</b></div>
+      <div>Хряки грузят припасы на корабль в порту. До отплытия осталось время, поэтому <b>вы ещё можете передумать и отменить поход!</b></div>
+      <div style="margin-top:6px;color:#b71c1c">⚠️ Как только корабль отплывёт (на 30 минут), во время пути хряков нельзя будет использовать в другой поход!</div>
+      <div class="upgrade-bar" style="height:12px;margin-top:8px"><div class="upgrade-bar-fill" style="width:${pct}%"></div></div>
+    `;
+    voyageBody.appendChild(infoCard);
+
+    const timerDiv = document.createElement('div');
+    timerDiv.className = 'timer-banner';
+    timerDiv.textContent = `Отплытие через: ${formatRealDuration(remMs)}`;
+    voyageBody.appendChild(timerDiv);
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.type = 'button';
+    cancelBtn.className = 'sell-btn';
+    cancelBtn.style.width = '100%';
+    cancelBtn.style.justifyContent = 'center';
+    cancelBtn.style.padding = '12px';
+    cancelBtn.style.fontSize = '14px';
+    cancelBtn.style.background = 'linear-gradient(180deg, #ff7b7b 0%, #e03131 100%)';
+    cancelBtn.style.color = '#ffffff';
+    cancelBtn.textContent = `🛑 ПЕРЕДУМАЛ — ОТМЕНИТЬ ПОХОД (+${state.voyage.cost || SEA_VOYAGE_COST} 💰)`;
+    cancelBtn.onclick = () => {
+      const refund = state.voyage.cost || SEA_VOYAGE_COST;
+      state.coins += refund;
+      state.voyage = null;
+      caravan.status = 'idle';
+      caravan.targetX = null;
+      caravan.targetY = null;
+      saveGame(true);
+      SoundManager.uiClick();
+      triggerHaptic('medium');
+      spawnFloatingText(caravan.x, caravan.y - 30, `Поход отменён! +${refund}💰`, '#a3e635');
+      closeVoyageModal();
+    };
+    voyageBody.appendChild(cancelBtn);
+
+    const keepBtn = document.createElement('button');
+    keepBtn.type = 'button';
+    keepBtn.className = 'buy-btn';
+    keepBtn.style.width = '100%';
+    keepBtn.style.justifyContent = 'center';
+    keepBtn.style.padding = '11px';
+    keepBtn.textContent = 'Продолжать подготовку к отплытию';
+    keepBtn.onclick = () => {
+      SoundManager.uiClick();
+      closeVoyageModal();
+    };
+    voyageBody.appendChild(keepBtn);
+    return;
+  }
+
+  // Сценарий 2: Корабль УЖЕ в 30-минутном плавании по морю (отменить и перенаправить нельзя!)
+  if (caravan.status === 'voyage_sailing' && state.voyage && state.voyage.active) {
+    voyageModalTitle.textContent = 'КОРАБЛЬ В МОРЕ';
+    const remMs = Math.max(0, state.voyage.sailStartTimeMs + state.voyage.sailDurationMs - Date.now());
+    const pct = Math.min(100, Math.round((1 - remMs / state.voyage.sailDurationMs) * 100));
+
+    const sailCard = document.createElement('div');
+    sailCard.className = 'forecast-panel';
+    sailCard.innerHTML = `
+      <div style="font-size:14.5px;margin-bottom:6px">⛵ <b>Курс: ${state.voyage.destName}</b></div>
+      <div>Хряки плывут на корабле по открытому морю!</div>
+      <div style="margin-top:6px;color:#b71c1c">🔒 <b>Во время пути их нельзя использовать в другой поход</b> — дождитесь прибытия корабля к берегу!</div>
+      <div class="upgrade-bar" style="height:12px;margin-top:8px"><div class="upgrade-bar-fill" style="width:${pct}%"></div></div>
+    `;
+    voyageBody.appendChild(sailCard);
+
+    const timerDiv = document.createElement('div');
+    timerDiv.className = 'timer-banner';
+    timerDiv.textContent = `До прибытия: ${formatRealDuration(remMs)} (${pct}%)`;
+    voyageBody.appendChild(timerDiv);
+
+    const showShipBtn = document.createElement('button');
+    showShipBtn.type = 'button';
+    showShipBtn.className = 'buy-btn';
+    showShipBtn.style.width = '100%';
+    showShipBtn.style.justifyContent = 'center';
+    showShipBtn.style.padding = '11px';
+    showShipBtn.textContent = 'Показать корабль на карте';
+    showShipBtn.onclick = () => {
+      closeVoyageModal();
+      focusCameraOn(caravan.x, caravan.y, 0.55);
+    };
+    voyageBody.appendChild(showShipBtn);
+    return;
+  }
+
+  // Сценарий 3A: Обычный сухопутный поход (лес, луг, холмы, ориентир долины) — КОРАБЛЬ НЕ НУЖЕН!
+  if (pendingVoyageTarget && !pendingVoyageTarget.isDistantSea) {
+    const target = pendingVoyageTarget;
+    voyageModalTitle.textContent = 'ОТПРАВИТЬ ХРЯКОВ?';
+    renderIconToCanvas(document.getElementById('voyageHeaderIcon'), 'flag');
+    const cost = target.cost || EXPEDITION_COST;
+    const canAfford = state.coins >= cost;
+
+    const landBox = document.createElement('div');
+    landBox.className = 'forecast-panel';
+    landBox.innerHTML = `
+      <div style="font-size:15px;margin-bottom:6px">🧭 <b>Подтвердите отправку обоза хряков</b></div>
+      <div style="margin-bottom:4px">📍 Куда: <b>${target.destName}</b></div>
+      <div style="margin-bottom:6px">📏 Расстояние: <b>~${target.distMeters || 45} м</b> • В пути: <b>~${target.estSeconds || 6} сек</b></div>
+      <div class="stat-chips" style="margin-bottom:6px">
+        <span class="stat-chip highlight">💰 Стоимость: <b>${cost} монет</b></span>
+        <span class="stat-chip">🎁 Добыча: монеты, корм и 🪵 брёвна</span>
+      </div>
+      <div style="font-size:11.5px;color:#5c3818">Если вы нажали на карту случайно — просто нажмите «Отмена».</div>
+    `;
+    voyageBody.appendChild(landBox);
+
+    const btnRow = document.createElement('div');
+    btnRow.style.display = 'flex';
+    btnRow.style.flexDirection = 'column';
+    btnRow.style.gap = '8px';
+
+    const goBtn = document.createElement('button');
+    goBtn.type = 'button';
+    goBtn.className = 'buy-btn';
+    goBtn.style.width = '100%';
+    goBtn.style.justifyContent = 'center';
+    goBtn.style.padding = '12px';
+    goBtn.style.fontSize = '14.5px';
+    goBtn.textContent = canAfford
+      ? `✅ Да, отправить хряков! (${cost} 💰)`
+      : `Не хватает монет (нужно ${cost} 💰)`;
+    goBtn.disabled = !canAfford;
+    goBtn.onclick = () => {
+      const chosen = pendingVoyageTarget;
+      closeVoyageModal();
+      if (chosen) executeLandExpedition(chosen);
+    };
+
+    const cancelLandBtn = document.createElement('button');
+    cancelLandBtn.type = 'button';
+    cancelLandBtn.className = 'sell-btn';
+    cancelLandBtn.style.width = '100%';
+    cancelLandBtn.style.justifyContent = 'center';
+    cancelLandBtn.style.padding = '11px';
+    cancelLandBtn.style.fontSize = '13.5px';
+    cancelLandBtn.style.background = 'linear-gradient(180deg, #ff8787 0%, #e03131 100%)';
+    cancelLandBtn.style.color = '#ffffff';
+    cancelLandBtn.textContent = '❌ Отмена (случайно нажал)';
+    cancelLandBtn.onclick = () => {
+      SoundManager.uiClick();
+      closeVoyageModal();
+    };
+
+    btnRow.appendChild(goBtn);
+    btnRow.appendChild(cancelLandBtn);
+    voyageBody.appendChild(btnRow);
+    return;
+  }
+
+  // Сценарий 0A: Корабль сейчас строится на верфи (идут 2 часа реального времени)
+  if (!state.shipBuilt && state.shipBuild && state.shipBuild.active) {
+    voyageModalTitle.textContent = 'ВЕРФЬ: ПОСТРОЙКА КОРАБЛЯ';
+    const remMs = Math.max(0, state.shipBuild.startTimeMs + state.shipBuild.durationMs - Date.now());
+    const pct = Math.min(100, Math.round((1 - remMs / state.shipBuild.durationMs) * 100));
+
+    const buildCard = document.createElement('div');
+    buildCard.className = 'forecast-panel';
+    buildCard.innerHTML = `
+      <div style="font-size:15px;margin-bottom:6px">🔨 <b>Хряки-плотники строят парусный корабль!</b></div>
+      <div>На постройку ушло <b>${SHIP_BUILD_LOGS} брёвен</b> и <b>${SHIP_BUILD_COINS} монет</b>. Полное время строительства — <b>2 часа реального времени</b>.</div>
+      <div style="margin-top:6px">После спуска корабля на воду откроются морские походы на все 4 острова!</div>
+      <div class="upgrade-bar" style="height:13px;margin-top:9px"><div class="upgrade-bar-fill" style="width:${pct}%"></div></div>
+    `;
+    voyageBody.appendChild(buildCard);
+
+    const timerDiv = document.createElement('div');
+    timerDiv.className = 'timer-banner';
+    timerDiv.textContent = remMs > 0 ? `До спуска на воду: ${formatRealDuration(remMs)}` : '🎉 КОРАБЛЬ ПОСТРОЕН!';
+    voyageBody.appendChild(timerDiv);
+
+    if (remMs <= 0) {
+      const claimShipBtn = document.createElement('button');
+      claimShipBtn.type = 'button';
+      claimShipBtn.className = 'buy-btn';
+      claimShipBtn.style.width = '100%';
+      claimShipBtn.style.justifyContent = 'center';
+      claimShipBtn.style.padding = '13px';
+      claimShipBtn.style.fontSize = '15px';
+      claimShipBtn.textContent = '⛵ СПУСТИТЬ КОРАБЛЬ НА ВОДУ!';
+      claimShipBtn.onclick = () => {
+        state.shipBuilt = true;
+        state.shipBuild = null;
+        saveGame(true);
+        SoundManager.discover();
+        triggerHaptic('success');
+        const hWx = HARBOR_TILE.tx * TILE_SIZE + TILE_SIZE / 2;
+        const hWy = HARBOR_TILE.ty * TILE_SIZE + TILE_SIZE / 2;
+        spawnParticles(hWx, hWy - 16, 'ship', 6);
+        spawnParticles(hWx, hWy - 24, 'sparkle', 8);
+        spawnFloatingText(hWx, hWy - 42, '⛵ КОРАБЛЬ ГОТОВ К ПЛАВАНИЮ!', '#74ff52');
+        renderVoyageModal();
+      };
+      voyageBody.appendChild(claimShipBtn);
+    } else {
+      const okBtn = document.createElement('button');
+      okBtn.type = 'button';
+      okBtn.className = 'buy-btn';
+      okBtn.style.width = '100%';
+      okBtn.style.justifyContent = 'center';
+      okBtn.style.padding = '11px';
+      okBtn.textContent = 'Понятно, жду окончания стройки';
+      okBtn.onclick = () => {
+        SoundManager.uiClick();
+        closeVoyageModal();
+      };
+      voyageBody.appendChild(okBtn);
+    }
+    return;
+  }
+
+  // Сценарий 0B: Корабль ещё НЕ построен (показывается только при попытке поплыть в море/на остров или при клике на Верфь!)
+  if (!state.shipBuilt) {
+    voyageModalTitle.textContent = 'СОЗДАНИЕ КОРАБЛЯ';
+    const hasLogs = state.logs >= SHIP_BUILD_LOGS;
+    const hasCoins = state.coins >= SHIP_BUILD_COINS;
+    const canBuild = hasLogs && hasCoins;
+
+    const needCard = document.createElement('div');
+    needCard.className = 'forecast-panel';
+    needCard.innerHTML = `
+      <div style="font-size:15px;margin-bottom:6px">⛵ <b>Чтобы плыть в море и на острова, сначала постройте корабль!</b></div>
+      <div style="margin-bottom:6px">Для строительства на верфи требуются материалы и время:</div>
+      <div class="stat-chips" style="margin-bottom:8px">
+        <span class="stat-chip" style="background:${hasLogs ? '#c8ff6b' : '#ffcdd2'}">🪵 Брёвна: <b>${state.logs} / ${SHIP_BUILD_LOGS}</b></span>
+        <span class="stat-chip highlight" style="background:${hasCoins ? '#fff08a' : '#ffcdd2'}">💰 Монеты: <b>${Math.floor(state.coins)} / ${SHIP_BUILD_COINS}</b></span>
+      </div>
+      <div>⏳ <b>Время создания корабля: 2 часа</b> реального времени.</div>
+    `;
+    voyageBody.appendChild(needCard);
+
+    const buildBtn = document.createElement('button');
+    buildBtn.type = 'button';
+    buildBtn.className = 'buy-btn';
+    buildBtn.style.width = '100%';
+    buildBtn.style.justifyContent = 'center';
+    buildBtn.style.padding = '13px';
+    buildBtn.style.fontSize = '14.5px';
+    buildBtn.textContent = canBuild
+      ? `🔨 Построить корабль (${SHIP_BUILD_LOGS}🪵 + ${SHIP_BUILD_COINS}💰 • 2 ч)`
+      : `Не хватает ресурсов (${SHIP_BUILD_LOGS}🪵 и ${SHIP_BUILD_COINS}💰)`;
+    buildBtn.disabled = !canBuild;
+    buildBtn.onclick = () => {
+      if (state.logs < SHIP_BUILD_LOGS || state.coins < SHIP_BUILD_COINS || state.shipBuilt || state.shipBuild) return;
+      state.logs -= SHIP_BUILD_LOGS;
+      state.coins -= SHIP_BUILD_COINS;
+      state.shipBuild = {
+        active: true,
+        startTimeMs: Date.now(),
+        durationMs: SHIP_BUILD_DURATION_MS
+      };
+      saveGame(true);
+      SoundManager.purchase();
+      SoundManager.chop();
+      triggerHaptic('success');
+      const hWx = HARBOR_TILE.tx * TILE_SIZE + TILE_SIZE / 2;
+      const hWy = HARBOR_TILE.ty * TILE_SIZE + TILE_SIZE / 2;
+      spawnParticles(hWx, hWy - 14, 'woodchip', 8);
+      spawnFloatingText(hWx, hWy - 36, '🔨 СТРОЙКА КОРАБЛЯ НАЧАЛАСЬ (2 Ч)!', '#ffe047');
+      renderVoyageModal();
+    };
+    voyageBody.appendChild(buildBtn);
+
+    const closeBtn2 = document.createElement('button');
+    closeBtn2.type = 'button';
+    closeBtn2.className = 'sell-btn';
+    closeBtn2.style.width = '100%';
+    closeBtn2.style.justifyContent = 'center';
+    closeBtn2.style.padding = '11px';
+    closeBtn2.textContent = 'Вернуться на ферму';
+    closeBtn2.onclick = () => {
+      SoundManager.uiClick();
+      closeVoyageModal();
+    };
+    voyageBody.appendChild(closeBtn2);
+    return;
+  }
+
+  // Сценарий 3B: Дальний морской поход (море или острова, когда корабль уже построен!)
+  const target = pendingVoyageTarget || classifyDestination(SEA_ISLANDS[0].tx * TILE_SIZE, SEA_ISLANDS[0].ty * TILE_SIZE);
+  voyageModalTitle.textContent = 'ВЫ УВЕРЕНЫ?';
+  const cost = target.cost || SEA_VOYAGE_COST;
+  const canAfford = state.coins >= cost;
+
+  const confirmBox = document.createElement('div');
+  confirmBox.className = 'forecast-panel';
+  confirmBox.innerHTML = `
+    <div style="font-size:15px;margin-bottom:6px">❓ <b>Вы уверены, что хотите отправить хряков в дальний морской поход?</b></div>
+    <div style="margin-bottom:4px">📍 Цель: <b>${target.destName}</b></div>
+    <div>⏳ <b>Отправление через: 15 минут</b> реального времени <i>(пока идут сборы, вы сможете передумать и отменить поход!)</i>.</div>
+    <div style="margin-top:4px">⛵ <b>Время в пути по морю: ~30 минут</b> реального времени.</div>
+    <div style="margin-top:6px;color:#b71c1c">⚠️ <b>Важно:</b> когда корабль отплывёт, во время пути хряков нельзя будет использовать в другой поход!</div>
+    <div style="margin-top:6px">💰 Снаряжение корабля: <b>${cost} монет</b></div>
+  `;
+  voyageBody.appendChild(confirmBox);
+
+  const btnRow = document.createElement('div');
+  btnRow.style.display = 'flex';
+  btnRow.style.flexDirection = 'column';
+  btnRow.style.gap = '8px';
+
+  const confirmBtn = document.createElement('button');
+  confirmBtn.type = 'button';
+  confirmBtn.className = 'buy-btn';
+  confirmBtn.style.width = '100%';
+  confirmBtn.style.justifyContent = 'center';
+  confirmBtn.style.padding = '12px';
+  confirmBtn.style.fontSize = '14px';
+  confirmBtn.textContent = canAfford
+    ? `✅ Да, я уверен! Начать сборы (15 мин • ${cost}💰)`
+    : `Не хватает монет (нужно ${cost}💰)`;
+  confirmBtn.disabled = !canAfford;
+  confirmBtn.onclick = () => {
+    if (state.coins < cost) return;
+    state.coins -= cost;
+
+    const harborWx = HARBOR_TILE.tx * TILE_SIZE + TILE_SIZE / 2;
+    const harborWy = HARBOR_TILE.ty * TILE_SIZE + TILE_SIZE / 2;
+
+    state.voyage = {
+      active: true,
+      phase: 'prep',
+      destName: target.destName,
+      isIsland: Boolean(target.isIsland),
+      startX: harborWx,
+      startY: harborWy,
+      targetX: target.targetX,
+      targetY: target.targetY,
+      cost,
+      prepStartTimeMs: Date.now(),
+      prepDurationMs: VOYAGE_PREP_DURATION_MS,
+      sailStartTimeMs: 0,
+      sailDurationMs: VOYAGE_SAIL_DURATION_MS
+    };
+
+    caravan.x = harborWx;
+    caravan.y = harborWy;
+    caravan.targetX = target.targetX;
+    caravan.targetY = target.targetY;
+    caravan.status = 'voyage_prep';
+    caravan.waypoints = [];
+    revealFogAroundWorld(harborWx, harborWy, 6);
+
+    saveGame(true);
+    SoundManager.marchStart();
+    triggerHaptic('success');
+    spawnFloatingText(harborWx, harborWy - 30, '⏳ СБОРЫ В ПОРТУ: 15 МИН!', '#ffe047');
+    renderVoyageModal();
+  };
+
+  const cancelBtn = document.createElement('button');
+  cancelBtn.type = 'button';
+  cancelBtn.className = 'sell-btn';
+  cancelBtn.style.width = '100%';
+  cancelBtn.style.justifyContent = 'center';
+  cancelBtn.style.padding = '11px';
+  cancelBtn.style.fontSize = '13.5px';
+  cancelBtn.textContent = '❌ Нет, я передумал';
+  cancelBtn.onclick = () => {
+    pendingVoyageTarget = null;
+    SoundManager.uiClick();
+    closeVoyageModal();
+  };
+
+  btnRow.appendChild(confirmBtn);
+  btnRow.appendChild(cancelBtn);
+  voyageBody.appendChild(btnRow);
 }
 
 </script>
