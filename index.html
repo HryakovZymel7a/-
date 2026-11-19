@@ -5,6 +5,7 @@
  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
  <meta name="theme-color" content="#14283c" />
  <title>Хряки Ферма — Осенняя усадьба</title>
+ <script src="https://telegram.org"></script>
  <script src="https://adsgram.ai"></script>
  <style>
  * {
@@ -8249,24 +8250,7 @@ const ADSGRAM_BLOCK_ID = "60521";
 const AD_REWARD_COOLDOWN_MS = 3 * 60 * 1000; // Перезарядка 3 минуты на каждую карточку
 const AD_COOLDOWNS_STORAGE_KEY = 'khryakograd_ad_cooldowns_v1';
 
-let adController = null;
-
-function initAdsgramController() {
- if (adController && typeof adController.show === 'function') {
- return adController;
- }
- if (window.Adsgram && typeof window.Adsgram.init === 'function') {
- try {
- adController = window.Adsgram.init({ blockId: ADSGRAM_BLOCK_ID });
- } catch (err) {
- adController = null;
- }
- }
- return adController;
-}
-
-initAdsgramController();
-window.addEventListener('load', initAdsgramController);
+let AdController = null;
 
 function loadAdCooldowns() {
  try {
@@ -8428,32 +8412,38 @@ function watchRewardedAdForItem(item) {
  return;
  }
 
- const webApp = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : tg;
- const isInsideTelegram = Boolean(webApp && (webApp.initData || (webApp.initDataUnsafe && webApp.initDataUnsafe.user)));
- const controller = initAdsgramController();
-
- if (!controller || typeof controller.show !== 'function') {
+ // Ленивая инициализация контроллера Adsgram при первом клике на «Смотреть»
+ if (!AdController) {
+ if (!window.Adsgram || typeof window.Adsgram.init !== 'function') {
  SoundManager.uiClick();
  triggerHaptic('medium');
- if (!isInsideTelegram) {
- showPixelToast('Реклама не подгрузилась: игра открыта вне Telegram Mini App.', 'error', 'flag');
- } else {
- showPixelToast('Реклама ещё не подгрузилась, попробуй через пару секунд.', 'error', 'flag');
- }
+ showPixelToast('SDK Adsgram не загружен. Открой игру внутри Telegram Mini App.', 'error', 'flag');
  return;
+ }
+ try {
+ AdController = window.Adsgram.init({ blockId: "60521" });
+ } catch (initErr) {
+ AdController = null;
+ SoundManager.uiClick();
+ triggerHaptic('medium');
+ const initReason = (initErr && initErr.description) || (initErr && initErr.message) || JSON.stringify(initErr);
+ showPixelToast(`Ошибка инициализации Adsgram: ${initReason}`, 'error', 'flag');
+ return;
+ }
  }
 
  adShowInProgress = true;
  renderStarsShopModal();
 
  try {
- controller.show()
+ AdController.show()
  .then((result) => {
  adShowInProgress = false;
  if (result && result.done === false) {
  SoundManager.uiClick();
  triggerHaptic('medium');
- showPixelToast('Реклама не досмотрена, награда не начислена', 'error', 'flag');
+ const reason = result.description || 'Реклама не досмотрена, награда не начислена';
+ showPixelToast(reason, 'error', 'flag');
  renderStarsShopModal();
  return;
  }
@@ -8465,18 +8455,25 @@ function watchRewardedAdForItem(item) {
  triggerHaptic('success');
  renderStarsShopModal();
  })
- .catch(() => {
+ .catch((result) => {
  adShowInProgress = false;
  SoundManager.uiClick();
  triggerHaptic('medium');
- showPixelToast('Реклама не досмотрена, награда не начислена', 'error', 'flag');
+ let reason = 'неизвестная ошибка Adsgram';
+ if (result && typeof result === 'object') {
+ reason = result.description || result.message || JSON.stringify(result);
+ } else if (result !== undefined && result !== null) {
+ reason = String(result);
+ }
+ showPixelToast(`Реклама не показана: ${reason}`, 'error', 'flag');
  renderStarsShopModal();
  });
  } catch (err) {
  adShowInProgress = false;
  SoundManager.uiClick();
  triggerHaptic('medium');
- showPixelToast('Реклама не досмотрена, награда не начислена', 'error', 'flag');
+ const syncReason = (err && err.description) || (err && err.message) || JSON.stringify(err);
+ showPixelToast(`Ошибка запуска рекламы: ${syncReason}`, 'error', 'flag');
  renderStarsShopModal();
  }
 }
