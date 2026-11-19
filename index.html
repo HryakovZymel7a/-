@@ -865,18 +865,31 @@ function bindTelegramSafeAreaEvents(webApp) {
  setTimeout(onAreaUpdate, 700);
 }
 
-function initTelegramAsync() {
- if (window.Telegram && window.Telegram.WebApp) {
- tg = window.Telegram.WebApp;
+function setupTelegramWebApp(webApp) {
+ if (!webApp) return;
+ tg = webApp;
  try {
  tg.ready();
  tg.expand();
- if (tg.requestFullscreen) tg.requestFullscreen();
- if (tg.setHeaderColor) tg.setHeaderColor('#2d6a4f');
- if (tg.setBackgroundColor) tg.setBackgroundColor('#2b5876');
+ if (typeof tg.disableVerticalSwipes === 'function') {
+ tg.disableVerticalSwipes();
+ }
+ if (typeof tg.enableClosingConfirmation === 'function') {
+ tg.enableClosingConfirmation();
+ }
+ if (typeof tg.requestFullscreen === 'function') {
+ tg.requestFullscreen();
+ }
+ if (typeof tg.setHeaderColor === 'function') tg.setHeaderColor('#2d6a4f');
+ if (typeof tg.setBackgroundColor === 'function') tg.setBackgroundColor('#2b5876');
  bindTelegramSafeAreaEvents(tg);
  resize();
  } catch (e) {}
+}
+
+function initTelegramAsync() {
+ if (window.Telegram && window.Telegram.WebApp) {
+ setupTelegramWebApp(window.Telegram.WebApp);
  return;
  }
  if (location.protocol === 'https:' || location.protocol === 'http:') {
@@ -885,14 +898,7 @@ function initTelegramAsync() {
  s.async = true;
  s.onload = () => {
  if (window.Telegram && window.Telegram.WebApp) {
- tg = window.Telegram.WebApp;
- try {
- tg.ready();
- tg.expand();
- if (tg.requestFullscreen) tg.requestFullscreen();
- bindTelegramSafeAreaEvents(tg);
- resize();
- } catch (e) {}
+ setupTelegramWebApp(window.Telegram.WebApp);
  }
  };
  document.body.appendChild(s);
@@ -5846,6 +5852,10 @@ document.addEventListener('visibilitychange', () => {
 });
 
 window.addEventListener('pagehide', flushSave);
+document.addEventListener('touchmove', (e) => {
+ if (e.target && e.target.closest && e.target.closest('.shop-content')) return;
+ if (e.cancelable) e.preventDefault();
+}, { passive: false });
 window.addEventListener('resize', resize);
 if (window.visualViewport) {
  window.visualViewport.addEventListener('resize', resize);
