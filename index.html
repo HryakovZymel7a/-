@@ -3,10 +3,9 @@
 <head>
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+ <meta name="theme-color" content="#14283c" />
  <title>Хряки Ферма — Осенняя усадьба</title>
- <link rel="preconnect" href="https://fonts.googleapis.com">
- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@600;700&family=Press+Start+2P&family=Rubik:wght@700;800&display=swap" rel="stylesheet">
+ <script src="https://adsgram.ai"></script>
  <style>
  * {
  box-sizing: border-box;
@@ -68,6 +67,7 @@
  height: 100%;
  height: 100vh;
  height: 100dvh;
+ background: #14283c;
  touch-action: none;
  image-rendering: pixelated;
  image-rendering: crisp-edges;
@@ -98,25 +98,25 @@
  }
 
  .loc-nav-btn {
-      flex: 0 0 auto;
-      font-family: 'Pixelify Sans', 'Rubik', system-ui, -apple-system, sans-serif;
-      font-weight: 700;
-      font-size: 12px;
-      letter-spacing: 0.1px;
-      color: #fff8e7;
-      text-shadow: 1px 2px 0 #2e1a0c;
-      background: #8c5228;
-      border: 3px solid #59361c;
-      border-radius: 0px;
-      box-shadow: 2px 2px 0 #2e1a0c, inset 0 2px 0 #b06e3b;
-      padding: 4px 7px;
-      cursor: pointer;
-      white-space: nowrap;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      transition: transform 0.05s steps(1), box-shadow 0.05s steps(1);
-    }
+ flex: 0 0 auto;
+ font-family: 'Pixelify Sans', 'Rubik', system-ui, -apple-system, sans-serif;
+ font-weight: 700;
+ font-size: 12px;
+ letter-spacing: 0.1px;
+ color: #fff8e7;
+ text-shadow: 1px 2px 0 #2e1a0c;
+ background: #8c5228;
+ border: 3px solid #59361c;
+ border-radius: 0px;
+ box-shadow: 2px 2px 0 #2e1a0c, inset 0 2px 0 #b06e3b;
+ padding: 4px 7px;
+ cursor: pointer;
+ white-space: nowrap;
+ display: inline-flex;
+ align-items: center;
+ gap: 4px;
+ transition: transform 0.05s steps(1), box-shadow 0.05s steps(1);
+ }
 
  .loc-nav-btn:active {
  transform: translate(2px, 2px);
@@ -624,95 +624,18 @@
  font-weight: 700;
  }
 
- /* Кнопка «Купить в боте» и элементы Лавки Звёзд */
- .bot-buy-btn {
- font-family: 'Pixelify Sans', 'Rubik', system-ui, -apple-system, sans-serif;
- background: #356c94;
- border: 3px solid #59361c;
- border-radius: 0px;
- padding: 10px 12px;
- font-size: 14px;
- font-weight: 700;
- color: #fff8e7;
- text-shadow: 2px 2px 0 #2e1a0c;
- box-shadow: 3px 3px 0 #2e1a0c, inset 0 2px 0 #5293c2;
- cursor: pointer;
- width: 100%;
- display: flex;
- align-items: center;
- justify-content: center;
- gap: 7px;
- text-decoration: none;
- transition: transform 0.05s steps(1), box-shadow 0.05s steps(1);
- }
-
- .bot-buy-btn:active {
- transform: translate(2px, 2px);
- box-shadow: 1px 1px 0 #2e1a0c;
- }
-
- .promo-box {
+ /* Плашка описания окна «Лавка бонусов 🎬» (Adsgram Rewarded Ads) */
+ .ads-info-banner {
  background: #ebd0a6;
  border: 3px solid #59361c;
  border-radius: 0px;
- padding: 10px;
+ padding: 9px 11px;
  box-shadow: 3px 3px 0 #2e1a0c;
- display: flex;
- flex-direction: column;
- gap: 8px;
- }
-
- .promo-row {
- display: flex;
- gap: 6px;
- align-items: stretch;
- }
-
- .promo-input {
- flex: 1;
- min-width: 0;
- background: #fff8e7;
- border: 3px solid #59361c;
- border-radius: 0px;
- padding: 8px 9px;
- font-family: 'Press Start 2P', monospace;
- font-size: 11px;
- color: #2e1a0c;
- text-transform: uppercase;
- box-shadow: inset 2px 2px 0 #d4b483;
- user-select: text !important;
- -webkit-user-select: text !important;
- pointer-events: auto !important;
- outline: none;
- }
-
- .promo-input::placeholder {
  font-family: 'Pixelify Sans', 'Rubik', system-ui, -apple-system, sans-serif;
- font-size: 13px;
- text-transform: none;
- color: #8c6d4f;
- }
-
- .promo-feedback {
- font-family: 'Pixelify Sans', 'Rubik', system-ui, -apple-system, sans-serif;
- font-size: 13px;
+ font-size: 13.5px;
  font-weight: 700;
- padding: 7px 9px;
- border: 2px solid #59361c;
- display: none;
- line-height: 1.3;
- }
-
- .promo-feedback.ok {
- display: block;
- background: #d8edc0;
- color: #264d14;
- }
-
- .promo-feedback.err {
- display: block;
- background: #f7c6be;
- color: #7a1c12;
+ color: #2e1a0c;
+ line-height: 1.32;
  }
 
  /* Всплывающее пиксельное уведомление поверх экрана */
@@ -769,6 +692,9 @@
  justify-content: center;
  }
  </style>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@600;700&family=Press+Start+2P&family=Rubik:wght@700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 </head>
 <body>
 
@@ -892,13 +818,13 @@
 </div>
 
 
-<!-- Модальное окно «Лавка Звёзд ⭐» (монетизация через Telegram Stars и бонусные коды) -->
+<!-- Модальное окно «Лавка бонусов 🎬» (монетизация через Adsgram Rewarded Ads) -->
 <div id="starsShopModal" class="game-modal">
  <div class="shop-window">
  <div class="shop-header" style="background: #9c621e;">
  <div class="shop-title-wrap">
  <canvas id="starsShopHeaderIcon" width="32" height="32"></canvas>
- <div class="shop-title">ЛАВКА ЗВЁЗД ⭐</div>
+ <div class="shop-title">ЛАВКА БОНУСОВ 🎬</div>
  </div>
  <div class="shop-balance" title="Ускорения скрещивания">
  <span>⚡<span id="starsTurboCount">0</span></span>
@@ -2728,25 +2654,47 @@ function focusCameraOn(worldCenterX, worldCenterY, z = camera.targetZoom) {
 }
 
 function resize() {
-  // Используем родной DPR экрана (до 3.0), чтобы все надписи, цифры и рамки были бритвенно чёткими
-  dpr = Math.min(window.devicePixelRatio || 1, 3.0);
-  const vv = window.visualViewport;
-  const nextW = Math.round((vv && vv.width) || window.innerWidth || document.documentElement.clientWidth);
-  const nextH = Math.round((vv && vv.height) || window.innerHeight || document.documentElement.clientHeight);
-  if (nextW > 20 && nextH > 20) {
-    W = nextW;
-    H = nextH;
-  }
-  canvas.width = Math.round(W * dpr);
-  canvas.height = Math.round(H * dpr);
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.imageSmoothingEnabled = false;
-  _lastCanvasFont = '';
-  computeHudLayout();
-  lastNavSyncAt = 0;
-  const c = clampCamera(camera.x, camera.y);
-  camera.x = c.x;
-  camera.y = c.y;
+ // Используем родной DPR экрана (до 3.0), чтобы все надписи, цифры и рамки были бритвенно чёткими
+ const nextDpr = Math.min(window.devicePixelRatio || 1, 3.0);
+ const vv = window.visualViewport;
+ const nextW = Math.round((vv && vv.width) || window.innerWidth || document.documentElement.clientWidth);
+ const nextH = Math.round((vv && vv.height) || window.innerHeight || document.documentElement.clientHeight);
+ const targetW = (nextW > 20) ? nextW : W;
+ const targetH = (nextH > 20) ? nextH : H;
+ const targetCanvasW = Math.round(targetW * nextDpr);
+ const targetCanvasH = Math.round(targetH * nextDpr);
+
+ if (
+ targetW === W &&
+ targetH === H &&
+ nextDpr === dpr &&
+ canvas.width === targetCanvasW &&
+ canvas.height === targetCanvasH
+ ) {
+ if (typeof renderSceneFrame === 'function') {
+ renderSceneFrame(performance.now());
+ }
+ return;
+ }
+
+ W = targetW;
+ H = targetH;
+ dpr = nextDpr;
+ canvas.width = targetCanvasW;
+ canvas.height = targetCanvasH;
+ ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+ ctx.imageSmoothingEnabled = false;
+ _lastCanvasFont = '';
+ computeHudLayout();
+ lastNavSyncAt = 0;
+ const c = clampCamera(camera.x, camera.y);
+ camera.x = c.x;
+ camera.y = c.y;
+
+ // Мгновенно перерисовываем текущий кадр сразу после очистки canvas браузером, чтобы не было ни одной вспышки
+ if (typeof renderSceneFrame === 'function') {
+ renderSceneFrame(performance.now());
+ }
 }
 
 
@@ -2793,20 +2741,20 @@ let lastNavSyncAt = 0;
 let cachedNavBtns = null;
 
 function syncLocationNavStripState(now = performance.now()) {
-  if (!locationNavBuilt) {
-    buildLocationNavStrip();
-    cachedNavBtns = locationNavStrip ? Array.from(locationNavStrip.querySelectorAll('.loc-nav-btn')) : [];
-  }
-  if (!locationNavStrip) return;
-  if (now - lastNavSyncAt < 450) return;
-  lastNavSyncAt = now;
+ if (!locationNavBuilt) {
+ buildLocationNavStrip();
+ cachedNavBtns = locationNavStrip ? Array.from(locationNavStrip.querySelectorAll('.loc-nav-btn')) : [];
+ }
+ if (!locationNavStrip) return;
+ if (now - lastNavSyncAt < 450) return;
+ lastNavSyncAt = now;
 
-  const targetTop = `${hudLayout.safeTop + 42}px`;
-  const targetRight = `${W - hudLayout.minimap.x + 6}px`;
-  if (locationNavStrip.style.top !== targetTop) locationNavStrip.style.top = targetTop;
-  if (locationNavStrip.style.right !== targetRight) locationNavStrip.style.right = targetRight;
+ const targetTop = `${hudLayout.safeTop + 42}px`;
+ const targetRight = `${W - hudLayout.minimap.x + 6}px`;
+ if (locationNavStrip.style.top !== targetTop) locationNavStrip.style.top = targetTop;
+ if (locationNavStrip.style.right !== targetRight) locationNavStrip.style.right = targetRight;
 
-  const btns = cachedNavBtns || locationNavStrip.querySelectorAll('.loc-nav-btn');
+ const btns = cachedNavBtns || locationNavStrip.querySelectorAll('.loc-nav-btn');
  btns.forEach((btn) => {
  const id = btn.dataset.locId;
  const isLocked = (id === 'barn' && state.barnLevel === 0) || (id === 'sawmill' && state.sawmillLevel === 0) || (id === 'harbor' && !state.shipBuilt);
@@ -3147,41 +3095,41 @@ function bakeOverviewTerrain() {
  }
 
  // 2. Рисуем тайлы суши, отмелей, пляжей и осенние детали (листья, сухую траву, камушки) ОДИН РАЗ при загрузке
-  for (let ty = 0; ty < MAP_ROWS; ty++) {
-    const rowOff = ty * MAP_COLS;
-    const pyBase = ty * OVERVIEW_SCALE;
-    for (let tx = 0; tx < MAP_COLS; tx++) {
-      const tType = TILE_GRID[rowOff + tx];
-      if (tType === 0) continue;
-      const pxBase = tx * OVERVIEW_SCALE;
-      octx.fillStyle = TILE_PALETTE[tType];
-      octx.fillRect(pxBase, pyBase, OVERVIEW_SCALE, OVERVIEW_SCALE);
+ for (let ty = 0; ty < MAP_ROWS; ty++) {
+ const rowOff = ty * MAP_COLS;
+ const pyBase = ty * OVERVIEW_SCALE;
+ for (let tx = 0; tx < MAP_COLS; tx++) {
+ const tType = TILE_GRID[rowOff + tx];
+ if (tType === 0) continue;
+ const pxBase = tx * OVERVIEW_SCALE;
+ octx.fillStyle = TILE_PALETTE[tType];
+ octx.fillRect(pxBase, pyBase, OVERVIEW_SCALE, OVERVIEW_SCALE);
 
-      if (tType === 11) {
-        octx.fillStyle = '#a87d4f';
-        octx.fillRect(pxBase + 2, pyBase + 2, 1, 1);
-        octx.fillRect(pxBase + 5, pyBase + 5, 1, 1);
-      } else if (tType >= 2 && tType <= 8) {
-        const h1 = hash2D(tx, ty);
-        const h2 = hash2D(ty + 17, tx + 31);
-        const h3 = hash2D(tx * 3 + 7, ty * 5 + 11);
-        if (h1 > 0.36) {
-          octx.fillStyle = h1 > 0.72 ? '#d97b29' : (h1 > 0.52 ? '#b84a1e' : '#e3a838');
-          octx.fillRect(pxBase + 1 + Math.floor(h2 * 5), pyBase + 1 + Math.floor(h3 * 5), 1, 1);
-        }
-        if (h3 > 0.58) {
-          octx.fillStyle = '#4f3f1d';
-          octx.fillRect(pxBase + 1 + Math.floor(h1 * 5), pyBase + 2 + Math.floor(h2 * 4), 1, 1);
-        }
-        if (h1 < 0.34 && h2 > 0.35) {
-          octx.fillStyle = '#7d7063';
-          octx.fillRect(pxBase + 1 + Math.floor(h3 * 5), pyBase + 1 + Math.floor(h1 * 5), 1, 1);
-        }
-      }
-    }
-  }
+ if (tType === 11) {
+ octx.fillStyle = '#a87d4f';
+ octx.fillRect(pxBase + 2, pyBase + 2, 1, 1);
+ octx.fillRect(pxBase + 5, pyBase + 5, 1, 1);
+ } else if (tType >= 2 && tType <= 8) {
+ const h1 = hash2D(tx, ty);
+ const h2 = hash2D(ty + 17, tx + 31);
+ const h3 = hash2D(tx * 3 + 7, ty * 5 + 11);
+ if (h1 > 0.36) {
+ octx.fillStyle = h1 > 0.72 ? '#d97b29' : (h1 > 0.52 ? '#b84a1e' : '#e3a838');
+ octx.fillRect(pxBase + 1 + Math.floor(h2 * 5), pyBase + 1 + Math.floor(h3 * 5), 1, 1);
+ }
+ if (h3 > 0.58) {
+ octx.fillStyle = '#4f3f1d';
+ octx.fillRect(pxBase + 1 + Math.floor(h1 * 5), pyBase + 2 + Math.floor(h2 * 4), 1, 1);
+ }
+ if (h1 < 0.34 && h2 > 0.35) {
+ octx.fillStyle = '#7d7063';
+ octx.fillRect(pxBase + 1 + Math.floor(h3 * 5), pyBase + 1 + Math.floor(h1 * 5), 1, 1);
+ }
+ }
+ }
+ }
 
-  // 3. Декорации для крупных объектов (горы, деревья, мосты)
+ // 3. Декорации для крупных объектов (горы, деревья, мосты)
  for (let ty = 0; ty < MAP_ROWS; ty++) {
  for (let tx = 0; tx < MAP_COLS; tx++) {
  const p = TILE_PROPS[ty * MAP_COLS + tx];
@@ -3381,25 +3329,25 @@ function roundRect(ctx, x, y, w, h, r) {
 }
 
 const cachedShadowCanvas = (() => {
-  const c = document.createElement('canvas');
-  c.width = 96;
-  c.height = 48;
-  const g = c.getContext('2d');
-  const sg = g.createRadialGradient(48, 24, 4, 48, 24, 44);
-  sg.addColorStop(0, 'rgba(15, 24, 10, 0.36)');
-  sg.addColorStop(0.65, 'rgba(15, 24, 10, 0.16)');
-  sg.addColorStop(1, 'rgba(15, 24, 10, 0)');
-  g.fillStyle = sg;
-  g.beginPath();
-  g.ellipse(48, 24, 44, 20, 0, 0, Math.PI * 2);
-  g.fill();
-  return c;
+ const c = document.createElement('canvas');
+ c.width = 96;
+ c.height = 48;
+ const g = c.getContext('2d');
+ const sg = g.createRadialGradient(48, 24, 4, 48, 24, 44);
+ sg.addColorStop(0, 'rgba(15, 24, 10, 0.36)');
+ sg.addColorStop(0.65, 'rgba(15, 24, 10, 0.16)');
+ sg.addColorStop(1, 'rgba(15, 24, 10, 0)');
+ g.fillStyle = sg;
+ g.beginPath();
+ g.ellipse(48, 24, 44, 20, 0, 0, Math.PI * 2);
+ g.fill();
+ return c;
 })();
 
 function drawGroundShadow(ctx, x, y, rx, ry) {
-  const w = rx * 2.24;
-  const h = ry * 2.24;
-  ctx.drawImage(cachedShadowCanvas, x - w * 0.5, y - h * 0.5, w, h);
+ const w = rx * 2.24;
+ const h = ry * 2.24;
+ ctx.drawImage(cachedShadowCanvas, x - w * 0.5, y - h * 0.5, w, h);
 }
 
 function formatCropHarvestText(cropId, amount) {
@@ -3465,37 +3413,37 @@ function drawCartoonButton(ctx, x, y, w, h, r = 0, topColor = '#8c5228', bottomC
 
 let _lastCanvasFont = '';
 function drawOutlinedText(text, x, y, fontSize, fill = '#fff6df', align = 'center', strokeW = 2.5, usePixelTitle = false) {
-  const pxSize = Math.max(11, Math.round(fontSize * 1.08));
-  const nextFont = usePixelTitle
-    ? `800 ${Math.max(12, pxSize)}px 'Pixelify Sans', 'Rubik', system-ui, -apple-system, sans-serif`
-    : `700 ${pxSize}px 'Pixelify Sans', 'Rubik', system-ui, -apple-system, sans-serif`;
+ const pxSize = Math.max(11, Math.round(fontSize * 1.08));
+ const nextFont = usePixelTitle
+ ? `800 ${Math.max(12, pxSize)}px 'Pixelify Sans', 'Rubik', system-ui, -apple-system, sans-serif`
+ : `700 ${pxSize}px 'Pixelify Sans', 'Rubik', system-ui, -apple-system, sans-serif`;
 
-  if (_lastCanvasFont !== nextFont) {
-    ctx.font = nextFont;
-    _lastCanvasFont = nextFont;
-  }
-  ctx.textAlign = align;
-  ctx.textBaseline = 'middle';
+ if (_lastCanvasFont !== nextFont) {
+ ctx.font = nextFont;
+ _lastCanvasFont = nextFont;
+ }
+ ctx.textAlign = align;
+ ctx.textBaseline = 'middle';
 
-  const tx = Math.round(x);
-  const ty = Math.round(y);
-  const isDarkText = (
-    fill === '#2e1a0c' ||
-    fill === '#59361c' ||
-    fill === '#245912' ||
-    fill === '#6b320e' ||
-    fill === '#1f1107'
-  );
+ const tx = Math.round(x);
+ const ty = Math.round(y);
+ const isDarkText = (
+ fill === '#2e1a0c' ||
+ fill === '#59361c' ||
+ fill === '#245912' ||
+ fill === '#6b320e' ||
+ fill === '#1f1107'
+ );
 
-  if (!isDarkText) {
-    ctx.fillStyle = '#1f1107';
-    ctx.fillText(text, tx + 1, ty + 2);
-    if (strokeW >= 3.0) {
-      ctx.fillText(text, tx - 1, ty + 1);
-    }
-  }
-  ctx.fillStyle = fill;
-  ctx.fillText(text, tx, ty);
+ if (!isDarkText) {
+ ctx.fillStyle = '#1f1107';
+ ctx.fillText(text, tx + 1, ty + 2);
+ if (strokeW >= 3.0) {
+ ctx.fillText(text, tx - 1, ty + 1);
+ }
+ }
+ ctx.fillStyle = fill;
+ ctx.fillText(text, tx, ty);
 }
 
 function isRectVisible(rx, ry, rw, rh, margin = 150) {
@@ -3653,55 +3601,55 @@ function drawAmbientLife(now) {
 }
 
 function drawTerrainAndTiles(now = 0) {
-  ctx.imageSmoothingEnabled = false;
+ ctx.imageSmoothingEnabled = false;
 
-  const viewW = W / camera.zoom;
-  const viewH = H / camera.zoom;
-  ctx.fillStyle = '#0B2545';
-  ctx.fillRect(camera.x - 10, camera.y - 10, viewW + 20, viewH + 20);
+ const viewW = W / camera.zoom;
+ const viewH = H / camera.zoom;
+ ctx.fillStyle = '#0B2545';
+ ctx.fillRect(camera.x - 10, camera.y - 10, viewW + 20, viewH + 20);
 
-  drawVisibleLayerCropped(overviewCanvas);
+ drawVisibleLayerCropped(overviewCanvas);
 
-  if (camera.zoom >= 0.36) {
-    const startCol = Math.max(0, Math.floor(camera.x / TILE_SIZE));
-    const endCol = Math.min(MAP_COLS - 1, Math.ceil((camera.x + viewW) / TILE_SIZE));
-    const startRow = Math.max(0, Math.floor(camera.y / TILE_SIZE));
-    const endRow = Math.min(MAP_ROWS - 1, Math.ceil((camera.y + viewH) / TILE_SIZE));
+ if (camera.zoom >= 0.36) {
+ const startCol = Math.max(0, Math.floor(camera.x / TILE_SIZE));
+ const endCol = Math.min(MAP_COLS - 1, Math.ceil((camera.x + viewW) / TILE_SIZE));
+ const startRow = Math.max(0, Math.floor(camera.y / TILE_SIZE));
+ const endRow = Math.min(MAP_ROWS - 1, Math.ceil((camera.y + viewH) / TILE_SIZE));
 
-    // Анимируем видимую рябь на воде одним общим проходом
-    const waveShift = Math.sin(now / 520) * 5.0;
-    ctx.strokeStyle = 'rgba(165, 205, 240, 0.28)';
-    ctx.lineWidth = 2.2;
-    ctx.beginPath();
-    for (let ty = startRow; ty <= endRow; ty++) {
-      const rowOff = ty * MAP_COLS;
-      const y = ty * TILE_SIZE;
-      for (let tx = startCol; tx <= endCol; tx++) {
-        const idx = rowOff + tx;
-        if (FOG_GRID[idx] === 0) continue;
-        const tType = TILE_GRID[idx];
-        if (tType === 0 || tType === 1 || tType === 10) {
-          const x = tx * TILE_SIZE;
-          const wOff = ((tx + ty) % 2 === 0) ? waveShift : -waveShift;
-          ctx.moveTo(x + 14 + wOff, y + 22);
-          ctx.lineTo(x + 34 + wOff, y + 22);
-          ctx.moveTo(x + 24 - wOff, y + 44);
-          ctx.lineTo(x + 46 - wOff, y + 44);
-        }
-      }
-    }
-    ctx.stroke();
+ // Анимируем видимую рябь на воде одним общим проходом
+ const waveShift = Math.sin(now / 520) * 5.0;
+ ctx.strokeStyle = 'rgba(165, 205, 240, 0.28)';
+ ctx.lineWidth = 2.2;
+ ctx.beginPath();
+ for (let ty = startRow; ty <= endRow; ty++) {
+ const rowOff = ty * MAP_COLS;
+ const y = ty * TILE_SIZE;
+ for (let tx = startCol; tx <= endCol; tx++) {
+ const idx = rowOff + tx;
+ if (FOG_GRID[idx] === 0) continue;
+ const tType = TILE_GRID[idx];
+ if (tType === 0 || tType === 1 || tType === 10) {
+ const x = tx * TILE_SIZE;
+ const wOff = ((tx + ty) % 2 === 0) ? waveShift : -waveShift;
+ ctx.moveTo(x + 14 + wOff, y + 22);
+ ctx.lineTo(x + 34 + wOff, y + 22);
+ ctx.moveTo(x + 24 - wOff, y + 44);
+ ctx.lineTo(x + 46 - wOff, y + 44);
+ }
+ }
+ }
+ ctx.stroke();
 
-    // Объёмные деревья, скалы и мосты в зоне видимости
-    for (let ty = startRow; ty <= endRow; ty++) {
-      const rowOff = ty * MAP_COLS;
-      for (let tx = startCol; tx <= endCol; tx++) {
-        const idx = rowOff + tx;
-        if (FOG_GRID[idx] === 0 || TILE_PROPS[idx] === 0) continue;
-        drawTileDecoration(ctx, tx, ty, TILE_SIZE, now);
-      }
-    }
-  }
+ // Объёмные деревья, скалы и мосты в зоне видимости
+ for (let ty = startRow; ty <= endRow; ty++) {
+ const rowOff = ty * MAP_COLS;
+ for (let tx = startCol; tx <= endCol; tx++) {
+ const idx = rowOff + tx;
+ if (FOG_GRID[idx] === 0 || TILE_PROPS[idx] === 0) continue;
+ drawTileDecoration(ctx, tx, ty, TILE_SIZE, now);
+ }
+ }
+ }
 }
 
 function drawLogSpots(now) {
@@ -4401,21 +4349,21 @@ function drawPenAndBoars() {
  }
 
  // Отображение клички, породы и сытости хряка на контрастной подложке
-    const showPlate = camera.zoom >= 0.62 || boar.labelTimer > 0 || boar.fullnessTimer > 0;
-    if (showPlate) {
-      const tagY = by + baseSize * 0.43 - jumpOffset * 0.35;
-      const genTag = (boar.generation || 1) > 1 ? ` · П.${boar.generation}` : '';
-      const sexIcon = boar.gender === 'female' ? '♀ ' : '♂ ';
-      const nameColor = boar.gender === 'female' ? '#ffb8d0' : '#ffe066';
-      const plateH = boar.fullnessTimer > 0 ? 41 : 28;
-      ctx.fillStyle = 'rgba(34, 18, 7, 0.78)';
-      ctx.fillRect(Math.round(bx - 54), Math.round(tagY - 9), 108, plateH);
-      drawOutlinedText(`${sexIcon}${boar.nickname}${genTag}`, bx, tagY, 12.5, nameColor, 'center', 2);
-      drawOutlinedText(boar.breed, bx, tagY + 13, 10.8, '#fff8e7', 'center', 2);
-      if (boar.fullnessTimer > 0) {
-        drawOutlinedText(`Сыт (${Math.ceil(boar.fullnessTimer)}с)`, bx, tagY + 26, 10.5, '#ff9ff3', 'center', 2);
-      }
-    }
+ const showPlate = camera.zoom >= 0.62 || boar.labelTimer > 0 || boar.fullnessTimer > 0;
+ if (showPlate) {
+ const tagY = by + baseSize * 0.43 - jumpOffset * 0.35;
+ const genTag = (boar.generation || 1) > 1 ? ` · П.${boar.generation}` : '';
+ const sexIcon = boar.gender === 'female' ? '♀ ' : '♂ ';
+ const nameColor = boar.gender === 'female' ? '#ffb8d0' : '#ffe066';
+ const plateH = boar.fullnessTimer > 0 ? 41 : 28;
+ ctx.fillStyle = 'rgba(34, 18, 7, 0.78)';
+ ctx.fillRect(Math.round(bx - 54), Math.round(tagY - 9), 108, plateH);
+ drawOutlinedText(`${sexIcon}${boar.nickname}${genTag}`, bx, tagY, 12.5, nameColor, 'center', 2);
+ drawOutlinedText(boar.breed, bx, tagY + 13, 10.8, '#fff8e7', 'center', 2);
+ if (boar.fullnessTimer > 0) {
+ drawOutlinedText(`Сыт (${Math.ceil(boar.fullnessTimer)}с)`, bx, tagY + 26, 10.5, '#ff9ff3', 'center', 2);
+ }
+ }
  }
 
  if (!(worldSpriteImages.pigsty_barn && worldSpriteImages.pigsty_barn.complete)) {
@@ -4683,9 +4631,9 @@ function drawAllFields(now) {
  drawCartoonIcon(ctx, seed.iconKey, cx, cy - 2, 28);
  ctx.globalAlpha = 1;
  ctx.fillStyle = 'rgba(34, 18, 7, 0.75)';
-        ctx.fillRect(Math.round(rect.x + 6), Math.round(rect.y + rect.h - 22), Math.round(rect.w - 12), 17);
-        drawOutlinedText(`Семена: ${seed.seedCost}`, cx - 6, rect.y + rect.h - 13.5, 11, canAffordSeed ? '#ffe066' : '#ff8787', 'center', 0);
-        drawCartoonIcon(ctx, 'coin', cx + 30, rect.y + rect.h - 13.5, 12);
+ ctx.fillRect(Math.round(rect.x + 6), Math.round(rect.y + rect.h - 22), Math.round(rect.w - 12), 17);
+ drawOutlinedText(`Семена: ${seed.seedCost}`, cx - 6, rect.y + rect.h - 13.5, 11, canAffordSeed ? '#ffe066' : '#ff8787', 'center', 0);
+ drawCartoonIcon(ctx, 'coin', cx + 30, rect.y + rect.h - 13.5, 12);
  } else {
  const cropCfg = CROPS[plot.crop] || CROPS.carrot;
  const progress = Math.min(1, plot.progress || 0);
@@ -4973,55 +4921,55 @@ function getDayPhaseInfo(minutes) {
 }
 
 const cachedCloudCanvas = (() => {
-  const c = document.createElement('canvas');
-  c.width = 160;
-  c.height = 90;
-  const g = c.getContext('2d');
-  const cg = g.createRadialGradient(70, 38, 6, 80, 45, 72);
-  cg.addColorStop(0, 'rgba(255, 250, 238, 0.22)');
-  cg.addColorStop(0.6, 'rgba(255, 250, 238, 0.09)');
-  cg.addColorStop(1, 'rgba(255, 250, 238, 0)');
-  g.fillStyle = cg;
-  g.beginPath();
-  g.ellipse(80, 45, 72, 36, 0, 0, Math.PI * 2);
-  g.fill();
-  return c;
+ const c = document.createElement('canvas');
+ c.width = 160;
+ c.height = 90;
+ const g = c.getContext('2d');
+ const cg = g.createRadialGradient(70, 38, 6, 80, 45, 72);
+ cg.addColorStop(0, 'rgba(255, 250, 238, 0.22)');
+ cg.addColorStop(0.6, 'rgba(255, 250, 238, 0.09)');
+ cg.addColorStop(1, 'rgba(255, 250, 238, 0)');
+ g.fillStyle = cg;
+ g.beginPath();
+ g.ellipse(80, 45, 72, 36, 0, 0, Math.PI * 2);
+ g.fill();
+ return c;
 })();
 
 function drawSunbeamsAndDriftingClouds(now) {
-  if (camera.zoom < 0.25) return;
-  const phase = getDayPhaseInfo(state.gameMinutes);
+ if (camera.zoom < 0.25) return;
+ const phase = getDayPhaseInfo(state.gameMinutes);
 
-  for (let i = 0; i < driftingClouds.length; i++) {
-    const cl = driftingClouds[i];
-    if (!isRectVisible(cl.x - cl.rx * 2, cl.y - cl.ry * 2, cl.rx * 4, cl.ry * 4, 180)) continue;
+ for (let i = 0; i < driftingClouds.length; i++) {
+ const cl = driftingClouds[i];
+ if (!isRectVisible(cl.x - cl.rx * 2, cl.y - cl.ry * 2, cl.rx * 4, cl.ry * 4, 180)) continue;
 
-    ctx.fillStyle = 'rgba(15, 24, 12, 0.07)';
-    ctx.beginPath();
-    ctx.ellipse(cl.x + 45, cl.y + 85, cl.rx * 0.9, cl.ry * 0.65, 0, 0, Math.PI * 2);
-    ctx.fill();
+ ctx.fillStyle = 'rgba(15, 24, 12, 0.07)';
+ ctx.beginPath();
+ ctx.ellipse(cl.x + 45, cl.y + 85, cl.rx * 0.9, cl.ry * 0.65, 0, 0, Math.PI * 2);
+ ctx.fill();
 
-    ctx.drawImage(cachedCloudCanvas, cl.x - cl.rx * 1.2, cl.y - cl.ry * 1.2, cl.rx * 2.4, cl.ry * 2.4);
-  }
+ ctx.drawImage(cachedCloudCanvas, cl.x - cl.rx * 1.2, cl.y - cl.ry * 1.2, cl.rx * 2.4, cl.ry * 2.4);
+ }
 
-  if (phase.label === 'день' || phase.label === 'утро') {
-    const cx = WORLD.penRect.x - 240;
-    const cy = WORLD.penRect.y - 360;
-    if (isRectVisible(cx - 200, cy - 200, 1800, 1600, 300)) {
-      ctx.fillStyle = 'rgba(255, 238, 170, 0.065)';
-      for (let r = 0; r < 3; r++) {
-        const sway = Math.sin(now / 1900 + r * 1.4) * 35;
-        const rayX = cx + r * 420 + sway;
-        ctx.beginPath();
-        ctx.moveTo(rayX, cy);
-        ctx.lineTo(rayX + 170, cy);
-        ctx.lineTo(rayX + 620, cy + 1100);
-        ctx.lineTo(rayX + 350, cy + 1100);
-        ctx.closePath();
-        ctx.fill();
-      }
-    }
-  }
+ if (phase.label === 'день' || phase.label === 'утро') {
+ const cx = WORLD.penRect.x - 240;
+ const cy = WORLD.penRect.y - 360;
+ if (isRectVisible(cx - 200, cy - 200, 1800, 1600, 300)) {
+ ctx.fillStyle = 'rgba(255, 238, 170, 0.065)';
+ for (let r = 0; r < 3; r++) {
+ const sway = Math.sin(now / 1900 + r * 1.4) * 35;
+ const rayX = cx + r * 420 + sway;
+ ctx.beginPath();
+ ctx.moveTo(rayX, cy);
+ ctx.lineTo(rayX + 170, cy);
+ ctx.lineTo(rayX + 620, cy + 1100);
+ ctx.lineTo(rayX + 350, cy + 1100);
+ ctx.closePath();
+ ctx.fill();
+ }
+ }
+ }
 }
 
 function drawCloudsAndDayNight(now) {
@@ -5215,7 +5163,7 @@ function drawStarsShopButton(now) {
 
  const pxOff = isPressed ? 2 : 0;
  drawCartoonIcon(ctx, 'star', sb.x + 18 + pxOff, sb.y + sb.h / 2 + pxOff, 22);
- drawOutlinedText('Лавка Звёзд ⭐', sb.x + 34 + pxOff, sb.y + sb.h / 2 + 1 + pxOff, 13.5, '#fff8e7', 'left', 2);
+ drawOutlinedText('Бонусы 🎬', sb.x + 34 + pxOff, sb.y + sb.h / 2 + 1 + pxOff, 13.5, '#fff8e7', 'left', 2);
 
  if ((state.turboBoosts || 0) > 0) {
  drawOutlinedText(`⚡${state.turboBoosts}`, sb.x + sb.w - 10 + pxOff, sb.y + sb.h / 2 + 1 + pxOff, 11.5, '#ffe047', 'right', 2);
@@ -5778,27 +5726,15 @@ function drawWorldEffects() {
 
 let rafId = null;
 
-function gameLoop(now) {
- if (document.hidden) {
- rafId = null;
- return;
- }
- rafId = requestAnimationFrame(gameLoop);
-
+function renderSceneFrame(now) {
  if (!worldInitialized) {
- ctx.fillStyle = '#2b5876';
+ ctx.fillStyle = '#14283c';
  ctx.fillRect(0, 0, W, H);
- drawOutlinedText('ЗАГРУЗКА «ХРЯКИ ФЕРМА»...', W / 2, H / 2, 19, '#ffe047', 'center', 4.5);
+ drawOutlinedText('ЗАГРУЗКА «ХРЯКИ ФЕРМА»...', W / 2, H / 2, 18, '#ffe047', 'center', 3.0);
  return;
  }
-
- // Размеры отслеживаются событиями resize и visualViewport без дёргания DOM каждый кадр
-
- const dt = Math.min((now - lastTime) / 1000, 0.1);
- lastTime = now;
 
  try {
- update(dt);
  ctx.save();
  const shakeX = cameraShakeTime > 0 ? (Math.random() - 0.5) * cameraShakeMag * 2 : 0;
  const shakeY = cameraShakeTime > 0 ? (Math.random() - 0.5) * cameraShakeMag * 2 : 0;
@@ -5830,6 +5766,28 @@ function gameLoop(now) {
  } catch (err) {}
 }
 
+function gameLoop(now) {
+ if (document.hidden) {
+ rafId = null;
+ return;
+ }
+ rafId = requestAnimationFrame(gameLoop);
+
+ if (!worldInitialized) {
+ renderSceneFrame(now);
+ return;
+ }
+
+ const dt = Math.min((now - lastTime) / 1000, 0.1);
+ lastTime = now;
+
+ try {
+ update(dt);
+ } catch (err) {}
+
+ renderSceneFrame(now);
+}
+
 document.addEventListener('visibilitychange', () => {
  if (document.hidden) {
  flushSave();
@@ -5845,32 +5803,48 @@ if (window.visualViewport) {
  window.visualViewport.addEventListener('resize', resize);
 }
 
-// Мгновенный первый кадр без зависания при открытии файла
-resize();
-rafId = requestAnimationFrame(gameLoop);
-
-setTimeout(() => {
+// Надёжный мгновенный старт игры при открытии в Chrome, WebView и Telegram Mini App
+function bootGame() {
+ if (worldInitialized) return;
+ try {
+ resize();
  buildValleyMap();
  loadGame();
  syncActiveBoars();
  loadAllSprites();
  bakeOverviewTerrain();
  rebuildFogCanvas();
- resize();
  const startZoom = Math.min(0.85, Math.max(0.54, (W - 24) / 600));
  camera.zoom = startZoom;
  camera.targetZoom = startZoom;
  focusCameraOn(WORLD.penRect.x + WORLD.penRect.w / 2, WORLD.penRect.y + WORLD.penRect.h * 0.72, startZoom);
- setTimeout(resize, 160);
  if (camera.targetX !== null) {
  camera.x = camera.targetX;
  camera.y = camera.targetY;
  camera.targetX = null;
  camera.targetY = null;
  }
+ } catch (e) {
+ console.error('Boot error:', e);
+ }
+ lastTime = performance.now();
  worldInitialized = true;
+ renderSceneFrame(lastTime);
+ if (!rafId) {
+ rafId = requestAnimationFrame(gameLoop);
+ }
+ setTimeout(() => {
+ resize();
+ renderSceneFrame(performance.now());
+ }, 120);
  initTelegramAsync();
-}, 16);
+}
+
+if (document.readyState === 'loading') {
+ document.addEventListener('DOMContentLoaded', bootGame, { once: true });
+} else {
+ bootGame();
+}
 
 /**
  * УПРАВЛЕНИЕ: PINCH-TO-ZOOM, КОЛЁСИКО, ТАП ПО КАРТЕ
@@ -8263,47 +8237,123 @@ function renderVoyageModal() {
 
 
 /**
- * МАГАЗИН «ЛАВКА ЗВЁЗД ⭐» И АКТИВАЦИЯ БОНУСНЫХ КОДОВ (TELEGRAM STARS)
+ * ЛАВКА БОНУСОВ 🎬 — МОНЕТИЗАЦИЯ ЧЕРЕЗ ADSGRAM REWARDED ADS
  */
 const starsShopModal = document.getElementById('starsShopModal');
 const starsShopBody = document.getElementById('starsShopBody');
 let starsShopOpenedAt = 0;
-let lastPromoFeedback = null;
+let bonusTimerInterval = null;
+let adShowInProgress = false;
 
-const STARS_BOT_URL = 'https://t.me/HryakiFerma_bot';
+const ADSGRAM_BLOCK_ID = "60521";
+const AD_REWARD_COOLDOWN_MS = 3 * 60 * 1000; // Перезарядка 3 минуты на каждую карточку
+const AD_COOLDOWNS_STORAGE_KEY = 'khryakograd_ad_cooldowns_v1';
 
-const STARS_CATALOG = [
+let adController = null;
+
+function initAdsgramController() {
+ if (adController && typeof adController.show === 'function') {
+ return adController;
+ }
+ if (window.Adsgram && typeof window.Adsgram.init === 'function') {
+ try {
+ adController = window.Adsgram.init({ blockId: ADSGRAM_BLOCK_ID });
+ } catch (err) {
+ adController = null;
+ }
+ }
+ return adController;
+}
+
+initAdsgramController();
+window.addEventListener('load', initAdsgramController);
+
+function loadAdCooldowns() {
+ try {
+ const raw = window.localStorage.getItem(AD_COOLDOWNS_STORAGE_KEY) || SafeStorage.get(AD_COOLDOWNS_STORAGE_KEY);
+ if (raw) {
+ const parsed = JSON.parse(raw);
+ if (parsed && typeof parsed === 'object') return parsed;
+ }
+ } catch (e) {}
+ return {};
+}
+
+function saveAdCooldowns(map) {
+ try {
+ const serialized = JSON.stringify(map);
+ window.localStorage.setItem(AD_COOLDOWNS_STORAGE_KEY, serialized);
+ SafeStorage.set(AD_COOLDOWNS_STORAGE_KEY, serialized);
+ } catch (e) {}
+}
+
+function getAdRewardRemainingMs(rewardId) {
+ const map = loadAdCooldowns();
+ const readyAt = Number(map[rewardId] || 0);
+ return Math.max(0, readyAt - Date.now());
+}
+
+function setAdRewardCooldown(rewardId) {
+ const map = loadAdCooldowns();
+ map[rewardId] = Date.now() + AD_REWARD_COOLDOWN_MS;
+ saveAdCooldowns(map);
+}
+
+const AD_REWARD_CATALOG = [
  {
- prefix: 'TURBO',
- title: 'Турбо-инкубатор (3 мгновенных ускорения скрещивания)',
- priceStars: 35,
+ id: 'turbo',
+ title: 'Турбо-инкубатор (+1 ускорение скрещивания)',
+ rewardLabel: '+1 ⚡ ускорение',
  iconKey: 'heart',
- desc: 'Мгновенно завершает ожидание в Племенном дворе. Код: TURBO-XXXX',
- getStatus: () => `В запасе: ${state.turboBoosts || 0} ускор.`
+ desc: 'Мгновенно завершает ожидание в Племенном дворе после просмотра ролика.',
+ getStatus: () => `В запасе: ${state.turboBoosts || 0} ускор.`,
+ grant: () => {
+ state.turboBoosts = (state.turboBoosts || 0) + 1;
+ spawnFloatingText(BREEDING_CONFIG.rect.x + 160, BREEDING_CONFIG.rect.y + 80, '+1 ускорение случки!', '#ffe047');
+ showPixelToast('Награда получена: +1 ускорение скрещивания!', 'success', 'heart');
+ }
  },
  {
- prefix: 'FIELD',
- title: 'Дополнительное поле (+6 грядок)',
- priceStars: 100,
- iconKey: 'plot',
- desc: 'Открывает целый новый участок земли на 6 грядок для корма. Код: FIELD-XXXX',
- getStatus: () => `Открыто полей: ${state.unlockedFields.length}`
- },
- {
- prefix: 'TULUP',
- title: 'Утеплённый тулуп (+40% к защите хряков от холода)',
- priceStars: 45,
- iconKey: 'warehouse',
- desc: 'Согревает хряков в ноябрьские заморозки (+40% защита, +20% монет). Код: TULUP-XXXX',
- getStatus: () => `Защита от холода: +${getColdProtectionPct()}%`
- },
- {
- prefix: 'GOLD',
- title: 'Мешок золота (5 000 монет)',
- priceStars: 50,
+ id: 'gold',
+ title: 'Мешок золота (+1 500 монет)',
+ rewardLabel: '+1 500 монет',
  iconKey: 'coin',
- desc: 'Тяжёлый купеческий мешок звонкой монеты прямо в казну усадьбы. Код: GOLD-XXXX',
- getStatus: () => `В казне: ${Math.floor(state.coins)} монет`
+ desc: 'Тяжёлый купеческий мешок звонкой монеты прямо в казну усадьбы.',
+ getStatus: () => `В казне: ${Math.floor(state.coins)} монет`,
+ grant: () => {
+ state.coins += 1500;
+ spawnParticles(WORLD.penRect.x + WORLD.penRect.w / 2, WORLD.penRect.y + 120, 'coin', 10);
+ spawnFloatingText(WORLD.penRect.x + WORLD.penRect.w / 2, WORLD.penRect.y + 70, '+1 500 монет!', '#ffe047');
+ showPixelToast('Награда получена: +1 500 монет!', 'success', 'coin');
+ }
+ },
+ {
+ id: 'food',
+ title: 'Корзина деликатесов (+15 корма)',
+ rewardLabel: '+15 корма',
+ iconKey: 'basket',
+ desc: 'Свежие корнеплоды и отборные жёлуди для сытости всего стада.',
+ getStatus: () => `На складе: ${state.food} корма`,
+ grant: () => {
+ state.food += 15;
+ spawnParticles(WORLD.penRect.x + WORLD.penRect.w / 2, WORLD.penRect.y + 120, 'basket', 8);
+ spawnFloatingText(WORLD.penRect.x + WORLD.penRect.w / 2, WORLD.penRect.y + 70, '+15 корма!', '#a3e635');
+ showPixelToast('Награда получена: +15 корма!', 'success', 'basket');
+ }
+ },
+ {
+ id: 'logs',
+ title: 'Вязанка дров (+10 брёвен)',
+ rewardLabel: '+10 брёвен',
+ iconKey: 'log',
+ desc: 'Сухие сосновые брёвна для лесопилки, верфи и построек усадьбы.',
+ getStatus: () => `В запасе: ${state.logs} брёвен`,
+ grant: () => {
+ state.logs += 10;
+ spawnParticles(SAWMILL_CONFIG.rect.x + SAWMILL_CONFIG.rect.w / 2, SAWMILL_CONFIG.rect.y + 130, 'log', 8);
+ spawnFloatingText(SAWMILL_CONFIG.rect.x + SAWMILL_CONFIG.rect.w / 2, SAWMILL_CONFIG.rect.y + 80, '+10 брёвен!', '#ffcf56');
+ showPixelToast('Награда получена: +10 брёвен!', 'success', 'log');
+ }
  }
 ];
 
@@ -8339,10 +8389,20 @@ function openStarsShopModal() {
  renderIconToCanvas(document.getElementById('starsShopHeaderIcon'), 'star');
  renderStarsShopModal();
  starsShopModal.classList.add('active');
+ if (bonusTimerInterval) clearInterval(bonusTimerInterval);
+ bonusTimerInterval = setInterval(() => {
+ if (starsShopModal.classList.contains('active') && !adShowInProgress) {
+ renderStarsShopModal();
+ }
+ }, 1000);
 }
 
 function closeStarsShopModal() {
  starsShopModal.classList.remove('active');
+ if (bonusTimerInterval) {
+ clearInterval(bonusTimerInterval);
+ bonusTimerInterval = null;
+ }
 }
 
 document.getElementById('closeStarsShopBtn').addEventListener('click', (e) => {
@@ -8357,65 +8417,68 @@ starsShopModal.addEventListener('pointerdown', (e) => {
  }
 });
 
-function activateStarPromoCode(rawCode) {
- const code = String(rawCode || '').trim().toUpperCase();
- if (!code) {
- return { ok: false, message: 'Введи бонусный код из бота!' };
+function watchRewardedAdForItem(item) {
+ if (!item || adShowInProgress) return;
+
+ const remMs = getAdRewardRemainingMs(item.id);
+ if (remMs > 0) {
+ SoundManager.uiClick();
+ triggerHaptic('light');
+ showPixelToast(`Подожди ${formatRealDuration(remMs)} до следующей награды!`, 'error', 'flag');
+ return;
  }
 
- // Проверка общей длины (9–12 символов) и формата ПРЕФИКС-XXXX (4–6 букв/цифр)
- const formatOk = code.length >= 9 && code.length <= 12 && /^(TURBO|FIELD|TULUP|GOLD)-[A-Z0-9]{4,6}$/.test(code);
- if (!formatOk) {
- return {
- ok: false,
- message: 'Неверный формат кода! Нужен код вида TURBO-XXXX, FIELD-XXXX, TULUP-XXXX или GOLD-XXXX (9–12 символов).'
- };
+ const webApp = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : tg;
+ const isInsideTelegram = Boolean(webApp && (webApp.initData || (webApp.initDataUnsafe && webApp.initDataUnsafe.user)));
+ const controller = initAdsgramController();
+
+ if (!controller || typeof controller.show !== 'function') {
+ SoundManager.uiClick();
+ triggerHaptic('medium');
+ if (!isInsideTelegram) {
+ showPixelToast('Реклама не подгрузилась: игра открыта вне Telegram Mini App.', 'error', 'flag');
+ } else {
+ showPixelToast('Реклама ещё не подгрузилась, попробуй через пару секунд.', 'error', 'flag');
+ }
+ return;
  }
 
- if (!Array.isArray(state.usedPromoCodes)) state.usedPromoCodes = [];
- if (state.usedPromoCodes.includes(code)) {
- return {
- ok: false,
- message: `Код ${code} уже был активирован ранее! Повторный ввод невозможен.`
- };
+ adShowInProgress = true;
+ renderStarsShopModal();
+
+ try {
+ controller.show()
+ .then((result) => {
+ adShowInProgress = false;
+ if (result && result.done === false) {
+ SoundManager.uiClick();
+ triggerHaptic('medium');
+ showPixelToast('Реклама не досмотрена, награда не начислена', 'error', 'flag');
+ renderStarsShopModal();
+ return;
  }
-
- const prefix = code.split('-')[0];
- state.usedPromoCodes.push(code);
-
- let rewardMsg = '';
- let iconKey = 'star';
-
- if (prefix === 'TURBO') {
- state.turboBoosts = (state.turboBoosts || 0) + 3;
- rewardMsg = 'Турбо-инкубатор активирован! Начислено +3 ускорения скрещивания.';
- iconKey = 'heart';
- spawnFloatingText(BREEDING_CONFIG.rect.x + 160, BREEDING_CONFIG.rect.y + 80, '+3 ускорения случки!', '#ffe047');
- } else if (prefix === 'FIELD') {
- const newField = grantExtraFieldFromStars();
- rewardMsg = `Открыто ${newField.fullName} (+6 грядок)!`;
- iconKey = 'plot';
- spawnFloatingText(newField.rect.x + newField.rect.w / 2, newField.rect.y + 60, `${newField.fullName}: +6 грядок!`, '#a3e635');
- } else if (prefix === 'TULUP') {
- state.tulupCount = (state.tulupCount || 0) + 1;
- rewardMsg = `Утеплённый тулуп надет! Защита хряков от холода теперь +${getColdProtectionPct()}%.`;
- iconKey = 'warehouse';
- spawnFloatingText(WORLD.penRect.x + WORLD.penRect.w / 2, WORLD.penRect.y + 70, `Тулуп: +40% защита от холода!`, '#ffe047');
- } else if (prefix === 'GOLD') {
- state.coins += 5000;
- rewardMsg = 'Мешок золота открыт! В казну начислено +5 000 монет.';
- iconKey = 'coin';
- spawnParticles(WORLD.penRect.x + WORLD.penRect.w / 2, WORLD.penRect.y + 120, 'coin', 12);
- spawnFloatingText(WORLD.penRect.x + WORLD.penRect.w / 2, WORLD.penRect.y + 70, '+5 000 монет!', '#ffe047');
- }
-
+ setAdRewardCooldown(item.id);
+ item.grant();
  saveGame(true);
  SoundManager.purchase();
  SoundManager.discover();
  triggerHaptic('success');
- showPixelToast(rewardMsg, 'success', iconKey);
-
- return { ok: true, message: rewardMsg };
+ renderStarsShopModal();
+ })
+ .catch(() => {
+ adShowInProgress = false;
+ SoundManager.uiClick();
+ triggerHaptic('medium');
+ showPixelToast('Реклама не досмотрена, награда не начислена', 'error', 'flag');
+ renderStarsShopModal();
+ });
+ } catch (err) {
+ adShowInProgress = false;
+ SoundManager.uiClick();
+ triggerHaptic('medium');
+ showPixelToast('Реклама не досмотрена, награда не начислена', 'error', 'flag');
+ renderStarsShopModal();
+ }
 }
 
 function renderStarsShopModal() {
@@ -8423,76 +8486,17 @@ function renderStarsShopModal() {
  if (turboCounter) turboCounter.textContent = (state.turboBoosts || 0).toString();
  starsShopBody.innerHTML = '';
 
- // 1. Блок покупки через Telegram Stars и ввода кода из бота
- const promoBox = document.createElement('div');
- promoBox.className = 'promo-box';
- promoBox.innerHTML = `
- <div style="font-size:13.5px;font-weight:700;color:#2e1a0c;">
- Оплати набор звёздами Telegram Stars в боте и введи полученный код ниже:
- </div>
- <a class="bot-buy-btn" id="buyInBotLink" href="${STARS_BOT_URL}" target="_blank" rel="noopener">
- ${pxImg('star', true)}
- <span>Купить в боте</span>
- </a>
- <div class="promo-row">
- <input id="promoCodeInput" class="promo-input" type="text" maxlength="12" placeholder="Ввести код из бота" autocomplete="off" autocapitalize="characters" spellcheck="false" />
- <button type="button" class="buy-btn" id="activateCodeBtn">Активировать</button>
- </div>
- <div id="promoFeedbackBox" class="promo-feedback"></div>
- `;
- starsShopBody.appendChild(promoBox);
+ const infoBanner = document.createElement('div');
+ infoBanner.className = 'ads-info-banner';
+ infoBanner.textContent = 'Посмотри короткий рекламный ролик до конца, чтобы получить награду. Перезарядка каждой карточки — 3 минуты.';
+ starsShopBody.appendChild(infoBanner);
 
- const botLink = promoBox.querySelector('#buyInBotLink');
- if (botLink) {
- botLink.addEventListener('click', (e) => {
- SoundManager.uiClick();
- triggerHaptic('light');
- if (tg && typeof tg.openTelegramLink === 'function' && STARS_BOT_URL.startsWith('https://t.me/')) {
- e.preventDefault();
- try {
- tg.openTelegramLink(STARS_BOT_URL);
- } catch (err) {
- window.open(STARS_BOT_URL, '_blank', 'noopener');
- }
- }
- });
- }
+ AD_REWARD_CATALOG.forEach((item) => {
+ const remMs = getAdRewardRemainingMs(item.id);
+ const isCooldown = remMs > 0;
 
- const inputEl = promoBox.querySelector('#promoCodeInput');
- const activateBtn = promoBox.querySelector('#activateCodeBtn');
- const feedbackEl = promoBox.querySelector('#promoFeedbackBox');
-
- if (lastPromoFeedback) {
- feedbackEl.className = 'promo-feedback ' + (lastPromoFeedback.ok ? 'ok' : 'err');
- feedbackEl.textContent = lastPromoFeedback.message;
- }
-
- const handleActivate = () => {
- const res = activateStarPromoCode(inputEl.value);
- lastPromoFeedback = res;
- if (!res.ok) {
- SoundManager.uiClick();
- triggerHaptic('medium');
- showPixelToast(res.message, 'error', 'flag');
- feedbackEl.className = 'promo-feedback err';
- feedbackEl.textContent = res.message;
- } else {
- renderStarsShopModal();
- }
- };
-
- activateBtn.addEventListener('click', handleActivate);
- inputEl.addEventListener('keydown', (e) => {
- if (e.key === 'Enter') {
- e.preventDefault();
- handleActivate();
- }
- });
-
- // 2. Витрина наборов за Telegram Stars ⭐
- STARS_CATALOG.forEach((item) => {
  const card = document.createElement('div');
- card.className = 'shop-card';
+ card.className = 'shop-card' + (!isCooldown ? ' unlocked-card' : '');
 
  const av = document.createElement('div');
  av.className = 'card-avatar';
@@ -8508,32 +8512,32 @@ function renderStarsShopModal() {
  <div class="card-name"><span>${item.title}</span></div>
  <div class="card-desc">${item.desc}</div>
  <div class="stat-chips">
- <span class="stat-chip highlight">${item.priceStars} ⭐</span>
+ <span class="stat-chip highlight">${item.rewardLabel}</span>
  <span class="stat-chip">${item.getStatus()}</span>
  </div>
  `;
 
- const pickBtn = document.createElement('button');
- pickBtn.type = 'button';
- pickBtn.className = 'sell-btn';
- pickBtn.textContent = `${item.priceStars} ⭐`;
- pickBtn.title = 'Нажми «Купить в боте» или введи код ' + item.prefix + '-XXXX';
- pickBtn.onclick = () => {
+ const watchBtn = document.createElement('button');
+ watchBtn.type = 'button';
+ watchBtn.className = isCooldown ? 'sell-btn' : 'buy-btn';
+ watchBtn.disabled = isCooldown || adShowInProgress;
+ if (adShowInProgress) {
+ watchBtn.textContent = 'Загрузка...';
+ } else if (isCooldown) {
+ watchBtn.textContent = `⏳ ${formatRealDuration(remMs)}`;
+ } else {
+ watchBtn.textContent = 'Смотреть 🎬';
+ }
+ watchBtn.onclick = (e) => {
+ if (e) e.stopPropagation();
  SoundManager.uiClick();
  triggerHaptic('light');
- inputEl.focus();
- inputEl.placeholder = `${item.prefix}-XXXX`;
- lastPromoFeedback = {
- ok: true,
- message: `Нажми «Купить в боте» (${item.priceStars} ⭐) и введи код вида ${item.prefix}-XXXX.`
- };
- feedbackEl.className = 'promo-feedback ok';
- feedbackEl.textContent = lastPromoFeedback.message;
+ watchRewardedAdForItem(item);
  };
 
  card.appendChild(av);
  card.appendChild(info);
- card.appendChild(pickBtn);
+ card.appendChild(watchBtn);
  starsShopBody.appendChild(card);
  });
 }
