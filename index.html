@@ -2228,6 +2228,7 @@ let state = {
  discoveredLandmarks: ['khryakograd'],
  collectedTreasures: [],
  gameMinutes: 9 * 60 + 15,
+ timeSpeed: 1,
  fogHex: '',
  usedPromoCodes: [],
  turboBoosts: 0,
@@ -2570,6 +2571,7 @@ function loadGame() {
  if (typeof state.scoutSpeedLevel !== 'number' || state.scoutSpeedLevel < 1) state.scoutSpeedLevel = 1;
  if (typeof state.scoutVisionLevel !== 'number' || state.scoutVisionLevel < 1) state.scoutVisionLevel = 1;
  if (typeof state.gameMinutes !== 'number' || isNaN(state.gameMinutes)) state.gameMinutes = 9 * 60 + 15;
+ if (![1, 3, 5].includes(state.timeSpeed)) state.timeSpeed = 1;
 
  const hadFog = deserializeFog(state.fogHex);
  if (!hadFog) {
@@ -2930,6 +2932,7 @@ let hudLayout = {
  zoomOutBtn: { x: 0, y: 0, w: 34, h: 28 },
  zoomResetBtn: { x: 0, y: 0, w: 54, h: 28 },
  zoomInBtn: { x: 0, y: 0, w: 34, h: 28 },
+ timeSpeedBtns: [],
  minimap: { x: 0, y: 12, w: 126, h: 94 },
  sunDialCard: { x: 10, y: 84, w: 176, h: 36 },
  starsShopBtn: { x: 10, y: 124, w: 176, h: 36 },
@@ -3189,6 +3192,17 @@ function computeHudLayout() {
  hudLayout.zoomOutBtn = { x: hudLayout.minimap.x, y: zBarY, w: zSideW, h: 28 };
  hudLayout.zoomResetBtn = { x: hudLayout.minimap.x + zSideW + 2, y: zBarY, w: zMidW, h: 28 };
  hudLayout.zoomInBtn = { x: hudLayout.minimap.x + mmW - zSideW, y: zBarY, w: zSideW, h: 28 };
+
+ const tBarY = zBarY + 34;
+ const tGap = 2;
+ const tBtnW = (mmW - tGap * 2) / 3;
+ hudLayout.timeSpeedBtns = [1, 3, 5].map((spd, idx) => ({
+ speed: spd,
+ x: hudLayout.minimap.x + idx * (tBtnW + tGap),
+ y: tBarY,
+ w: tBtnW,
+ h: 28
+ }));
 
  const pillsAvailW = Math.max(180, hudLayout.soundBtn.x - 14);
  const pillGap = 4;
@@ -5546,6 +5560,40 @@ function drawHUD(now) {
  drawCartoonButton(ctx, zIn.x, zIn.y, zIn.w, zIn.h, 0, canZoomIn ? '#8c5228' : '#6e5c4f', canZoomIn ? '#693b1b' : '#54463c', pressedHudKey === 'zoomIn');
  drawOutlinedText('+', zIn.x + zIn.w / 2 + (pressedHudKey === 'zoomIn' ? 2 : 0), zIn.y + zIn.h / 2 + (pressedHudKey === 'zoomIn' ? 2 : 0), 15, canZoomIn ? '#fff6df' : '#cbbba8', 'center', 2);
 
+ const curSpeed = [1, 3, 5].includes(state.timeSpeed) ? state.timeSpeed : 1;
+ (hudLayout.timeSpeedBtns || []).forEach((tb) => {
+ const isActive = curSpeed === tb.speed;
+ const isPressed = pressedHudKey === `timeSpeed_${tb.speed}`;
+ drawCartoonButton(
+ ctx,
+ tb.x,
+ tb.y,
+ tb.w,
+ tb.h,
+ 0,
+ isActive ? '#578a39' : '#8c5228',
+ isActive ? '#3f6927' : '#693b1b',
+ isPressed
+ );
+ const pxOff = isPressed ? 2 : 0;
+ if (isActive) {
+ ctx.save();
+ ctx.strokeStyle = '#ffd541';
+ ctx.lineWidth = 2;
+ ctx.strokeRect(Math.round(tb.x + 2 + pxOff), Math.round(tb.y + 2 + pxOff), Math.round(tb.w - 4), Math.round(tb.h - 4));
+ ctx.restore();
+ }
+ drawOutlinedText(
+ `${tb.speed}x`,
+ tb.x + tb.w / 2 + pxOff,
+ tb.y + tb.h / 2 + 1 + pxOff,
+ 12.5,
+ isActive ? '#ffd541' : '#fff6df',
+ 'center',
+ 2.0
+ );
+ });
+
  syncLocationNavStripState(now);
 
  drawMinimap();
@@ -5795,8 +5843,9 @@ function drawSoundSpeakerIcon(ctx, cx, cy, muted) {
 let lastTime = performance.now();
 
 function update(dt) {
+ const timeSpeed = [1, 3, 5].includes(state.timeSpeed) ? state.timeSpeed : 1;
  const prevDay = Math.floor(state.gameMinutes / 1440);
- state.gameMinutes += dt * 4.0;
+ state.gameMinutes += (dt / 60) * timeSpeed;
  const curDay = Math.floor(state.gameMinutes / 1440);
  if (curDay !== prevDay) {
  state.marketDayIndex = (state.marketDayIndex + 1) % BOAR_CATALOG.length;
@@ -6335,6 +6384,9 @@ function isHudHit(sx, sy) {
  if (pointInRect(sx, sy, hudLayout.zoomOutBtn)) return true;
  if (pointInRect(sx, sy, hudLayout.zoomResetBtn)) return true;
  if (pointInRect(sx, sy, hudLayout.zoomInBtn)) return true;
+ for (const tb of (hudLayout.timeSpeedBtns || [])) {
+ if (pointInRect(sx, sy, tb)) return true;
+ }
  if (pointInRect(sx, sy, hudLayout.minimap)) return true;
  if (pointInRect(sx, sy, hudLayout.sunDialCard)) return true;
  if (pointInRect(sx, sy, hudLayout.starsShopBtn)) return true;
@@ -6371,6 +6423,7 @@ function getTwoPointers() {
 }
 
 canvas.addEventListener('pointerdown', (e) => {
+ if (e.cancelable) e.preventDefault();
  if (!worldInitialized || shopModal.classList.contains('active') || breedModal.classList.contains('active') || marketModal.classList.contains('active') || sawmillModal.classList.contains('active') || voyageModal.classList.contains('active') || starsShopModal.classList.contains('active')) return;
  const rect = canvas.getBoundingClientRect();
  const sx = e.clientX - rect.left;
@@ -6414,6 +6467,10 @@ canvas.addEventListener('pointerdown', (e) => {
  else if (pointInRect(sx, sy, hudLayout.zoomResetBtn)) pressedHudKey = 'zoomReset';
  else if (pointInRect(sx, sy, hudLayout.sunDialCard)) pressedHudKey = 'sundial';
  else if (pointInRect(sx, sy, hudLayout.starsShopBtn)) pressedHudKey = 'starsShop';
+ else if ((hudLayout.timeSpeedBtns || []).some((tb) => pointInRect(sx, sy, tb))) {
+ const hitTb = hudLayout.timeSpeedBtns.find((tb) => pointInRect(sx, sy, tb));
+ if (hitTb) pressedHudKey = `timeSpeed_${hitTb.speed}`;
+ }
  else {
  for (const btn of hudLayout.seedBtns) {
  if (pointInRect(sx, sy, btn)) {
@@ -6501,6 +6558,7 @@ canvas.addEventListener('pointermove', (e) => {
 });
 
 function handlePointerFinish(e) {
+ if (e.cancelable) e.preventDefault();
  pressedHudKey = null;
  activePointers.delete(e.pointerId);
 
@@ -6592,6 +6650,21 @@ function handleSingleTap(sx, sy) {
  SoundManager.zoomStep(nextZ > camera.targetZoom ? 1 : -1);
  triggerHaptic('light');
  return;
+ }
+
+ for (const tb of (hudLayout.timeSpeedBtns || [])) {
+ if (pointInRect(sx, sy, tb)) {
+ state.timeSpeed = tb.speed;
+ SoundManager.uiClick();
+ triggerHaptic('light');
+ showPixelToast(
+ tb.speed === 1 ? '⏱️ Время: 1x (реальное время)' : `⏩ Скорость времени: ${tb.speed}x`,
+ 'success',
+ 'star'
+ );
+ saveGame(true);
+ return;
+ }
  }
 
  if (pointInRect(sx, sy, hudLayout.starsShopBtn)) {
@@ -8335,12 +8408,19 @@ const voyageModalTitle = document.getElementById('voyageModalTitle');
 let voyageOpenedAt = 0;
 let voyageTimerInterval = null;
 
+let voyageUnlockTimer = null;
 function openVoyageModal() {
  voyageOpenedAt = performance.now();
  renderIconToCanvas(document.getElementById('voyageHeaderIcon'), 'ship');
  renderIconToCanvas(document.getElementById('voyageBalanceCoin'), 'coin');
+ voyageBody.style.pointerEvents = 'none';
  renderVoyageModal();
  voyageModal.classList.add('active');
+ if (voyageUnlockTimer) clearTimeout(voyageUnlockTimer);
+ voyageUnlockTimer = setTimeout(() => {
+ voyageBody.style.pointerEvents = 'auto';
+ voyageUnlockTimer = null;
+ }, 320);
  if (voyageTimerInterval) clearInterval(voyageTimerInterval);
  voyageTimerInterval = setInterval(() => {
  if (voyageModal.classList.contains('active')) {
@@ -8351,6 +8431,11 @@ function openVoyageModal() {
 
 function closeVoyageModal() {
  voyageModal.classList.remove('active');
+ voyageBody.style.pointerEvents = 'auto';
+ if (voyageUnlockTimer) {
+ clearTimeout(voyageUnlockTimer);
+ voyageUnlockTimer = null;
+ }
  pendingVoyageTarget = null;
  if (voyageTimerInterval) {
  clearInterval(voyageTimerInterval);
@@ -8510,6 +8595,7 @@ function renderVoyageModal() {
  : `Не хватает монет (${cost})`;
  goBtn.disabled = !canAfford;
  goBtn.onclick = () => {
+ if (performance.now() - voyageOpenedAt < 320) return;
  const chosen = pendingVoyageTarget;
  closeVoyageModal();
  if (chosen) executeLandExpedition(chosen);
@@ -8699,6 +8785,7 @@ function renderVoyageModal() {
  : `Не хватает монет (нужно ${cost}💰)`;
  confirmBtn.disabled = !canAfford;
  confirmBtn.onclick = () => {
+ if (performance.now() - voyageOpenedAt < 320) return;
  if (state.coins < cost) return;
  state.coins -= cost;
 
